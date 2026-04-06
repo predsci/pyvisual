@@ -1,0 +1,47 @@
+channels:
+  - conda-forge
+dependencies:
+  # -------- Core Python --------
+  - python=3.13
+
+  # -------- Python Runtime --------
+  - numpy=2.3.*
+  - pyvista
+  - scipy
+  - astropy
+  - pandas
+  - sunpy
+
+  # -------- Build Toolchain --------
+  - setuptools
+  - python-build
+
+  # -------- Testing / QA --------
+  - pytest
+  - pytest-cov
+  - pytest-benchmark
+  - mypy
+  - ruff
+  - coverage
+  - nox
+
+  # -------- Docs --------
+  - sphinx
+  - sphinx-book-theme
+  - sphinx-gallery
+  - sphinx-copybutton
+  - numpydoc
+  - matplotlib
+  - pooch
+
+  # psi-io Dependencies (Conda Precedence)
+  - h5py
+  - pyhdf
+
+  # -------- Pip installs --------
+  - pip
+  - pip:
+      - pthree
+      - psi-io[hdf4,interp]==2.0.6
+      - mapflpy[hdf4]==1.1.9
+      - pyvista[all]

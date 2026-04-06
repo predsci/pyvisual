@@ -1,0 +1,137 @@
+# PyProject Configuration
+# =======================
+
+# Build System
+# ------------
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools >= 77.0.3"]
+
+# Project Metadata
+# ----------------
+[project]
+name = "pyvisual"
+version = "0.9.0"
+description = "3D Visualization Tools for Solar Physics"
+authors = [
+  {name = "Predictive Science Inc.", email = "webmaster@predsci.com"},
+  {name = "Ryder Davidson"},
+  {name = "Cooper Downs"},
+  {name = "Andres Reyes"},
+]
+readme = "README.rst"
+license = "Apache-2.0"
+license-files = ["LICENSE.txt"]
+keywords = [
+  "solar physics",
+  "space physics",
+  "heliophysics",
+  "magnetohydrodynamic",
+  "science",
+  "mas",
+  "predsci",
+  "psi",
+  "modeling",
+  "fortran"
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Natural Language :: English",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3 :: Only",
+  "Operating System :: Unix",
+  "Operating System :: POSIX :: Linux",
+  "Operating System :: MacOS :: MacOS X",
+  "Typing :: Typed",
+  "Topic :: Scientific/Engineering :: Astronomy",
+  "Topic :: Scientific/Engineering :: Physics",
+]
+requires-python = ">=3.10"
+dependencies = [
+  "numpy",
+  "pyvista",
+  "psi-io>=2.0.6",
+  "sunpy",
+  "astropy",
+]
+
+# Project Dependencies
+# --------------------
+[project.optional-dependencies]
+hdf4 = [
+  "pyhdf>=0.11.6"
+]
+interp = [
+  "scipy",
+]
+tracing = [
+  "mapflpy>=1.1.9",
+]
+data = [
+  "pooch==1.8.2",
+  "matplotlib==3.10.7",
+  "scipy"
+]
+build = [
+  "python-build",
+  "packaging"
+]
+test = [
+  "pytest",
+  "pytest-cov",
+  "pytest-benchmark"
+]
+types = [
+  "mypy>=1.15"
+]
+lint = [
+  "ruff>=0.11.7"
+]
+docs = [
+  "sphinx==8.2.3",
+  "sphinx-book-theme==1.1.4",
+  "sphinx-gallery==0.19.0",
+  "sphinx-copybutton==0.5.2",
+  "numpydoc==1.9.0",
+  "pooch==1.8.2",
+  "matplotlib==3.10.7",
+  "mapflpy>=1.1.9",
+  "scipy",
+  "pthree==1.0.1",
+  "pyvista[all]",
+]
+dev = [
+  "nox>=2025.11.12",
+]
+all = [
+  "psi-io[hdf4,interp,tracing,data,build,test,types,lint,docs,dev]",
+]
+
+# Tools & Extensions
+# ==================
+
+# Setuptools configuration
+# ------------------------
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = [
+  "pyvisual",
+  "pyvisual.*"
+]
+exclude = [
+  "tests",
+  "docs",
+  "examples",
+]
+
+[tool.setuptools.package-data]
+"pyvisual" = [
+  "assets/*.json",
+]
