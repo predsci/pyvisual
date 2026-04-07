@@ -47,7 +47,7 @@ try:
     from importlib.metadata import version as _pkg_version
     from importlib.metadata import PackageNotFoundError
     from pathlib import Path
-    __version__ = _pkg_version("pyvisual")  # type: ignore[assignment]
+    __version__ = _pkg_version("psi-visual")  # type: ignore[assignment]
 except PackageNotFoundError as e:  # dev/editable without metadata
     try:
         import tomllib  # Python 3.11+

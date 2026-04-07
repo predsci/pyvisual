@@ -3,16 +3,16 @@
    :alt: Predictive Science Inc.
    :width: 20px
 
-.. |pypi| image:: https://img.shields.io/pypi/v/pyvisual?logo=pypi&logoColor=white
-   :target: https://pypi.org/project/pyvisual
+.. |pypi| image:: https://img.shields.io/pypi/v/psi-visual?logo=pypi&logoColor=white
+   :target: https://pypi.org/project/psi-visual
    :alt: PyPI
 
-.. |license| image:: https://img.shields.io/pypi/l/pyvisual?logo=apache&logoColor=white
+.. |license| image:: https://img.shields.io/pypi/l/psi-visual?logo=apache&logoColor=white
    :target: https://opensource.org/license/apache-2-0/
    :alt: License
 
-.. |pyversions| image:: https://img.shields.io/pypi/pyversions/pyvisual.svg?logo=python&label=python&logoColor=white
-   :target: https://pypi.org/project/pyvisual
+.. |pyversions| image:: https://img.shields.io/pypi/pyversions/psi-visual.svg?logo=python&label=python&logoColor=white
+   :target: https://pypi.org/project/psi-visual
    :alt: Python Versions
 
 .. |deps| image:: https://img.shields.io/librariesio/github/predsci/pyvisual?logo=Libraries.io&logoColor=white

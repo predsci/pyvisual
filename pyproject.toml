@@ -10,7 +10,7 @@ requires = ["setuptools >= 77.0.3"]
 # Project Metadata
 # ----------------
 [project]
-name = "pyvisual"
+name = "psi-visual"
 version = "0.9.0"
 description = "3D Visualization Tools for Solar Physics"
 authors = [
