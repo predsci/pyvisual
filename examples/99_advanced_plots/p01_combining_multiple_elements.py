@@ -1,7 +1,7 @@
 """
 TODO add description
 """
-
+import numpy as np
 from mapflpy.tracer import Tracer
 
 from pyvisual import Plot3d
@@ -26,7 +26,7 @@ plotter.add_2d_slice(1, *reversed(chmap_scales), chmap.T,
                      cmap="seismic", show_scalar_bar=False)
 plotter.add_contour(*br_scales, br,
                     opacity=0.5, color='white', show_scalar_bar=False)
-plotter.add_fieldlines(fieldlines.geometry,
+plotter.add_fieldlines(*np.moveaxis(fieldlines.geometry, 1, 0),
                        line_width=2,
                        coloring='random', cmap='hsv', name='fieldlines')
 plotter.show()

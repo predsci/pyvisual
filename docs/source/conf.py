@@ -114,7 +114,8 @@ sort_members = False
 exclusions = [
     '_add_stack_set', 'render_scene', '_add_grid_set',
     'TWOPI', 'XYZ_PERMUTATIONS', 'RTP_PERMUTATIONS',
-    r'parsers\._', r'mesh3d\._update', r'plot3d\.Plot3d\._'
+    r'parsers\._', r'mesh3d\._update', r'plot3d\.Plot3d\._',
+    '_abc_impl'
 ]
 
 node_tree = build_node_tree(root_package,
@@ -360,8 +361,8 @@ sphinx_gallery_conf = {
     "download_all_examples": False,
     "remove_config_comments": True,
     "filename_pattern": r"\.py$",
-    "plot_gallery": False,
-    "run_stale_examples": False,
+    "plot_gallery": True,
+    "run_stale_examples": True,
     "matplotlib_animations": True,
     "image_scrapers": (DynamicScraper(), 'matplotlib'),
 }

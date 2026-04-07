@@ -25,17 +25,16 @@ BUFFER_SIZE = 5
 def _plotter_callback(pt):
     plotter.buffer += 1
     r, t, p = cartesian_to_spherical(*pt)
-    lps, weights = cartesian_pointmesh(1, t, p, angular_radius=1, dimensionality=(1, 0, 0), pts_per_direction=5)
+    lps, weights = cartesian_pointmesh(1, t, p, angular_radius=1, dimensionality=(0,1,1), pts_per_direction=5)
     fieldlines, *_ = tracer.trace_fwd(launch_points=lps.reshape((3, -1)))
     fls = fieldlines.reshape((-1,) + lps.shape)
     plotter.add_points(*lps, name="Launch Points",)
     plotter.add_fieldlines(*np.swapaxes(fls, 0, 1),
-                                                      weights,
-                                                      cmap='hsv',
-                                                      name=f'Fieldlines{plotter.buffer % BUFFER_SIZE}',
-                                                      show_scalar_bar=False,
-                           line_width=20,
-                                                      opacity='linear_r')
+                           weights,
+                           cmap='hsv',
+                           name=f'Fieldlines{plotter.buffer % BUFFER_SIZE}',
+                           show_scalar_bar=False,
+                           line_width=5)
 
 plotter.enable_point_picking(_plotter_callback)
 plotter.add_2d_slice(1, br_t, br_p, br,

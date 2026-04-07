@@ -393,7 +393,7 @@ class _BaseFrameFilters(ABC):
 
         Parameters
         ----------
-        *args : array-like
+        *args : ArrayLike
             Optional ``(xp, fp)`` arguments for :func:`numpy.interp` to define
             a spatially-varying radial scale factor.  If omitted, ``s(r) = 1``.
         exp : Number | None, optional
@@ -415,7 +415,7 @@ class _BaseFrameFilters(ABC):
 
         Parameters
         ----------
-        *args : array-like
+        *args : ArrayLike
             Optional ``(xp, fp)`` arguments for :func:`numpy.interp`.
         exp : Number | None, optional
             Exponent applied to the scaled radius.  Default is :math:`e`.
@@ -847,7 +847,7 @@ class _BaseFrameMesh(ABC):
 
         Parameters
         ----------
-        other : CartesianMesh | SphericalMesh | array-like
+        other : CartesianMesh | SphericalMesh | ArrayLike
             Right-hand operand.  If it is the same type as ``self``, its
             :attr:`data` is used; otherwise it is used directly (scalar or array
             broadcast).

@@ -1,7 +1,7 @@
 User Guide
 ==========
 
-To get started with **psi_io**, please refer to the following sections:
+To get started with **pyvisual**, please refer to the following sections:
 
 .. toctree::
 
