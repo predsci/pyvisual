@@ -771,7 +771,7 @@ def thompson_sphere(elong: ArrayLike,
 
     The `Thompson sphere
     <https://doi.org/10.1007/s11207-006-0030-x>`_ is the sphere of radius
-    :math:`d_{obs}/2` centred on the midpoint between the Sun and the observer.
+    :math:`d_{obs}/2` centered on the midpoint between the Sun and the observer.
     Every point on it satisfies the condition that the angle between the
     Sun-to-point vector and the point-to-observer vector is exactly
     :math:`90°`, making it the locus of maximum Thomson-scattering efficiency
@@ -787,10 +787,10 @@ def thompson_sphere(elong: ArrayLike,
     ----------
     elong : ArrayLike
         Elongation (helioprojective longitude, :math:`T_x`) of the LOS from
-        Sun-centre in **degrees**, in :math:`[-180°, 180°]`.
+        Sun-center in **degrees**, in :math:`[-180°, 180°]`.
     alt : ArrayLike
         Altitude (helioprojective latitude, :math:`T_y`) of the LOS from
-        Sun-centre in **degrees**, in :math:`[-90°, 90°]`.
+        Sun-center in **degrees**, in :math:`[-90°, 90°]`.
     obs_lon : ArrayLike
         Carrington longitude of the observer in **degrees**,
         in :math:`[-180°, 180°]`.
@@ -798,7 +798,7 @@ def thompson_sphere(elong: ArrayLike,
         Carrington latitude of the observer in **degrees**,
         in :math:`[-90°, 90°]`.
     r_obs_rs : ArrayLike
-        Observer distance from Sun-centre in :math:`R_\\odot`.
+        Observer distance from Sun-center in :math:`R_\\odot`.
     obs_pangle : ArrayLike, optional
         Solar P-angle: rotation of the observer frame relative to solar north
         in **degrees**. A positive value means solar north appears
@@ -823,10 +823,10 @@ def thompson_sphere(elong: ArrayLike,
     The algorithm:
 
     1. Constructs the reference point on the sphere of radius :math:`d_{obs}`
-       centred at the observer corresponding to the given helioprojective
+       centered at the observer corresponding to the given helioprojective
        angles.
     2. Finds the parameter :math:`t` along the LOS at which the distance to
-       Sun-centre is minimised (the Thompson-sphere intersection).
+       Sun-center is minimised (the Thompson-sphere intersection).
     3. Applies the P-angle, B\ :sub:`0`-angle (Carrington latitude), and
        Carrington longitude rotations sequentially via
        :func:`rotate_position_about_x`, :func:`rotate_position_about_y`, and
@@ -843,9 +843,8 @@ def thompson_sphere(elong: ArrayLike,
 
     Examples
     --------
-    Point on the plane-of-sky at Sun-centre elongation (:math:`T_x = 0`,
-    :math:`T_y = 0`) for an observer at :math:`1\\,\\text{AU} \\approx 215\\,R_\\odot`
-    in the ecliptic plane:
+    Point on the plane-of-sky at Sun-center elongation (:math:`T_x = 0`,
+    :math:`T_y = 0`) for an observer at :math:`1\\,\\text{AU} \\approx 215\\,R_\\odot`.
 
     >>> x, y, z = thompson_sphere(0.0, 0.0, 0.0, 0.0, 215.0)
     >>> float(z)
@@ -916,7 +915,7 @@ def los_rmin2angle(rmin_rs: ArrayLike,
     """Convert a LOS impact parameter :math:`r_{min}` to a helioprojective angle.
 
     The *impact parameter* :math:`r_{min}` is the distance of closest approach
-    of a line of sight to Sun-centre (in :math:`R_\\odot`).  This function
+    of a line of sight to Sun-center (in :math:`R_\\odot`).  This function
     inverts the geometric relationship
 
     .. math::
@@ -934,7 +933,7 @@ def los_rmin2angle(rmin_rs: ArrayLike,
         and encode the sign of the corresponding angle (useful for 1-D
         coordinate sweeps).
     d_obs_rs : float
-        Observer distance from Sun-centre in :math:`R_\\odot`.
+        Observer distance from Sun-center in :math:`R_\\odot`.
 
     Returns
     -------
@@ -991,7 +990,7 @@ def los_angle2rmin(angle_deg: ArrayLike,
     """Convert a helioprojective angle to a LOS impact parameter :math:`r_{min}`.
 
     The inverse of :func:`los_rmin2angle`.  Given the helioprojective
-    elongation angle :math:`\\alpha` (the angle between Sun-centre and the
+    elongation angle :math:`\\alpha` (the angle between Sun-center and the
     point of closest approach as seen from the observer), returns the
     corresponding impact parameter :math:`r_{min}` in :math:`R_\\odot`.
 
@@ -1002,7 +1001,7 @@ def los_angle2rmin(angle_deg: ArrayLike,
         supported and propagate their sign to ``rmin_rs`` (useful for 1-D
         coordinate sweeps).
     d_obs_rs : float
-        Observer distance from Sun-centre in :math:`R_\\odot`.
+        Observer distance from Sun-center in :math:`R_\\odot`.
 
     Returns
     -------
@@ -1290,7 +1289,7 @@ def fibonacci_lattice(
     See Also
     --------
     :func:`cartesian_pointmesh` : Local neighbourhood sampling around one or
-        more spherical centres.
+        more spherical centers.
 
     Examples
     --------
@@ -1342,32 +1341,32 @@ def cartesian_pointmesh(
     pts_per_direction: int = 2,
     dimensionality: tuple[int, int, int] = (1, 1, 1),
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Generate a local point mesh around one or many spherical centres.
+    """Generate a local point mesh around one or many spherical centers.
 
-    For each input centre :math:`(r, \\theta, \\phi)`, builds a small normalised
+    For each input center :math:`(r, \\theta, \\phi)`, builds a small normalised
     Cartesian grid in the local spherical orthonormal basis
     :math:`(\\hat{e}_r, \\hat{e}_\\theta, \\hat{e}_\\phi)`, retains only offsets
     within the unit ball, scales them by the arc-length
     :math:`\\mathrm{d}s = r\\,\\alpha_{\\mathrm{rad}}`, and maps back to global
     spherical coordinates.  The result is a set of launch or sample points
-    in a neighbourhood around each centre direction.
+    in a neighbourhood around each center direction.
 
     Coordinate conventions follow the PSI/physics colatitude standard used
     throughout this module: :math:`\\theta \\in [0, \\pi]` is colatitude from
     :math:`+z` (solar north) and :math:`\\phi \\in [0, 2\\pi)` is azimuth.
     Basis vectors :math:`(\\hat{e}_r, \\hat{e}_\\theta, \\hat{e}_\\phi)` are
-    the orthonormal spherical basis at each centre, obtained via
+    the orthonormal spherical basis at each center, obtained via
     :func:`spherical_to_cartesian_vec`.
 
     Parameters
     ----------
     r : ArrayLike
-        Radial distance of the centre(s) in :math:`R_\\odot`. Broadcast together
+        Radial distance of the center(s) in :math:`R_\\odot`. Broadcast together
         with ``t`` and ``p`` following NumPy broadcasting rules.
     t : ArrayLike
-        Colatitude :math:`\\theta` of the centre(s) in :math:`[0, \\pi]`.
+        Colatitude :math:`\\theta` of the center(s) in :math:`[0, \\pi]`.
     p : ArrayLike
-        Longitude :math:`\\phi` of the centre(s) in :math:`[0, 2\\pi)`.
+        Longitude :math:`\\phi` of the center(s) in :math:`[0, 2\\pi)`.
     angular_radius : float, optional
         Angular radius of the neighbourhood in **degrees**.  Converted internally
         to an arc-length scale :math:`\\mathrm{d}s = r\\,\\alpha_{\\mathrm{rad}}`.
@@ -1396,14 +1395,14 @@ def cartesian_pointmesh(
         and ``dimensionality``.
     rho : np.ndarray
         Normalised radial distances of each kept offset from the local origin,
-        shape ``(npts,)``.  Identical for all centres; useful as a distance
+        shape ``(npts,)``.  Identical for all centers; useful as a distance
         weight or mask.
 
     Notes
     -----
-    The local grid is generated once for all centres.  Offsets with
+    The local grid is generated once for all centers.  Offsets with
     :math:`\\rho \\leq 1` (plus a small tolerance) are retained, then applied
-    to every broadcasted centre by projecting normalised offsets into Cartesian
+    to every broadcasted center by projecting normalised offsets into Cartesian
     space via the local spherical basis and scaling by :math:`\\mathrm{d}s`.
 
     For large ``angular_radius`` the small-angle arc-length approximation may
@@ -1425,7 +1424,7 @@ def cartesian_pointmesh(
     >>> lp.shape[0]  # first axis is always 3 (r, t, p)
     3
 
-    Vectorised neighbourhoods around 10 centres along a meridian:
+    Vectorised neighbourhoods around 10 centers along a meridian:
 
     >>> r = np.ones(10)
     >>> t = np.linspace(0, np.pi, 10)

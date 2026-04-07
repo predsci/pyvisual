@@ -2,7 +2,7 @@
 
 This module manages the downloading, verification, and local caching of HDF5
 data files used in the pyvisual example gallery, and provides access to
-bundled package assets (e.g. the PyVista colour theme).
+bundled package assets (e.g. the PyVista color theme).
 
 The example datasets are MHD output files from a PSI Thermo 2 steady-state
 simulation for Carrington Rotation 2282 (CR 2282), hosted at
@@ -198,7 +198,7 @@ def fetch_theme():
     Resolves ``pyvisual_theme.json`` from the package's ``_assets`` directory
     and returns its absolute :class:`~pathlib.Path`.  This file is loaded
     automatically at import time by :mod:`pyvisual.core` to apply the default
-    PyVista colour theme.
+    PyVista color theme.
 
     Returns
     -------

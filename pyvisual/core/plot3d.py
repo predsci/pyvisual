@@ -102,11 +102,11 @@ class Plot3d(ObserverMixin, GeometryMixin, GridMeshMixin, StackMeshMixin, pv.Plo
         self._camera_update_observer = None
 
     def _adjust_scalar_bars(self):
-        """Reposition all scalar bars and centre-align their annotation text.
+        """Reposition all scalar bars and center-align their annotation text.
 
         Iterates over the current scalar bars and places them in a vertical
         stack starting at a normalised viewport height of 0.05, incrementing
-        by 0.1 per bar.  Annotation text is centred both horizontally and
+        by 0.1 per bar.  Annotation text is centered both horizontally and
         vertically.
         """
         scalar_bars = dict(self.scalar_bars)

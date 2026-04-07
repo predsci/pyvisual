@@ -28,9 +28,9 @@ Methods in :class:`GridMeshMixin` and :class:`StackMeshMixin` that accept
 :func:`~pyvisual.core.parsers.parse_mesh_params`, which promotes scalar inputs
 to 1-D arrays before the method body runs.
 
-Keyword arguments for ``add_mesh`` calls are built by merging immutable defaults
-from :mod:`pyvisual.core._styling` with caller-supplied overrides using the ``|``
-operator.
+Keyword arguments are passed through to :meth:`~pyvisual.core.plot3d.Plot3d.add_mesh`
+by merging stylistic defaults from :mod:`pyvisual.core._styling` with
+caller-supplied overrides.
 """
 
 from __future__ import annotations
@@ -38,25 +38,12 @@ from __future__ import annotations
 import warnings
 from collections.abc import Iterable
 from functools import wraps
-from itertools import pairwise
 from typing import Optional, Literal
 
 import numpy as np
 import pyvista as pv
 from numpy.typing import ArrayLike
 
-from pyvisual.core.constants import SOLAR_NORTH
-from pyvisual.core.mesh3d import (
-    build_spline_polydata,
-    build_slice_polydata,
-    build_point_polydata,
-    build_surface_polydata,
-    SphericalMesh)
-from pyvisual.core.parsers import (
-    parse_mesh_params, 
-    parse_stack_mesh, 
-    parse_grid_mesh, 
-    parse_data)
 from pyvisual.core._styling import (
     COLORMAP_KWARGS,
     SOLID_COLOR_KWARGS,
@@ -65,12 +52,24 @@ from pyvisual.core._styling import (
     SLICES_KWARGS,
     RANDOM_COLORING_DEFAULTS,
     FL_POLARITY_COLORING_DEFAULTS,
-    FIELDLINE_KWARGS,)
+    FIELDLINE_KWARGS, )
 from pyvisual.core._typing import (
     FlColorType,
     SphericalCoordinate,
     ObserverOrientation,
     SurfaceReconstructionType, )
+from pyvisual.core.constants import SOLAR_NORTH
+from pyvisual.core.mesh3d import (
+    build_spline_polydata,
+    build_slice_polydata,
+    build_point_polydata,
+    build_surface_polydata,
+    SphericalMesh)
+from pyvisual.core.parsers import (
+    parse_mesh_params,
+    parse_stack_mesh,
+    parse_grid_mesh,
+    parse_data)
 from pyvisual.utils.geometry import (
     ij_meshgrid,
     cartesian_to_spherical,
@@ -79,7 +78,7 @@ from pyvisual.utils.geometry import (
     clip_angle,
     thompson_sphere,
     los_rmin2angle,
-    camera_roll_wrt_solar_north,)
+    camera_roll_wrt_solar_north, )
 
 
 def render_scene(func):
@@ -153,12 +152,8 @@ class StackMeshMixin:
 
         Parameters
         ----------
-        r : ArrayLike
-            Radial distance in solar radii :math:`R_\\odot`.
-        t : ArrayLike
-            Colatitude :math:`\\theta` in radians.
-        p : ArrayLike
-            Longitude :math:`\\phi` in radians.
+        r, t, p : ArrayLike
+            Point location.
         data : ArrayLike | None, optional
             Scalar value at this point.  Default is ``None`` (solid color).
         dataid : str, optional
@@ -177,16 +172,24 @@ class StackMeshMixin:
         ValueError
             If any of ``r``, ``t``, ``p`` has size greater than 1.
 
+        See Also
+        --------
+        :meth:`add_points`
+            For rendering point clouds from larger coordinate arrays.
+
         Examples
         --------
-        Add a single point at :math:`r = 1.5 R_\\odot`, :math:`\\theta = \\pi/2`, :math:`\\phi = \\pi/2`
+        A single point at :math:`r = 1.5\\,R_\\odot` on the equatorial plane
+        (:math:`\\theta = \\pi/2`) at 90° longitude (:math:`\\phi = \\pi/2`).
 
         .. pyvista-plot::
 
             >>> from pyvisual import Plot3d
             >>> from math import pi
+            >>>
             >>> plotter = Plot3d()
             >>> plotter.add_sun()
+            >>> plotter.show_axes()
             >>> plotter.add_point(1.5, pi/2, pi/2)
             >>> plotter.show()
         """
@@ -207,7 +210,7 @@ class StackMeshMixin:
                     axis: int = 0,
                     dataid: str = 'Data',
                     **kwargs):
-        """Add a point cloud at spherical coordinates.
+        """Add a point cloud of spherical coordinates.
 
         Parameters
         ----------
@@ -231,20 +234,24 @@ class StackMeshMixin:
 
         Examples
         --------
-        Add 20 points along the equitorial plane, from :math:`r = 1 R_\\odot` to :math:`r = 30 R_\\odot`,
-        colored by radial distance.
+        Twenty points distributed along the equatorial plane
+        (:math:`\\theta = \\pi/2`) from :math:`r = 1\\,R_\\odot` to
+        :math:`r = 30\\,R_\\odot`, spanning a full longitude sweep and colored
+        by radial distance.
 
         .. pyvista-plot::
 
             >>> from pyvisual import Plot3d
             >>> import numpy as np
-            >>> plotter = Plot3d()
-            >>> plotter.add_sun()
+            >>>
             >>> r = np.linspace(1, 30, 20)
             >>> t = np.repeat(np.pi/2, 20)
             >>> p = np.linspace(0, 2*np.pi, 20)
-            >>> data = np.arange(20)
-            >>> plotter.add_points(r, t, p, data, point_size=5)
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_points(r, t, p, r, point_size=5)
             >>> plotter.show()
         """
         return self._add_stack_set(r, t, p, data,
@@ -285,22 +292,32 @@ class StackMeshMixin:
         ValueError
             If ``r``, ``t``, or ``p`` is not 1-D.
 
+        See Also
+        --------
+        :meth:`add_splines`
+            For rendering bundles of multiple splines from higher-dimensional
+            coordinate arrays.
+
         Examples
         --------
-        Add 20 points along the equitorial plane, from :math:`r = 1 R_\\odot` to :math:`r = 30 R_\\odot`,
-        colored by radial distance.
+        An equatorial Archimedean spiral tracing outward from
+        :math:`r = 1\\,R_\\odot` to :math:`r = 30\\,R_\\odot` over one full
+        longitude sweep (:math:`\\phi \\in [0, 2\\pi]`), colored by radial
+        distance.
 
         .. pyvista-plot::
 
             >>> from pyvisual import Plot3d
             >>> import numpy as np
+            >>>
+            >>> r = np.linspace(1, 30, 100)
+            >>> t = np.repeat(np.pi/2, 100)
+            >>> p = np.linspace(0, 2*np.pi, 100)
+            >>>
             >>> plotter = Plot3d()
+            >>> plotter.show_axes()
             >>> plotter.add_sun()
-            >>> r = np.linspace(1, 30, 20)
-            >>> t = np.repeat(np.pi/2, 20)
-            >>> p = np.linspace(0, 2*np.pi, 20)
-            >>> data = np.arange(20)
-            >>> plotter.add_spline(r, t, p, data, line_width=5)
+            >>> plotter.add_spline(r, t, p, r, line_width=5)
             >>> plotter.show()
         """
         if not (1 == r.ndim == t.ndim == p.ndim):
@@ -341,6 +358,31 @@ class StackMeshMixin:
         -------
         out : pyvista.Actor
             The rendered spline-bundle actor.
+
+        Examples
+        --------
+        Ten meridional splines connecting the north and south poles, colored by
+        spline index.  Each coordinate array has shape ``(10, 100)``.  Passing
+        ``axis=1`` declares that axis 1 (length 100) is the *fastest-varying*
+        dimension — the 100 points that trace each individual path.  The
+        remaining axis (or axes in higher-dimensional cases) enumerate distinct splines.
+
+        .. pyvista-plot::
+
+            >>> import numpy as np
+            >>> from pyvisual import Plot3d
+            >>>
+            >>> n_lines, n_pts = 10, 100
+            >>> r = np.tile(5 * np.sin(np.linspace(0, np.pi, n_pts)), (n_lines, 1))
+            >>> t = np.tile(np.linspace(0, np.pi, n_pts), (n_lines, 1))
+            >>> p = np.tile(np.linspace(0, 2 * np.pi, n_lines)[:, None], (1, n_pts))
+            >>> data = np.arange(n_lines)
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_splines(r, t, p, data, axis=1, show_scalar_bar=False)
+            >>> plotter.show()
         """
         return self._add_stack_set(r, t, p, data,
                                    axis, dataid,
@@ -370,15 +412,16 @@ class StackMeshMixin:
             N-D coordinate arrays of identical shape encoding the fieldline
             paths.
         data : ArrayLike | None, optional
-            Scalar data for coloring.  Required when ``coloring='polarity'``
-            (must be an integer array of the five polarity sentinel values
-            from :data:`~pyvisual.core._styling.FL_STATE_ANNOTATIONS`).
-            Ignored when ``coloring='random'``.  Default is ``None``.
+            Scalar data for coloring.  When ``coloring='polarity'``, this
+            should contain integer polarity labels for each fieldline (see
+            :func:`~mapflpy.utils.get_fieldline_polarity` and
+            :class:`~mapflpy.globals.Polarity` for additional context on fieldline
+            categorization schema). Default is ``None``.
         axis : int, optional
             The axis that enumerates distinct fieldlines.  Default is ``0``.
         dataid : str, optional
             Name for the scalar array.  Default is ``'Data'``.
-        coloring : {'random', 'polarity'} | None, optional
+        coloring : FlColorType | None, optional
             Fieldline coloring strategy:
 
             ``'polarity'``
@@ -407,6 +450,89 @@ class StackMeshMixin:
         ValueError
             If ``coloring='polarity'`` and ``data`` is ``None`` or does not
             contain between 1 and 5 distinct values.
+
+        See Also
+        --------
+        :mod:`mapflpy`
+            For magnetic fieldline tracing and polarity classification tools.
+        :meth:`~pyvisual.core.plot3d.Plot3d.add_splines`
+            For rendering bundles of splines without fieldline-specific coloring.
+            
+        Examples
+        --------
+        Trace fieldlines with :class:`~mapflpy.tracer.Tracer`'s
+        :meth:`~mapflpy.tracer._Tracer.trace_fwd` function, and
+        color each one with a unique random hue.
+
+        .. note::
+           The default seed configuration in :mod:`mapflpy` places
+           :math:`n = 128` seed points at :math:`r = 1.01\\,R_\\odot`,
+           distributed quasi-uniformly on the sphere via the Fibonacci
+           lattice algorithm.
+
+           The array ``traces.geometry`` has shape :math:`(M, 3, N)`, where
+           :math:`M` is the per-fieldline point buffer, the axis of length 3
+           indexes the spherical components :math:`(r,\\,\\theta,\\,\\phi)`, and
+           :math:`N` is the number of fieldlines.  :func:`numpy.moveaxis`
+           transposes this to :math:`(3, M, N)` so that unpacking with ``*``
+           yields three coordinate arrays each of shape :math:`(M, N)`.  With
+           the default ``axis=0``, the :math:`M`-axis traces point positions
+           along each fieldline and the :math:`N`-axis enumerates the distinct
+           fieldlines.
+
+        .. pyvista-plot::
+
+            >>> import numpy as np
+            >>> from mapflpy.tracer import Tracer
+            >>> from pyvisual import Plot3d
+            >>> from pyvisual.utils.data import fetch_datasets
+            >>>
+            >>> mag_field = fetch_datasets("cor", ["br", "bt", "bp"])
+            >>> tracer = Tracer(*mag_field)
+            >>> traces = tracer.trace_fwd()
+            >>> traces_rtp = np.moveaxis(traces.geometry, 1, 0)
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_fieldlines(*traces_rtp,
+            ...                        coloring='random',
+            ...                        line_width=2,
+            ...                        show_scalar_bar=False)
+            >>> plotter.observer_focus = 0, 0, 0
+            >>> plotter.observer_fov_view = 10
+            >>> plotter.show()
+
+        Alternatively, fieldline geometry can be colored by open/closed polarity state.
+
+        Here the :func:`~mapflpy.utils.get_fieldline_polarity` utility function is used to
+        categorize each fieldline, viz. with respect to the 5 states enumerated in
+        :class:`~mapflpy.globals.Polarity`.
+
+        .. pyvista-plot::
+
+            >>> import numpy as np
+            >>> from mapflpy.tracer import Tracer
+            >>> from mapflpy.utils import get_fieldline_polarity
+            >>> from pyvisual import Plot3d
+            >>> from pyvisual.utils.data import fetch_datasets
+            >>>
+            >>> mag_field = fetch_datasets("cor", ["br", "bt", "bp"])
+            >>> tracer = Tracer(*mag_field)
+            >>> traces = tracer.trace_fbwd(n=512)
+            >>> trace_polarity = get_fieldline_polarity(1, 30, mag_field.cor_br, traces)
+            >>> traces_rtp = np.moveaxis(traces.geometry, 1, 0)
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_fieldlines(*traces_rtp,
+            ...                        trace_polarity,
+            ...                        coloring='polarity',
+            ...                        line_width=2)
+            >>> plotter.observer_focus = 0, 0, 0
+            >>> plotter.observer_fov_view = 10
+            >>> plotter.show()
         """
         match coloring:
             case 'polarity':
@@ -490,7 +616,7 @@ class StackMeshMixin:
                     **kwargs):
         """Add a reconstructed surface through stacked spherical coordinate arrays.
 
-        Builds a :class:`pyvista.PolyData` surface via
+        Builds a :class:`~pyvista.PolyData` surface via
         :func:`~pyvisual.core.mesh3d.build_surface_polydata` and adds it to the
         scene.
 
@@ -518,6 +644,46 @@ class StackMeshMixin:
         -------
         out : pyvista.Actor
             The rendered surface actor.
+
+        See Also
+        --------
+        :meth:`pyvista.PolyDataFilters.delaunay_2d`
+            Projects points onto a plane and triangulates; best for nearly-flat
+            or open surfaces.
+        :meth:`pyvista.DataSetFilters.delaunay_3d`
+            Full volumetric tetrahedralization with outer-surface extraction;
+            robust for closed or highly curved surfaces.
+        :meth:`pyvista.PolyDataFilters.reconstruct_surface`
+            Implicit surface reconstruction via estimated point normals; works
+            well for dense, smooth point clouds.
+
+        Examples
+        --------
+        Reconstruct a closed surface of revolution defined by
+        :math:`r = 5\\sin\\theta\\,R_\\odot`, sampled at 10 equally-spaced
+        longitudes and 100 latitudinal points per meridian.  The surface is
+        colored by colatitude :math:`\\theta`.
+
+        ``'delaunay_3d'`` is required here because the point cloud forms a
+        closed, non-planar surface — the default ``'delaunay_2d'`` projects
+        points onto a plane before triangulating, which produces incorrect
+        connectivity for a surface that wraps around itself.
+
+        .. pyvista-plot::
+
+            >>> import numpy as np
+            >>> from pyvisual import Plot3d
+            >>>
+            >>> n_lines, n_pts = 10, 100
+            >>> t = np.tile(np.linspace(0, np.pi, n_pts), (n_lines, 1))
+            >>> r = 5 * np.sin(t)
+            >>> p = np.tile(np.linspace(0, 2 * np.pi, n_lines)[:, None],
+            ...             (1, n_pts))
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_surface(r, t, p, t, method='delaunay_3d')
+            >>> plotter.show()
         """
         r, t, p = parse_stack_mesh(r, t, p)
         skwargs = surface_kwargs or {}
@@ -584,6 +750,54 @@ class GridMeshMixin:
         ------
         ValueError
             If the number of size-1 arrays is not exactly 2.
+
+        See Also
+        --------
+        :meth:`add_2d_slice`
+            For rendering 2-D surface slices from independent coordinate arrays.
+        :meth:`add_spline`
+            For rendering 1-D line slices from stacked coordinate arrays.
+        :mod:`psi_io`
+            For more information on reading PSI data into independent coordinate arrays.
+            
+        Examples
+        --------
+        A longitudinal profile of :math:`B_r` at a fixed radial shell and
+        colatitude — a 1-D line scan in :math:`\\phi` at constant
+        :math:`(r, \\theta)`.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_io import read_hdf_by_index
+            >>>
+            >>> datafile = fetch_datasets("cor", "br")
+            >>> data, r, t, p = read_hdf_by_index(datafile.cor_br, 1, 71, None)
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_1d_slice(r, t, p, data, cmap='seismic', clim=(-1, 1), line_width=5)
+            >>> plotter.show()
+
+        A meridional profile of :math:`B_r` at fixed :math:`r` and :math:`\\phi`
+        — a 1-D colatitude scan from the north pole to the south pole.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_io import read_hdf_by_index
+            >>>
+            >>> datafile = fetch_datasets("cor", "br")
+            >>> data, r, t, p = read_hdf_by_index(datafile.cor_br, 1, None, 71)
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_1d_slice(r, t, p, data, cmap='seismic', clim=(-1, 1), line_width=5)
+            >>> plotter.show()
         """
         mesh_shape = (r.size, t.size, p.size)
         if sum(scale == 1 for scale in mesh_shape) != 2:
@@ -634,6 +848,53 @@ class GridMeshMixin:
         ------
         ValueError
             If the number of size-1 arrays is not exactly 1.
+
+        See Also
+        --------
+        :meth:`add_1d_slice`
+            For rendering 1-D line slices from independent coordinate arrays.
+        :mod:`psi_io`
+            For more information on reading PSI data into independent coordinate arrays.
+            
+        Examples
+        --------
+        A full spherical shell at constant :math:`r`, showing the radial
+        magnetic field :math:`B_r` across all colatitudes and longitudes.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_io import read_hdf_by_index
+            >>>
+            >>> datafile = fetch_datasets("cor", "br")
+            >>> data, r, t, p = read_hdf_by_index(datafile.cor_br, 1, None, None)
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_2d_slice(r, t, p, data, cmap='seismic', clim=(-30, 30))
+            >>> plotter.show()
+
+        A 2-D cut at fixed colatitude :math:`\\theta`, showing the signed
+        radial flux :math:`B_r r^2`.  Multiplying by :math:`r^2` removes the
+        geometric falloff and highlights flux concentration regardless of
+        distance.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_io import read_hdf_by_index
+            >>>
+            >>> datafile = fetch_datasets("cor", "br")
+            >>> data, r, t, p = read_hdf_by_index(datafile.cor_br, None, 71, None)
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_2d_slice(r, t, p, data*r**2, cmap='seismic', clim=(-1, 1))
+            >>> plotter.show()
         """
         mesh_shape = (r.size, t.size, p.size)
         if sum(scale == 1 for scale in mesh_shape) != 1:
@@ -659,15 +920,41 @@ class GridMeshMixin:
                      dataid: str = 'Data',
                      slice_type: Literal['points', 'splines', 'slices'] = 'points',
                      **kwargs):
-        """Add a 3-D volume slice rendered as points, splines, or surface quads.
+        """Add a structured set of points, splines, or slices from spherical coordinate arrays.
 
-        All three coordinate arrays must have more than one element (no fixed
-        axis).  The rendering geometry type is controlled by ``slice_type``.
+        This method is a flexible, general-purpose interface for constructing structured sets
+        of points, splines, or slices from independent spherical coordinate arrays. The
+        ``slice_type`` parameter selects the specific rendering style and underlying polydata
+        builder:
+
+            - ``slice_type='points'``
+              renders the full grid as a point cloud, using
+              :func:`~pyvisual.core.mesh3d.build_point_polydata`.
+            - ``slice_type='splines'``
+              renders the grid as a bundle of splines along the varying axis, using
+              :func:`~pyvisual.core.mesh3d.build_spline_polydata`.
+            - ``slice_type='slices'``
+              renders the grid as stacked quad surfaces along the varying axis, using
+              :func:`~pyvisual.core.mesh3d.build_slice_polydata`.
+
+        Structured grids can be decomposed into stacks of multiple 1-D or 2-D elements, and
+        rendered as "faux" volumes by providing the appropriate opacity transfer function
+        to :meth:`~pyvisual.core.plot3d.Plot3d.add_mesh` (for more detail on opacity transfer
+        functions, consult PyVista's `Plotting with Opacity <https://docs.pyvista.org/examples/02-plot/opacity.html>`_
+        example documentation).
+
+        .. warning::
+           It is crucial to note that ``slice_type`` selection impacts the *meaning* of
+           the ``axis`` parameter. When building point or spline meshes, ``axis`` specifies
+           the varying dimension along which points or splines are constructed. However,
+           when building slice meshes, ``axis`` specifies the fixed dimension along which
+           slices are stacked. This distinction is important for correctly interpreting the
+           input coordinate arrays and achieving the desired visualization outcome.
 
         Parameters
         ----------
         r, t, p : ArrayLike
-            Spherical coordinate arrays.  Each must have size > 1.
+            Spherical coordinate arrays.
         data : ArrayLike | None, optional
             Scalar field.  Default is ``None`` (solid color).
         axis : int, optional
@@ -683,7 +970,62 @@ class GridMeshMixin:
         Returns
         -------
         out : pyvista.Actor
-            The rendered 3-D slice actor.
+            The rendered surface actor.
+
+        See Also
+        --------
+        :meth:`add_1d_slice`
+            For rendering 1-D line slices from independent coordinate arrays.
+        :meth:`add_2d_slice`
+            For rendering 2-D surface slices from independent coordinate arrays.
+        :mod:`psi_io`
+            For more information on reading PSI data into independent coordinate arrays.
+
+        Examples
+        --------
+        An outer-corona slab spanning a near-equatorial colatitude band, rendered
+        as stacked quad surfaces (``slice_type='slices'``).  The scalar field
+        is a radially scaled :math:`B_r`.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_io import read_hdf_by_index
+            >>>
+            >>> datafile = fetch_datasets("cor", "br")
+            >>> data, r, t, p = read_hdf_by_index(datafile.cor_br, (128, None), (50, 92), None)
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_3d_slice(r, t, p, data*r, slice_type='slices', axis=1,
+            ...                      cmap='seismic', clim=(-1e-1, 1e-1), opacity=0.8)
+            >>> plotter.show()
+
+        The same near-equatorial band over the inner corona, rendered as
+        colatitudinal splines (``slice_type='splines'``) to emphasize the
+        way in which the ``axis`` parameter selects the varying dimension.
+        Here, ``axis=2`` declares that the longitude dimension is the varying
+        axis along which splines are constructed, while the remaining dimensions
+        (radius and colatitude) are fixed for each spline and enumerated by the
+        shape of the input arrays.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_io import read_hdf_by_index
+            >>>
+            >>> datafile = fetch_datasets("cor", "br")
+            >>> data, r, t, p = read_hdf_by_index(datafile.cor_br, (None, 128), (50, 92), None)
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_3d_slice(r, t, p, data*r, slice_type='splines', axis=2,
+            ...                      cmap='seismic', clim=(-1e-1, 1e-1), opacity=0.8)
+            >>> plotter.show()
         """
         return self._add_grid_set(r, t, p, data,
                                   axis, dataid, slice_type,
@@ -781,6 +1123,27 @@ class GridMeshMixin:
         -------
         out : pyvista.Actor
             The rendered isosurface actor.
+            
+        Examples
+        --------
+        Extract the :math:`B_r = 0` isosurface from the full 3-D coronal field.
+        This surface is the polarity inversion boundary shown against a
+        constant-:math:`r` background slice of :math:`B_r` for context.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_io import read_hdf_data
+            >>>
+            >>> datafile = fetch_datasets("cor", "br")
+            >>> data, r, t, p = read_hdf_data(datafile.cor_br)
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_contour(r, t, p, data, color='white')
+            >>> plotter.add_2d_slice(r[1], t, p, data[...,1], cmap="seismic", clim=(-30, 30))
+            >>> plotter.show()
         """
         sgrid = SphericalMesh(r, t, p, data=data, dataid=dataid, iformat='rtp')
         mesh = sgrid.contour(np.atleast_1d(isovalue if isovalue is not None else 0))
@@ -928,7 +1291,19 @@ class ObserverMixin:
         -------
         out : SphericalCoordinate
             The camera up vector expressed as :math:`(r, \\theta, \\phi)`.
-        """
+
+        Examples
+        --------
+        Read back the default up vector.
+
+        >>> from pyvisual import Plot3d
+        >>> from math import pi
+        >>>
+        >>> plotter = Plot3d()
+        >>> plotter.observer_viewup
+        SphericalCoordinate(r=np.float64(1.0), t=np.float64(0.0), p=np.float64(0.0))
+
+"""
         r, t, p = cartesian_to_spherical(*self.camera.up)
         return SphericalCoordinate(r, t, p)
 
@@ -947,6 +1322,22 @@ class ObserverMixin:
         -------
         position : SphericalCoordinate
             The observer's position as a named tuple of r, t, p data.
+
+        Examples
+        --------
+        Set the observer position to
+        :math:`(r, \\theta, \\phi) = (10\\,R_\\odot,\\,\\pi/4,\\,\\pi/4)`.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from math import pi
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.add_sun()
+            >>> plotter.add_longlat_lines()
+            >>> plotter.observer_position = (10, pi/4, pi/4)
+            >>> plotter.show()
         """
         r, t, p = cartesian_to_spherical(*self.camera.position)
         return SphericalCoordinate(r, t, p)
@@ -978,13 +1369,32 @@ class ObserverMixin:
 
     @property
     def observer_orientation(self):
-        """
-        Get or set the observer's orientation (p angle).
+        """Get or set the observer's position angle (roll about the line of sight).
+
+        The position angle :math:`p_{\\text{angle}}` is the signed rotation
+        about the view axis
+        :math:`\\hat{v} = (\\mathbf{f} - \\mathbf{p})/\\|\\mathbf{f} - \\mathbf{p}\\|`
+        that brings the projection of solar north
+        :math:`\\hat{z} = (0, 0, 1)` onto the image plane into alignment with
+        the camera up vector.  It is therefore a **derived** quantity that
+        depends jointly on three camera state variables:
+
+        - :attr:`observer_position` :math:`\\mathbf{p}` — the camera location,
+        - :attr:`observer_focus` :math:`\\mathbf{f}` — the look-at point,
+        - :attr:`observer_viewup` — the camera up direction.
+
+        .. warning::
+           Because :math:`p_{\\text{angle}}` is derived, any interactive
+           manipulation of the scene (rotation, pan, zoom) that changes
+           position, focal point, or up vector will silently update the
+           returned value.  Programmatically setting this property via the
+           setter adjusts the camera roll **relative to the current state**;
+           any subsequent interaction will override it.
 
         Returns
         -------
         orientation : ObserverOrientation
-            The observer's orientation as a named tuple of r, t, p data.
+            Named tuple with a single field ``p_angle`` (degrees).
         """
         p_angle = camera_roll_wrt_solar_north(*self.camera_position)
         return ObserverOrientation(p_angle=p_angle)
@@ -998,23 +1408,90 @@ class ObserverMixin:
 
     @property
     def observer_los_view(self):
-        """
-        Get or set the observer's line-of-sight field-of-view extents.
-
-        .. warning::
-            This property getter is not yet implemented.
+        """Get or set the observer's field-of-view in helioprojective angular coordinates.
 
         The setter accepts a 4-tuple ``(x0, x1, y0, y1)`` of angular extents
-        in degrees defining the horizontal and vertical FOV, and adjusts the
-        camera focal point, view angle, and window size accordingly.
+        in **degrees**, where ``(x0, x1)`` span the horizontal (elongation,
+        :math:`T_x`) axis and ``(y0, y1)`` span the vertical (altitude,
+        :math:`T_y`) axis.  Both are measured from Sun-center along the
+        observer's line of sight.
+
+        **How the view is determined**
+
+        Three camera properties are updated simultaneously:
+
+        1. *Window aspect ratio* — resized to
+           :math:`|x_1 - x_0| / |y_1 - y_0|` so that the FOV fills the
+           viewport without distortion.
+        2. *Vertical view angle* — set to :math:`|y_1 - y_0|` degrees, which
+           together with the aspect ratio fully defines the camera frustum.
+        3. *Focal point* — placed at the intersection of the central LOS
+           :math:`(T_x, T_y) = ((x_0+x_1)/2,\\,(y_0+y_1)/2)` with the
+           :func:`~pyvisual.utils.geometry.thompson_sphere`.  This converts
+           helioprojective pointing angles into an unambiguous 3-D Cartesian
+           location in the scene.
+
+        **Why the focal point uses the Thomson sphere**
+
+        PyVista's camera is aimed at a single 3-D point (the focal point),
+        not at an angular direction.  To express pointing in helioprojective
+        coordinates, the central LOS must be mapped to a specific Cartesian
+        position.  The Thomson sphere — centered at
+        :math:`\\mathbf{p}_{\\text{obs}}/2` with radius
+        :math:`\\|\\mathbf{p}_{\\text{obs}}\\|/2` — provides a natural
+        reference surface: every LOS from the observer intersects it at a
+        unique point, so setting the focal point to that intersection steers
+        the camera along the correct helioprojective direction.
+
+        **Dependence on observer position**
+
+        Because the Thomson sphere scales with :math:`\\|\\mathbf{p}_{\\text{obs}}\\|`,
+        the same ``(x0, x1, y0, y1)`` tuple will place the focal point at
+        different Cartesian locations for different observer distances.
+        Always set :attr:`observer_position` before setting this property.
+
+        .. warning::
+            The getter is not yet implemented and returns ``None``.  The
+            setter expects a 4-tuple ``(x0, x1, y0, y1)`` with
+            ``x0 < x1`` and ``y0 < y1``; a degenerate vertical extent
+            (``y0 == y1``) will raise :exc:`ZeroDivisionError` when
+            computing the aspect ratio.
+
+        See Also
+        --------
+        :attr:`observer_fov_view`
+            Alternate interface for setting the field of view by minimum LOS
+            impact radius rather than angular extents.
+        :func:`~pyvisual.utils.geometry.thompson_sphere`
+            For more information on the geometric mapping from helioprojective
+            angles to Cartesian focal point locations.
+
+        Examples
+        --------
+        Point a simulated coronagraph at the corona from
+        :math:`r = 50\\,R_\\odot` on the equatorial plane, with a
+        :math:`\\pm 10°` horizontal by :math:`\\pm 8°` vertical FOV centered
+        on the Sun.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from math import pi
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.add_sun()
+            >>> plotter.add_longlat_lines()
+            >>> plotter.observer_position = 50, pi/2, 0
+            >>> plotter.observer_los_view = -10, 10, -8, 8
+            >>> plotter.show()
         """
-        warnings.warn("NOT IMPLEMENTED")
         return
 
     @observer_los_view.setter
     @render_scene
     def observer_los_view(self, args):
         x0, x1, y0, y1 = args
+
         elongation = (x0 + x1) / 2
         altitude = (y0 + y1) / 2
         radius, t, p = cartesian_to_spherical(*self.camera.position)
@@ -1022,6 +1499,7 @@ class ObserverMixin:
         longitude = clip_angle(np.rad2deg(p), max_value=180)
         aspect_ratio = abs(x1 - x0) / abs(y1 - y0)
         _, window_vertical_size = self.window_size
+
         self.window_size = (int(window_vertical_size * aspect_ratio), int(window_vertical_size))
         self.camera.view_angle = abs(y1 - y0)
         fp = thompson_sphere(
@@ -1031,22 +1509,66 @@ class ObserverMixin:
 
     @property
     def observer_fov_view(self):
-        """
-        Get or set the observer's field-of-view by minimum LOS impact radius.
+        """Get or set the field-of-view by minimum line-of-sight impact radius.
+
+        This is a higher-level alternative to :attr:`observer_los_view` that
+        expresses the FOV in physically intuitive units — the closest distance
+        any line of sight passes to Sun-center — rather than raw angular extents.
+
+        **How the FOV is determined**
+
+        Given a minimum impact radius :math:`r_{\\min}` (in :math:`R_\\odot`)
+        and the current observer distance :math:`d_{\\text{obs}}`, the
+        symmetric half-angle :math:`\\alpha` is computed via
+
+        .. math::
+
+           \\alpha = \\arcsin\\!\\left(\\frac{r_{\\min}}{d_{\\text{obs}}}\\right)
+
+        using :func:`~pyvisual.utils.geometry.los_rmin2angle`. The result is
+        then forwarded to :attr:`observer_los_view` as the symmetric 4-tuple
+        :math:`(-\\alpha, +\\alpha, -\\alpha, +\\alpha)`, producing a square
+        viewport whose edge lines of sight graze :math:`r_{\\min}`.
+
+        **Relationship to observer position**
+
+        Because :math:`\\alpha` depends on :math:`d_{\\text{obs}}`, the same
+        ``rmin`` value produces a wider angular FOV for a distant observer and
+        a narrower one for a close observer — the physical scale on the sky
+        is always anchored to the solar surface.  Always set
+        :attr:`observer_position` before setting this property.
 
         .. warning::
-            This property getter is not yet implemented.
+            The getter is not yet implemented and returns ``None``.  The
+            setter raises :exc:`ValueError` if :math:`r_{\\min} \\geq d_{\\text{obs}}`
+            (impact radius larger than or equal to the observer distance is
+            geometrically impossible).
 
-        The setter accepts a single value ``rmin`` (in solar radii). The symmetric
-        angular half-extent is computed from the observer distance and ``rmin`` via
-        :func:`los_rmin2angle`, then forwarded to :attr:`observer_los_view`.
+        See Also
+        --------
+        :attr:`observer_los_view`
+            Lower-level FOV control via explicit helioprojective angular extents.
+        :func:`~pyvisual.utils.geometry.los_rmin2angle`
+            Converts an impact parameter to a helioprojective elongation angle.
 
-        Raises
-        ------
-        ValueError
-            If the observer distance is less than ``rmin``.
+        Examples
+        --------
+        View the corona from :math:`r = 50\\,R_\\odot` on the equatorial plane,
+        with the FOV sized so that the closest LOS grazes the solar surface
+        at :math:`r_{\\min} = 4\\,R_\\odot`.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from math import pi
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.add_sun()
+            >>> plotter.add_longlat_lines()
+            >>> plotter.observer_position = 50, pi/2, 0
+            >>> plotter.observer_fov_view = 4
+            >>> plotter.show()
         """
-        warnings.warn("NOT IMPLEMENTED")
         return
 
     @observer_fov_view.setter
@@ -1132,7 +1654,7 @@ class GeometryMixin:
 
     Provides convenience methods for:
 
-    - The Sun sphere centred at the origin with radius :math:`1\\,R_\\odot`.
+    - The Sun sphere centered at the origin with radius :math:`1\\,R_\\odot`.
     - Concentric spherical shells defined by inner/outer radii.
     - Planar discs specified in a local spherical basis.
     - The Thomson sphere for a given observer position.
@@ -1144,7 +1666,7 @@ class GeometryMixin:
         """Add a sphere representing the Sun at the origin.
 
         Constructs a :class:`pyvista.Sphere` with radius :math:`1\\,R_\\odot`
-        centred at the origin with a resolution of 180 × 360.
+        centered at the origin with a resolution of 180 × 360.
 
         Parameters
         ----------
@@ -1160,12 +1682,15 @@ class GeometryMixin:
 
         Examples
         --------
+        A unit solar sphere centered at the origin with default orange coloring.
+
         .. pyvista-plot::
 
-            >>> import pyvisual as pv
-            >>> pl = pv.Plot3d()
-            >>> pl.add_sun()
-            >>> pl.show()
+            >>> from pyvisual import Plot3d
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.show()
         """
         sun = pv.Sphere(radius=1.0,
                         center=(0, 0, 0),
@@ -1196,13 +1721,45 @@ class GeometryMixin:
             Inner radius of the shell in solar radii.
         outer_radius : float
             Outer radius of the shell in solar radii.
-        kwargs : dict
+        **kwargs
             Additional keyword arguments for styling the shell mesh.
 
         Returns
         -------
         out : pyvista.Actor
             The mesh actor representing the shell added to the plot.
+
+        Examples
+        --------
+        A translucent shell at :math:`r = 10\\,R_\\odot` centered on the Sun,
+        representing a source-surface or heliospheric boundary marker.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_shell(outer_radius=10, opacity=0.8)
+            >>> plotter.show()
+
+        Two small shells placed at :math:`(r=2\\,R_\\odot,\\,\\theta=\\pi/4)` and
+        :math:`(r=2\\,R_\\odot,\\,\\theta=3\\pi/4)` — symmetric about the equatorial
+        plane — useful as positional markers in the northern and southern
+        hemispheres.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from math import pi
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_shell(2, pi/4, 0, inner_radius=0.05, outer_radius=0.1, color='red', opacity=0.8)
+            >>> plotter.add_shell(2, 3*pi/4, 0, inner_radius=0.05, outer_radius=0.1, color='blue', opacity=0.8)
+            >>> plotter.show()
         """
         center = spherical_to_cartesian(r, t, p)
         shell_inner = pv.Sphere(radius=inner_radius,
@@ -1260,9 +1817,40 @@ class GeometryMixin:
         out : pyvista.Actor
             Returned actor from :meth:`add_mesh`.
 
-        Notes
-        -----
-        - This method always uses ``c_res=720`` for the disc circumferential resolution.
+        Examples
+        --------
+        A solid disc centered at :math:`r = 2\\,R_\\odot` on the equatorial
+        plane, with its normal pointing radially outward
+        (:math:`\\hat{n} = \\hat{r}`).
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from math import pi
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.add_sun()
+            >>> plotter.add_disc(r=2, t=pi/2, p=0, outer_radius=0.3, normal=(1, 0, 0))
+            >>> plotter.show()
+
+        Three discs at the same equatorial position illustrating each of the
+        local spherical basis directions: :math:`\\hat{r}` (blue),
+        :math:`\\hat{\\theta}` (white), and :math:`\\hat{\\phi}` (red).
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from math import pi
+            >>>
+            >>> disc_kwargs = dict(r=2, t=pi/2, p=0, outer_radius=0.2)
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_disc(**disc_kwargs, normal=(1, 0, 0), color='blue')
+            >>> plotter.add_disc(**disc_kwargs, normal=(0, 1, 0), color='white')
+            >>> plotter.add_disc(**disc_kwargs, normal=(0, 0, 1), color='red')
+            >>> plotter.show()
         """
         center = spherical_to_cartesian(r, t, p)
         normal = spherical_to_cartesian_vec(*normal, t, p)
@@ -1323,13 +1911,27 @@ class GeometryMixin:
 
         Examples
         --------
-        Use current camera position as the observer:
+        The Thomson sphere for an observer at :math:`r = 10\\,R_\\odot` on
+        the equatorial plane.  It is centered at the midpoint between the Sun
+        and the observer with radius :math:`5\\,R_\\odot`, and represents the
+        locus of points of maximum Thomson scattering efficiency along any
+        line of sight through the corona.
 
-        >>> actor = plotter.add_thompson_sphere(opacity=0.2)  # doctest: +SKIP
+        .. pyvista-plot::
 
-        Provide an observer position in spherical coordinates:
-
-        >>> actor = plotter.add_thompson_sphere(1.0, np.pi/2, 0.0, opacity=0.2)  # doctest: +SKIP
+            >>> from pyvisual import Plot3d
+            >>> from math import pi
+            >>>
+            >>> observer_position = 10, pi/2, 0
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.observer_position = observer_position
+            >>> plotter.add_thompson_sphere(opacity=0.8)
+            >>> plotter.add_point(*observer_position, color='red', point_size=10)
+            >>> plotter.observer_position = 50, pi/2, pi/6
+            >>> plotter.show()
         """
         observer_position = self.camera.position if not pos else spherical_to_cartesian(*pos)
         tsphere = pv.Sphere(radius=np.linalg.norm(observer_position) / 2,
@@ -1374,14 +1976,15 @@ class GeometryMixin:
 
         Examples
         --------
-        Add longitudinal lines every 15° at a radius of 1.02 R☉:
+        Meridians every 30° of longitude drawn at :math:`r = 1.01\\,R_\\odot`
+        to avoid z-fighting with the solar surface.
 
         .. pyvista-plot::
 
             >>> from pyvisual import Plot3d
             >>> plotter = Plot3d()
             >>> plotter.add_sun()
-            >>> actor = plotter.add_longitudinal_lines(lon_deg=15, radius=1.02, line_width=2)  # doctest: +SKIP
+            >>> plotter.add_longitudinal_lines()
             >>> plotter.show()
         """
         rargs = (radius, radius, 1, 1)
@@ -1413,6 +2016,18 @@ class GeometryMixin:
         -------
         out : pyvista.Actor
             Returned actor from :meth:`add_grid`.
+
+        Examples
+        --------
+        Parallels every 15° of latitude drawn at :math:`r = 1.01\\,R_\\odot`.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> plotter = Plot3d()
+            >>> plotter.add_sun()
+            >>> plotter.add_latitudinal_lines()
+            >>> plotter.show()
         """
         rargs = (radius, radius, 1, 1)
         targs = (0, np.pi, int(180 / lat_deg), 360)
@@ -1453,6 +2068,19 @@ class GeometryMixin:
             Meridians only.
         :meth:`add_latitudinal_lines`
             Parallels only.
+
+        Examples
+        --------
+        A full Carrington-style graticule: meridians every 30° and parallels
+        every 15°, drawn at :math:`r = 1.01\\,R_\\odot`.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> plotter = Plot3d()
+            >>> plotter.add_sun()
+            >>> actor = plotter.add_longlat_lines()
+            >>> plotter.show()
         """
         rargs = (radius, radius, 1, 1)
         targs = (0, np.pi, int(180 / lat_deg), 180)
@@ -1494,6 +2122,47 @@ class GeometryMixin:
         -------
         out : pyvista.Actor
             Returned actor from :meth:`~pyvisual.core.plot3d.Plot3d.add_mesh`.
+            
+        Examples
+        --------
+        A 3-D structured box between :math:`r \\in [15,\\,30]\\,R_\\odot`,
+        :math:`\\theta \\in [\\pi/4,\\,3\\pi/4]` and
+        :math:`\\phi \\in [\\pi/4,\\,3\\pi/4]`, showing 3 radial lines, 6
+        colatitudinal lines, and 6 longitudinal lines within the volume.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from math import pi
+            >>>
+            >>> radial_args = 15, 30, 3, 2
+            >>> theta_args = pi/4, 3*pi/4, 6, 60
+            >>> phi_args = pi/4, 3*pi/4, 6, 60
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_grid(radial_args, theta_args, phi_args)
+            >>> plotter.show()
+
+        A meridional cross-section at :math:`\\phi = 0` with 10 radial lines
+        spanning :math:`r \\in [1,\\,30]\\,R_\\odot` and 12 colatitudinal
+        lines from pole to pole.
+
+        .. pyvista-plot::
+
+            >>> from pyvisual import Plot3d
+            >>> from math import pi
+            >>>
+            >>> radial_args = 1, 30, 10, 2
+            >>> theta_args = 0, pi, 12, 60
+            >>> phi_args = 0, 0, 1, 1
+            >>>
+            >>> plotter = Plot3d()
+            >>> plotter.show_axes()
+            >>> plotter.add_sun()
+            >>> plotter.add_grid(radial_args, theta_args, phi_args)
+            >>> plotter.show()
         """
         rmin, rmax, rnum, rres = rargs
         tmin, tmax, tnum, tres = targs

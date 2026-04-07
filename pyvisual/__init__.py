@@ -7,18 +7,15 @@ for solar and magnetohydrodynamic (MHD) model output.  It wraps
 :class:`pyvista.Plotter` with spherical-coordinate awareness, observer controls,
 and rendering utilities tuned to the PSI data ecosystem (psi-io, mapflpy).
 
-The primary entry point is :class:`~pyvisual.core.plot3d.Plot3d`, exposed here
-at the top-level namespace for convenience.
-
 Quick start
 -----------
 .. code-block:: python
 
-    import pyvisual as pv
-
-    pl = pv.Plot3d()
-    pl.add_sun()
-    pl.show()
+    >>> from pyvisual import Plot3d
+    >>>
+    >>> plotter = Plot3d()
+    >>> plotter.add_sun()
+    >>> plotter.show()
 
 Sub-packages
 ------------
@@ -34,17 +31,8 @@ Sub-packages
     (:mod:`~pyvisual.utils.data`), and miscellaneous helpers
     (:mod:`~pyvisual.utils.helpers`).
 
-Attributes
-----------
-__version__ : str
-    The installed package version, resolved from package metadata at import
-    time.  Falls back to the ``[project] version`` field in ``pyproject.toml``
-    when the package is used in an editable install without metadata.
-
 See Also
 --------
-:class:`pyvisual.core.plot3d.Plot3d`
-    Full API reference for the main plotter class.
 `PSI data conventions <https://predsci.com/doc/psi-io/guide/index.html>`_
     Documentation for the HDF file format and coordinate conventions used by
     PSI model output.
@@ -53,6 +41,7 @@ See Also
 """
 
 from pyvisual.core.plot3d import Plot3d
+from pyvisual.core.mesh3d import SphericalMesh, CartesianMesh
 
 try:
     from importlib.metadata import version as _pkg_version

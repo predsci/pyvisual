@@ -1,0 +1,5 @@
+/* Primary navigation sidebar */
+.bd-sidebar-primary {
+    width: max-content;
+    flex-basis: max-content;
+}

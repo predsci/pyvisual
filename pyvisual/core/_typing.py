@@ -50,7 +50,7 @@ Mirrors :data:`FlColorType` as a plain :class:`set` for membership testing in
 validation logic.
 """
 
-SurfaceReconstructionType = Literal['delaunay_2d', 'delaunay_3dd', 'reconstruct_surface']
+SurfaceReconstructionType = Literal['delaunay_2d', 'delaunay_3d', 'reconstruct_surface']
 """Literal type for surface-reconstruction methods used in
 :func:`~pyvisual.core.mesh3d.build_surface_polydata`.
 
@@ -62,7 +62,7 @@ SurfaceReconstructionType = Literal['delaunay_2d', 'delaunay_3dd', 'reconstruct_
     Implicit surface reconstruction via :meth:`pyvista.PolyData.reconstruct_surface`.
 """
 
-SURFACE_RECONSTRUCTION_TYPE = {'delaunay_2d', 'delaunay_3dd', 'reconstruct_surface'}
+SURFACE_RECONSTRUCTION_TYPE = {'delaunay_2d', 'delaunay_3d', 'reconstruct_surface'}
 """Runtime set of valid surface-reconstruction method strings.
 
 Mirrors :data:`SurfaceReconstructionType` as a plain :class:`set`.

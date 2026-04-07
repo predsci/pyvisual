@@ -1,9 +1,20 @@
 """
 Input-normalisation utilities and the ``@parse_mesh_params`` decorator.
 
-This module provides the plumbing that translates user-supplied coordinate arrays,
+This module provides the low-level API that translates user-supplied coordinate arrays,
 frame strings, and mesh objects into the internal representations expected by the
 mesh and mixin layers.
+
+.. note::
+   This module is principally concerned with parsing and validating coordinate
+   transformations for spherical meshes. Although a certain (limited) set of additional
+   coordinate frames will be supported in future iterations of **pyvisual**, the primary
+   concern of this package is to work with PSI's native spherical-coordinate output.
+
+   For those interested in working with a broader range of coordinate systems, it is
+   recommended to consult SunPy's `sunkit-pyvista <https://docs.sunpy.org/projects/sunkit-pyvista/en/latest/>`_
+   package, which provides a more general interface to PyVista with support for SunPy's
+   coordinate frames and transformations.
 
 Key responsibilities
 --------------------

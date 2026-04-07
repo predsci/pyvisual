@@ -28,7 +28,7 @@ Polydata builders
 :func:`build_surface_polydata`
     Reconstructed surface from scattered points.
 :func:`build_thompson_sphere`
-    Sphere centred halfway between the origin and an observer position.
+    Sphere centered halfway between the origin and an observer position.
 
 Operator support
 ----------------
@@ -296,12 +296,12 @@ def build_surface_polydata(d1: np.ndarray,
     out : pyvista.PolyData
         The reconstructed surface polydata.
     """
-    pdata = build_point_polydata(d1, d2, d3, axis, frame)
+    pdata = build_point_polydata(d1, d2, d3, axis, frame=frame)
     match method:
         case 'delaunay_2d':
             return pdata.delaunay_2d(**kwargs)
         case 'delaunay_3d':
-            return pdata.delaunay_3d(**kwargs).extract_surface()
+            return pdata.delaunay_3d(**kwargs).extract_surface(algorithm='geometry')
         case 'reconstruct_surface':
             return pdata.reconstruct_surface(**kwargs)
         case _:
@@ -315,7 +315,7 @@ def build_thompson_sphere(d1: float,
                           theta_resolution: int = 180,
                           phi_resolution: int = 360,
                           frame: Optional[MeshFramesType] = None):
-    """Build a Thomson sphere centred halfway between the origin and an observer position.
+    """Build a Thomson sphere centered halfway between the origin and an observer position.
 
     The Thomson sphere for a given observer has:
 

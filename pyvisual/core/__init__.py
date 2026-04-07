@@ -28,7 +28,7 @@ This sub-package contains the primary classes and supporting infrastructure for
 - :mod:`~pyvisual.core._styling` — immutable :class:`~types.MappingProxyType`
   dictionaries of per-render-type default kwargs.
 
-On import this module attempts to load the PSI colour theme for PyVista via
+On import this module attempts to load the PSI color theme for PyVista via
 :func:`~pyvisual.utils.data.fetch_theme`.  If the theme file cannot be retrieved a
 :class:`UserWarning` is emitted and PyVista's built-in
 :class:`~pyvista.themes.DarkTheme` is used as a fallback.

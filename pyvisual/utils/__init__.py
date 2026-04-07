@@ -32,7 +32,7 @@ Modules
     retrieving version-pinned MHD output files (CR 2282 Thermo 2 run in both
     coronal and heliospheric domains), and
     :func:`~pyvisual.utils.data.fetch_theme` for resolving the bundled PyVista
-    colour-theme file.
+    color-theme file.
 
 :mod:`~pyvisual.utils.helpers`
     Minimal helpers with no dependencies beyond :mod:`numpy`.  Currently
