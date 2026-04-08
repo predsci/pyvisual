@@ -13,8 +13,8 @@ Both mesh types expose the same pyvisual filter API
 :meth:`~pyvisual.core.mesh3d.CartesianMeshFilters.deconstruct`), but because
 they wrap different PyVista grid types
 (:class:`pyvista.StructuredGrid` vs :class:`pyvista.RectilinearGrid`),
-unmodified PyVista filters such as :meth:`pyvista.DataSetFilters.slice_orthogonal`
-and :meth:`pyvista.DataSetFilters.slice_along_axis` behave differently on each:
+unmodified PyVista filters such as :meth:`~pyvista.DataObjectFilters.slice_orthogonal`
+and :meth:`~pyvista.DataObjectFilters.slice_along_axis` behave differently on each:
 
 - On a :class:`~pyvisual.core.mesh3d.CartesianMesh` PyVista operates on the
   true spatial :math:`(x, y, z)` point coordinates, so slices are flat planes
@@ -24,7 +24,7 @@ and :meth:`pyvista.DataSetFilters.slice_along_axis` behave differently on each:
   so the same filter methods instead cut surfaces of constant radius,
   colatitude, and longitude.
 
-See also :ref:`sphx_glr_06_spherical_grid_class_p03_filters.py` for the
+See also :ref:`sphx_glr_gallery_06_spherical_grid_class_p03_filters.py` for the
 spherical-mesh equivalent of this example.
 """
 
@@ -59,7 +59,7 @@ spherical_mesh
 # Indexing a :class:`~pyvisual.core.mesh3d.CartesianMesh` with a 3-tuple of
 # slices selects grid points by their index positions in each axis direction,
 # exactly as for :class:`~pyvisual.core.mesh3d.SphericalMesh` (see
-# :ref:`sphx_glr_06_spherical_grid_class_p03_filters.py`).
+# :ref:`sphx_glr_gallery_06_spherical_grid_class_p03_filters.py`).
 # Because both mesh classes share the same underlying grid topology — the
 # Cartesian conversion is applied to the *coordinates*, not the *connectivity*
 # — identical index slices select the same spatial sub-region regardless of
@@ -78,12 +78,12 @@ plotter.show()
 # Orthogonal Slices — CartesianMesh
 # ---------------------------------
 #
-# :meth:`pyvista.DataSetFilters.slice_orthogonal` cuts three mutually
+# :meth:`pyvista.DataObjectFilters.slice_orthogonal` cuts three mutually
 # perpendicular cross-sections through the mesh centroid.  On a
 # :class:`~pyvisual.core.mesh3d.CartesianMesh` the underlying grid stores
 # real :math:`(x, y, z)` point coordinates, so the three slices are flat
 # planes aligned with the coordinate axes — one each of the YZ, XZ, and XY
-# planes passing through the centre of the domain.
+# planes passing through the center of the domain.
 
 plotter = Plot3d()
 plotter.show_axes()

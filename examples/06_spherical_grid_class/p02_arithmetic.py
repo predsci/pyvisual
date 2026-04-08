@@ -24,7 +24,7 @@ br_file = fetch_datasets("cor", "br").cor_br
 # ------------
 #
 # We initialize a :class:`~pyvisual.core.mesh3d.SphericalMesh` from the HDF file path, which
-# triggers the file-path dispatch path (see :ref:`sphx_glr_06_spherical_grid_class_p01_construction.py`
+# triggers the file-path dispatch path (see :ref:`sphx_glr_gallery_06_spherical_grid_class_p01_spherical_grid_init.py`
 # for details on the three construction paths.
 mesh = SphericalMesh(br_file)
 mesh

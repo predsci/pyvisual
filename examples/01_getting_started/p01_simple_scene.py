@@ -24,7 +24,7 @@ from pyvisual import Plot3d
 # %%
 # Once instantiated, the Plot3d object can be used to add actors/meshes to the scene. Here we
 # add axes (to display the coordinate system) and a sun (a "reference" sphere, centered
-# at the origin, with radius 1 :math:`R_\odot`). By calling the :func:`~pyvisual.core.plot3d.Plot3d.show`
+# at the origin, with radius 1 :math:`R_\odot`). By calling the :meth:`~pyvista.Plotter.show`
 # method, we can display the scene in an interactive window.
 
 plotter = Plot3d(
@@ -40,7 +40,7 @@ sun_actor = plotter.add_sun()
 plotter.show()
 
 # %%
-# By capturing the returned result of the :func:`~pyvisual.Plot3d.add_sun` method, we can
+# By capturing the returned result of the :meth:`~pyvisual.core.plot3d.Plot3d.add_sun` method, we can
 # manipulate the sun actor after it has been added to the scene. For example, we can remove it
 # from the scene and then add it back again.
 

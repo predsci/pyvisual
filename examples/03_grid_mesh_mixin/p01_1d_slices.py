@@ -12,7 +12,7 @@ result as a polyline colored by the supplied ``data`` array.
 
 Real coronal magnetic field data from a PSI MAS model (CR 2282) is loaded
 via :func:`~pyvisual.utils.data.fetch_datasets` and sliced using
-:func:`~psi_io.read_hdf_by_index`.  Passing a single integer index for a
+:func:`~psi_io.psi_io.read_hdf_by_index`.  Passing a single integer index for a
 dimension fixes it to a single grid point; ``None`` selects the full extent.
 The function returns the data and the three coordinate arrays in
 :math:`(r, \\theta, \\phi)` order, ready for direct use with

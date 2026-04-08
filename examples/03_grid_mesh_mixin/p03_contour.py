@@ -67,7 +67,7 @@ plotter.show()
 #
 # To demonstrate this contouring method on :math:`B_r` data from a
 # steady-state Thermodynamic MAS coronal model, we can load in the data
-# using :func:`~psi_io.read_hdf_data`.
+# using :func:`~psi_io.psi_io.read_hdf_data`.
 
 from psi_io import read_hdf_data
 from pyvisual.utils.data import fetch_datasets

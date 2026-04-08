@@ -19,9 +19,9 @@ be passed straight to
 :func:`~mapflpy.scripts.run_fwdbwd_tracing` as ``launch_points`` without
 any intermediate coordinate conversion.
 
-See also :ref:`sphx_glr_02_stack_mesh_mixin_p04_fieldlines.py` for a
+See also :ref:`sphx_glr_gallery_02_stack_mesh_mixin_p04_fieldlines.py` for a
 general introduction to fieldline rendering, and
-:ref:`sphx_glr_99_advanced_plots_p01_combining_multiple_elements.py` for a
+:ref:`sphx_glr_gallery_99_advanced_plots_p01_combining_multiple_elements.py` for a
 broader scene that layers slices, contours, and fieldlines.
 """
 

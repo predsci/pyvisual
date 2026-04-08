@@ -48,7 +48,7 @@ plotter.show()
 # LOS View — Off-Center Pointing
 # --------------------------------
 #
-# Shifting the angular range off-centre moves the focal point away from
+# Shifting the angular range off-center moves the focal point away from
 # Sun-center.  Here the horizontal window is displaced by :math:`+5°`
 # (``x0 = -5``, ``x1 = +15``) so that the camera is biased to the east
 # limb of the Sun.  The vertical extent remains symmetric.

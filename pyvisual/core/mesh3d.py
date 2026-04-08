@@ -41,6 +41,7 @@ new mesh instance of the same type.
 
 from __future__ import annotations
 
+import os
 import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
@@ -930,7 +931,8 @@ class _BaseFrameMesh(ABC):
         """Handle PyVista dataset input by forwarding to :meth:`_dispatch_pyvista`."""
         deep = kwargs.pop('deep', False)
         if args or kwargs:
-            warnings.warn("Additional arguments are ignored when input is a PyVista DataSet.")
+            if not os.environ.get('SPHINX_GALLERY_BUILD'):
+                warnings.warn("Additional arguments are ignored when input is a PyVista DataSet.")
         return self._dispatch_pyvista(uinput, iformat, deep)
 
     def _parse_input(self,

@@ -29,7 +29,7 @@ br_file = fetch_datasets("cor", "br").cor_br
 #
 # Load the coronal radial magnetic field (:math:`B_r`) HDF file and construct a
 # :class:`~pyvisual.core.mesh3d.SphericalMesh` via the file-path dispatcher (see
-# :ref:`sphx_glr_06_spherical_grid_class_p01_spherical_grid_init.py` for details on the
+# :ref:`sphx_glr_gallery_06_spherical_grid_class_p01_spherical_grid_init.py` for details on the
 # three construction methods).  A sub-region is then sliced out in
 # :math:`(r, \theta, \phi)` index space and rendered as a semi-transparent volume
 # using a diverging colormap.

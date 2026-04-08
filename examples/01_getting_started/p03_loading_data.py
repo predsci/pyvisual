@@ -8,7 +8,7 @@ rendered scene:
 1. **Fetching a dataset** — :func:`~pyvisual.utils.data.fetch_datasets`
    downloads (or retrieves from cache) a version-pinned HDF5 file from the
    PSI asset server and returns its local path.
-2. **Reading the data** — :func:`~psi_io.read_hdf_by_index` loads the array
+2. **Reading the data** — :func:`~psi_io.psi_io.read_hdf_by_index` loads the array
    values and the three coordinate grids :math:`(r, \\theta, \\phi)` from the
    file.  Passing ``None`` for a dimension selects its full extent; passing an
    integer index fixes that dimension to a single grid point.
@@ -28,7 +28,7 @@ from pyvisual.utils.data import fetch_datasets
 #
 # :func:`~pyvisual.utils.data.fetch_datasets` accepts a *domain* identifier
 # (``'cor'`` for the coronal domain, ``'hel'`` for heliospheric) and a
-# *variable* name.  It returns a :class:`~collections.namedtuple` whose fields
+# *variable* name.  It returns a :func:`~collections.namedtuple` whose fields
 # are named ``"{domain}_{variable}"``.  The first call downloads the file to
 # the local cache; subsequent calls return the cached copy immediately without
 # hitting the network.
@@ -40,7 +40,7 @@ br_file = datasets.cor_br
 # Reading a 2-D Radial Slice
 # --------------------------
 #
-# :func:`~psi_io.read_hdf_by_index` reads the HDF5 file and returns
+# :func:`~psi_io.psi_io.read_hdf_by_index` reads the HDF5 file and returns
 # ``(data, r, t, p)`` — the scalar array followed by the three coordinate
 # vectors.  Index arguments control which portion of the grid is loaded:
 #

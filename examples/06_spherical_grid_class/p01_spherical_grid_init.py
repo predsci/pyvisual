@@ -6,10 +6,10 @@ This example demonstrates the three ways to initialise a
 :class:`~pyvisual.core.mesh3d.SphericalMesh`:
 
 1. **From an HDF file path** — pass the path directly; the constructor calls
-   :func:`~psi_io.read_hdf_by_index` internally.  Additional positional
+   :func:`~psi_io.psi_io.read_hdf_by_index` internally.  Additional positional
    arguments after the path are forwarded as index arguments to the file reader.
 2. **From data arrays** — read the file manually with
-   :func:`~psi_io.read_hdf_by_index`, then pass the coordinate arrays and data
+   :func:`~psi_io.psi_io.read_hdf_by_index`, then pass the coordinate arrays and data
    to the constructor.
 3. **From an existing** :class:`~pyvisual.core.mesh3d.SphericalMesh` — pass
    another mesh instance to produce a shallow copy.
@@ -32,9 +32,9 @@ br_file = fetch_datasets("cor", "br").cor_br
 # ---------------------
 #
 # Passing a file path as the first argument triggers the file-path dispatch
-# path: the constructor calls :func:`~psi_io.read_hdf_by_index` on the path,
+# path: the constructor calls :func:`~psi_io.psi_io.read_hdf_by_index` on the path,
 # loading both the scalar data and the three coordinate grids.  Positional
-# arguments after the path are forwarded to :func:`~psi_io.read_hdf_by_index`
+# arguments after the path are forwarded to :func:`~psi_io.psi_io.read_hdf_by_index`
 # as index arguments, controlling which portion of the grid is loaded
 # (see the function documentation for details).
 #
@@ -55,7 +55,7 @@ print(f"data range : [{mesh_from_path.data.min():.4f}, {mesh_from_path.data.max(
 #
 # When you need to pre-process the arrays before constructing the mesh —
 # for example to apply a coordinate transform or inspect the raw values —
-# call :func:`~psi_io.read_hdf_by_index` yourself and pass the results
+# call :func:`~psi_io.psi_io.read_hdf_by_index` yourself and pass the results
 # directly to the constructor.  The coordinate arrays go in as the first three
 # positional arguments (``r``, ``t``, ``p``); the scalar values are supplied
 # via the ``data`` keyword.
