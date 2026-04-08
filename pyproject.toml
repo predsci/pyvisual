@@ -11,7 +11,7 @@ requires = ["setuptools >= 77.0.3"]
 # ----------------
 [project]
 name = "psi-pyvisual"
-version = "0.9.0"
+version = "0.9.1"
 description = "3D Visualization Tools for Solar Physics"
 authors = [
   {name = "Predictive Science Inc.", email = "webmaster@predsci.com"},
