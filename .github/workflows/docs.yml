@@ -22,6 +22,11 @@ jobs:
           python-version-file: .python-version
           cache: pip
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1-mesa-glx xvfb libosmesa6
+
       - name: Install docs dependencies
         run: |
           python -m pip install --upgrade pip
@@ -29,7 +34,7 @@ jobs:
 
       - name: Build docs
         run: |
-          sphinx-build docs/source docs/_build/html
+          xvfb-run sphinx-build docs/source docs/_build/html
 
       - name: Upload docs artifact
         if: always()
