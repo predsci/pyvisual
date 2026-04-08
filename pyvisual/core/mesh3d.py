@@ -343,7 +343,7 @@ def build_thompson_sphere(d1: float,
     Returns
     -------
     out : pyvista.PolyData
-        A :class:`pyvista.Sphere` polydata with ``MESH_FRAME='cartesian'`` stamped
+        A spherical polydata object with ``MESH_FRAME='cartesian'`` stamped
         in its ``user_dict``.
     """
     observer_position = np.array((d1, d2, d3))
@@ -1085,6 +1085,23 @@ class CartesianMesh(_BaseFrameMesh, pv.StructuredGrid, CartesianMeshFilters):
     permutation are accepted via the ``iformat`` constructor argument; spherical
     inputs (``'rtp'``) are automatically converted to Cartesian before being
     stored.
+
+    .. note::
+       The general motivation behind this class (in contrast to the :class:`SphericalMesh`
+       class) is to facilitate the use of PyVista/VTK's
+       `filters <https://docs.pyvista.org/api/core/filters>`_ on spherical grids that have
+       been converted to Cartesian coordinates. This :func:`~pyvisual.utils.geometry.spherical_to_cartesian`
+       transformation yeilds topological structured meshes that are, nevertheless, not composed
+       of monotonically increasing coordinate arrays. Therefore, the grid's internal structure
+       has to be stored explicitly *viz.* through a :class:`pyvista.StructuredGrid` rather than a
+       :class:`pyvista.RectilinearGrid`.
+
+    .. warning::
+       The consequence of the above note is that the point arrays of this class are
+       derived from a :func:`~numpy.meshgrid`-like Cartesian product of the input scales,
+       and are not stored as the three separate 1-D arrays that are typical of rectilinear grids.
+       As such, these grids can be substantially more memory-intensive than their
+       :class:`SphericalMesh` counterparts.
 
     Parameters
     ----------

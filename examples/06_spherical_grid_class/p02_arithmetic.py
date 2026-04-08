@@ -15,22 +15,19 @@ changes.
 import numpy as np
 from pyvisual import Plot3d
 from pyvisual.core.mesh3d import SphericalMesh
+from pyvisual.utils.data import fetch_datasets
+
+br_file = fetch_datasets("cor", "br").cor_br
 
 # %%
-# Build a Base Mesh
-# -----------------
+# Build a Mesh
+# ------------
 #
-# We start with a simple dipole-like :math:`B_r` field, scaled to be
-# everywhere positive so that logarithmic operations are well-defined.
-
-r = np.linspace(1, 10, 20)
-t = np.linspace(0.1, np.pi - 0.1, 30)   # avoid exact poles
-p = np.linspace(0, 2 * np.pi, 60)
-
-R, T, P = np.meshgrid(r, t, p, indexing='ij')
-Br = np.abs(np.cos(T)) / R ** 2          # always positive
-
-mesh = SphericalMesh(r, t, p, data=Br, dataid='Br')
+# We initialize a :class:`~pyvisual.core.mesh3d.SphericalMesh` from the HDF file path, which
+# triggers the file-path dispatch path (see :ref:`sphx_glr_06_spherical_grid_class_p01_construction.py`
+# for details on the three construction paths.
+mesh = SphericalMesh(br_file)
+mesh
 
 # %%
 # Radial Flux Scaling
@@ -40,15 +37,13 @@ mesh = SphericalMesh(r, t, p, data=Br, dataid='Br')
 # :math:`B_r` to the signed radial flux :math:`B_r r^2`.  The coordinate
 # arrays are unchanged; only the active scalar is updated.
 
-R_axis = np.linspace(1, 10, 20)
-mesh_r2 = mesh * R_axis[:, None, None] ** 2
+mesh_r2 = mesh * mesh.r[:, None, None] ** 2
 print(f"Br     range: [{mesh.data.min():.4f}, {mesh.data.max():.4f}]")
 print(f"Br r^2 range: [{mesh_r2.data.min():.4f}, {mesh_r2.data.max():.4f}]")
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
-plotter.add_sun()
-plotter.add_mesh(mesh_r2, cmap='hot', opacity=0.5, show_scalar_bar=False)
+plotter.add_mesh(mesh_r2, cmap='seismic', clim=(-1, 1), opacity=0.5, show_scalar_bar=False)
 plotter.show()
 
 # %%
@@ -58,13 +53,16 @@ plotter.show()
 # The :meth:`~pyvisual.core.mesh3d._BaseFrameMesh.__array_ufunc__` hook lets
 # any single-output NumPy ufunc act directly on the mesh.
 # :func:`numpy.log10` applied to :math:`B_r r^2` converts the field to a
-# logarithmic scale, which is useful when the data spans several decades.
+# logarithmic scale.
+#
+# To account for the sign of :math:`B_r r^2`, we take the absolute value before applying
+# the logarithm using the python built-in :func:`abs` function, which also supports the
+# mesh type.
 
-mesh_log = np.log10(mesh_r2)
-print(f"log10(Br r^2) range: [{mesh_log.data.min():.3f}, {mesh_log.data.max():.3f}]")
+mesh_log = np.log10(abs(mesh_r2))
+print(f"log10(|Br r^2|) range: [{mesh_log.data.min():.3f}, {mesh_log.data.max():.3f}]")
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
-plotter.add_sun()
-plotter.add_mesh(mesh_log, cmap='inferno', opacity=0.5, show_scalar_bar=False)
+plotter.add_mesh(mesh_log, cmap='rainbow', clim=(-1, 1), opacity=0.5, show_scalar_bar=False)
 plotter.show()

@@ -29,7 +29,7 @@ t = np.tile(np.linspace(0, np.pi, n_pts), (n_lines, 1))
 r = 5 * np.sin(t)
 p = np.tile(np.linspace(0, 2 * np.pi, n_lines)[:, None], (1, n_pts))
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
 plotter.add_surface(r, t, p, t, method='delaunay_3d')
@@ -49,7 +49,7 @@ t_vals = np.tile(np.linspace(np.pi / 6, np.pi / 3, n_t), (n_p, 1)).T
 p_vals = np.tile(np.linspace(0, np.pi / 2, n_p), (n_t, 1))
 r_vals = np.full_like(t_vals, 3.0)
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
 plotter.add_surface(r_vals, t_vals, p_vals, p_vals, method='delaunay_2d',

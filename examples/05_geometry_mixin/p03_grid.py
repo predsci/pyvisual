@@ -32,7 +32,7 @@ radial_args = 15, 30, 3, 2
 theta_args = pi / 4, 3 * pi / 4, 6, 60
 phi_args = pi / 4, 3 * pi / 4, 6, 60
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
 plotter.add_grid(radial_args, theta_args, phi_args)
@@ -52,7 +52,7 @@ radial_args = 1, 30, 10, 2
 theta_args = 0, pi, 12, 60
 phi_args = 0, 0, 1, 1
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
 plotter.add_grid(radial_args, theta_args, phi_args)

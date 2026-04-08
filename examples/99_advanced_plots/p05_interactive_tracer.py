@@ -1,5 +1,13 @@
 """
-TODO add description
+Interactive Fieldline Tracer
+=============================
+
+This example demonstrates interactive point picking with
+:meth:`pyvista.Plotter.enable_point_picking`: clicking any point on the
+displayed radial slice triggers a callback that traces fieldlines from a small
+cone of launch points around the selected location and adds them to the scene.
+A rolling buffer of five named actor groups keeps the scene from accumulating
+too many lines.
 """
 
 import pyvista as pv

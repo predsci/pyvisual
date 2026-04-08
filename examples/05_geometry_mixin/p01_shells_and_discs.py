@@ -21,7 +21,7 @@ from pyvisual import Plot3d
 # source surface — the heliospheric boundary beyond which coronal field lines
 # are considered open.
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
 plotter.add_shell(outer_radius=10, opacity=0.2, color='cyan')
@@ -35,7 +35,7 @@ plotter.show()
 # in the corona.  The two small shells below are placed at symmetric latitudes
 # in the northern and southern hemispheres at :math:`r = 2\,R_\odot`.
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
 plotter.add_shell(2, pi / 4, 0, inner_radius=0.05, outer_radius=0.1,
@@ -58,7 +58,7 @@ plotter.show()
 
 disc_kwargs = dict(r=2, t=pi / 2, p=0, outer_radius=0.2)
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
 plotter.add_disc(**disc_kwargs, normal=(1, 0, 0), color='blue')

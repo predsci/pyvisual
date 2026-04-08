@@ -8,7 +8,7 @@ scalar field.
 
 Internally, :meth:`~pyvisual.core.mixins.GridMeshMixin.add_contour` builds a
 :class:`~pyvisual.core.mesh3d.SphericalMesh` from the supplied coordinate
-arrays and scalar data, then calls :meth:`pyvista.DataSet.contour` to extract
+arrays and scalar data, then calls :meth:`~pyvista.DataSetFilters.contour` to extract
 the isosurface at the requested value before converting the result to
 Cartesian coordinates for rendering.  Multiple isovalues can be passed as an
 array.
@@ -39,27 +39,10 @@ R, T, P = np.meshgrid(r, t, p, indexing='ij')
 # Tilted dipole: pure cos(theta) plus a longitude-dependent tilt
 Br = np.cos(T) + 0.4 * np.cos(P) * np.sin(T)
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
 plotter.add_contour(r, t, p, Br, isovalue=0, color='white', opacity=0.8)
-plotter.show()
-
-# %%
-# Contour with Radial Shell Context
-# ---------------------------------
-#
-# Overlaying the isosurface on a radial shell of :math:`B_r` at
-# :math:`r = 1\,R_\odot` provides context: the shell shows the signed field
-# strength at the solar surface while the white isosurface traces the
-# polarity-inversion boundary through the corona.
-
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
-plotter.show_axes()
-plotter.add_sun()
-plotter.add_2d_slice(r[0], t, p, Br[0], cmap='seismic', clim=(-1, 1),
-                     show_scalar_bar=False)
-plotter.add_contour(r, t, p, Br, isovalue=0, color='white', opacity=0.9)
 plotter.show()
 
 # %%
@@ -71,9 +54,30 @@ plotter.show()
 # :math:`B_r \in \{-0.3, 0, +0.3\}`, colored by value to distinguish the
 # positive-polarity, neutral, and negative-polarity boundaries.
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
 plotter.add_contour(r, t, p, Br, isovalue=[-0.3, 0.0, 0.3],
                     cmap='seismic', clim=(-0.3, 0.3), opacity=0.7)
+plotter.show()
+
+# %%
+# Using MAS Data
+# --------------
+#
+# To demonstrate this contouring method on :math:`B_r` data from a
+# steady-state Thermodynamic MAS coronal model, we can load in the data
+# using :func:`~psi_io.read_hdf_data`.
+
+from psi_io import read_hdf_data
+from pyvisual.utils.data import fetch_datasets
+
+br_file = fetch_datasets("cor", "br").cor_br
+br, r, t, p = read_hdf_data(br_file)
+
+plotter = Plot3d()
+plotter.show_axes()
+plotter.add_2d_slice(r[1], t, p, br[...,1], cmap='seismic', clim=(-30, 30),
+                     show_scalar_bar=False)
+plotter.add_contour(r, t, p, br, isovalue=0, color='white', opacity=0.9)
 plotter.show()

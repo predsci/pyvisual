@@ -1,5 +1,13 @@
 """
-TODO add description
+Combining Slices, Contours, and Fieldlines
+==========================================
+
+This example demonstrates a complete coronal scene that combines a 2-D radial
+shell (coronal hole map), an isosurface contour of the radial magnetic field
+:math:`B_r`, and a bundle of magnetic fieldlines colored by random hue —
+illustrating how :class:`~pyvisual.core.mixins.GridMeshMixin` and
+:class:`~pyvisual.core.mixins.StackMeshMixin` methods can be layered in a
+single :class:`~pyvisual.core.plot3d.Plot3d` scene.
 """
 import numpy as np
 from mapflpy.tracer import Tracer

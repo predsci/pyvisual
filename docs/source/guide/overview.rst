@@ -10,8 +10,8 @@ and maintained by `Predictive Science Inc. (PSI) <https://www.predsci.com/>`_ an
 is tightly coupled to the PSI data ecosystem — in particular
 `psi-io <https://predsci.com/doc/psi-io/guide/index.html>`_ (HDF4/HDF5 file I/O)
 and `mapflpy <https://predsci.com/doc/mapflpy/>`_ (magnetic fieldline tracing).
-Any rectilinear grid defined in spherical coordinates is compatible with the API,
-regardless of whether it originates from a PSI model.
+With that said, any rectilinear grid defined in spherical coordinates is compatible
+with the API.
 
 .. attention::
 
@@ -41,8 +41,24 @@ Cartesian frame (``'cartesian'``)
     Accepted aliases include ``'xyz'``, ``'cart'``, ``'rectilinear'``, and any
     permutation of the individual axis letters.
 
-Conversion between the two frames is handled transparently — methods that accept a
-``frame`` argument convert to Cartesian before passing data to PyVista.
+.. note::
+
+   **pyvisual** is principally concerned with rendering rectilinear spherical grids,
+   *viz.* those produced by PSI's MAS code; more specificially, this package is
+   designed to facilitate the visualization of such datasets by converting these
+   structured :math:`(r, \theta, \phi)` grids into the native Cartesian coordinate
+   system used by PyVista and VTK for rendering.
+
+   The coordinate system of the :class:`~pyvista.Plotter` is always a Cartesian
+   coordinate system in the Heliographic Carrington frame. Input data (however)
+   is generally expected to be in the spherical frame, and the API provides utilities for
+   converting between the two.
+
+   The spherical frame is used for all observer controls,
+   reference geometry, and mesh construction; the Cartesian frame is used for all
+   rendering and camera manipulation. The API abstracts away the details of converting
+   between the two, but it is important to understand the distinction when working with
+   the package.
 
 The Plotter: ``Plot3d``
 -----------------------
@@ -97,7 +113,27 @@ Mesh Classes
 ------------
 
 Two mesh classes are provided for loading and manipulating model data before
-adding it to a plotter.
+adding it to a plotter. These classes can be instantiated from an HDF file
+path, from raw coordinate and data arrays, or from an existing PyVista dataset.
+
+.. note::
+
+   When instantiating from an HDF filepath, the :mod:`psi-io` library is used
+   to read the file and extract the coordinate and data arrays by index.
+   As such, the file must be in a format compatible with :mod:`psi-io` (e.g. HDF4 with
+   Fortran-order arrays, or HDF5 with the same structure).
+
+   *It is generally
+   recommended to explicitly load the data arrays to ensure that the scales
+   and data-values are properly interpreted, rather than relying on the mesh
+   classes to infer them from the file.*
+
+The motivation behind these classes is to provide a convenient container for solar
+physics model data that can make full use of the powerful PyVista/VTK
+`Filters <https://docs.pyvista.org/api/core/filters.html>`_ (along with a few
+additional "filters" provided by **pyvisual** in the
+:class:`~pyvisual.core.mesh3d.CartesianMeshFilters` and
+:class:`~pyvisual.core.mesh3d.SphericalMeshFilters` mixin classes).
 
 :class:`~pyvisual.core.mesh3d.SphericalMesh`
     Wraps :class:`pyvista.RectilinearGrid` with a spherical-frame tag. Can be
@@ -110,6 +146,25 @@ adding it to a plotter.
 :class:`~pyvisual.core.mesh3d.CartesianMesh`
     The Cartesian counterpart, wrapping :class:`pyvista.StructuredGrid`. It shares
     the same operator API as :class:`~pyvisual.core.mesh3d.SphericalMesh`.
+
+.. note::
+
+   The general motivation behind the latter class (in contrast to the :class:`~pyvisual.core.mesh3d.SphericalMesh`
+   class) is to facilitate the use of PyVista/VTK's
+   `filters <https://docs.pyvista.org/api/core/filters>`_ on spherical grids that have
+   been converted to Cartesian coordinates. This :func:`~pyvisual.utils.geometry.spherical_to_cartesian`
+   transformation yeilds topological structured meshes that are, nevertheless, not composed
+   of monotonically increasing coordinate arrays. Therefore, the grid's internal structure
+   has to be stored explicitly *viz.* through a :class:`pyvista.StructuredGrid` rather than a
+   :class:`pyvista.RectilinearGrid`.
+
+.. warning::
+
+   The consequence of the above note is that the point arrays of this class are
+   derived from a :func:`~numpy.meshgrid`-like Cartesian product of the input scales,
+   and are not stored as the three separate 1-D arrays that are typical of rectilinear grids.
+   As such, these grids can be substantially more memory-intensive than their
+   :class:`~pyvisual.core.mesh3d.SphericalMesh` counterparts.
 
 Both classes are available from the top-level package::
 

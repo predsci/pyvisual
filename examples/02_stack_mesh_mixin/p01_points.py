@@ -19,7 +19,7 @@ from pyvisual import Plot3d
 # at :math:`r = 1.5\,R_\odot` on the equatorial plane
 # (:math:`\theta = \pi/2`) at 90° longitude (:math:`\phi = \pi/2`).
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.add_sun()
 plotter.show_axes()
 plotter.add_point(1.5, np.pi / 2, np.pi / 2, color='red', point_size=15)
@@ -40,7 +40,7 @@ r = np.linspace(1, 30, 20)
 t = np.repeat(np.pi / 2, 20)
 p = np.linspace(0, 2 * np.pi, 20)
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
 plotter.add_points(r, t, p, r, point_size=5)

@@ -59,4 +59,4 @@ or `contact <https://www.predsci.com/portal/contact.php>`_ Predictive Science In
 `Predictive Science Inc. <https://predsci.com>`_ |
 `Repository <https://github.com/predsci/pyvisual>`_ |
 `Documentation <https://predsci.com/doc/pyvisual>`_ |
-`Distribution <https://pypi.org/project/pyvisual>`_
+`Distribution <https://pypi.org/project/psi-pyvisual>`_

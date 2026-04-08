@@ -26,7 +26,7 @@ from pyvisual import Plot3d
 # Passing ``include='spherical'`` limits the display to the spherical observer
 # fields (position, focus, orientation, and view-up direction).
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.add_sun()
 plotter.add_longlat_lines()
 plotter.show_axes()
@@ -41,7 +41,7 @@ plotter.show()
 # Read the observer state after setting it programmatically, then pass the same
 # values back to reproduce the view in a new plotter instance.
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.add_sun()
 plotter.add_longlat_lines()
 plotter.observer_position = 8, np.pi / 4, np.pi / 6
@@ -55,7 +55,7 @@ print(f"Saved orientation : p_angle={saved_orientation.p_angle:.2f} deg")
 # sphinx_gallery_start_ignore
 # The following block re-instantiates the plotter to avoid the sphinx-gallery
 # restriction that show() must be called in the same code block as __init__.
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.add_sun()
 plotter.add_longlat_lines()
 # sphinx_gallery_end_ignore

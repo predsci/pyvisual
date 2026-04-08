@@ -29,7 +29,7 @@ from pyvisual import Plot3d
 
 observer_position = 10, pi / 2, 0
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
 plotter.observer_position = observer_position

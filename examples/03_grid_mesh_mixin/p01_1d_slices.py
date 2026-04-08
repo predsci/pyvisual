@@ -3,61 +3,76 @@
 ===============
 
 This example demonstrates :meth:`~pyvisual.core.mixins.GridMeshMixin.add_1d_slice`
-— the method for rendering a line slice along a single spherical coordinate
-axis.
+— the method for rendering a line slice along a single spherical coordinate axis.
 
 Exactly two of ``r``, ``t``, ``p`` must be size-1 arrays, fixing those
 coordinates.  The one array with more than one element defines the slice
 direction; **pyvisual** infers the varying axis automatically and renders the
 result as a polyline colored by the supplied ``data`` array.
 
-The two most common 1-D slice orientations in solar physics are the
-*longitudinal profile* (varying :math:`\phi` at fixed :math:`r` and
-:math:`\theta`) and the *meridional profile* (varying :math:`\theta` at fixed
-:math:`r` and :math:`\phi`).
+Real coronal magnetic field data from a PSI MAS model (CR 2282) is loaded
+via :func:`~pyvisual.utils.data.fetch_datasets` and sliced using
+:func:`~psi_io.read_hdf_by_index`.  Passing a single integer index for a
+dimension fixes it to a single grid point; ``None`` selects the full extent.
+The function returns the data and the three coordinate arrays in
+:math:`(r, \\theta, \\phi)` order, ready for direct use with
+:meth:`~pyvisual.core.mixins.GridMeshMixin.add_1d_slice`.
 """
 
-import numpy as np
+from psi_io import read_hdf_by_index
 from pyvisual import Plot3d
+from pyvisual.utils.data import fetch_datasets
 
 # %%
-# Longitudinal Profile
-# --------------------
+# Radial Cut
+# ----------
 #
-# Fix the radius at :math:`r = 1\,R_\odot` and the colatitude at the
-# equatorial plane (:math:`\theta = \pi/2`), then sweep longitude
-# :math:`\phi` from 0 to :math:`2\pi`.  The synthetic data mimics a
-# low-order multipole radial field :math:`B_r \propto \sin(2\phi)`.
+# Fix the colatitude at the equatorial plane (:math:`\theta = \theta_{71}`)
+# and a mid-grid longitude (:math:`\phi = \phi_{149}`), then sweep radius
+# from the solar surface to the outer coronal boundary.  The profile shows how
+# :math:`B_r` falls off (and changes sign) with distance from the Sun.
 
-r = np.array([1.0])
-t = np.array([np.pi / 2])
-p = np.linspace(0, 2 * np.pi, 360)
-data = np.sin(2 * p) * np.cos(p / 2)
+br_file = fetch_datasets("cor", "br").cor_br
+data, r, t, p = read_hdf_by_index(br_file, None, 71, 149)
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_1d_slice(r, t, p, data,
-                     cmap='seismic', clim=(-1, 1), line_width=5)
+plotter.add_1d_slice(r, t, p, data, cmap='seismic', clim=(-1, 1), line_width=5)
 plotter.show()
 
 # %%
-# Meridional Profile
-# ------------------
+# Theta Cut
+# ---------
 #
-# Fix the radius at :math:`r = 2\,R_\odot` and the longitude at
-# :math:`\phi = 0`, then sweep colatitude :math:`\theta` from pole to pole.
-# A dipole-like :math:`B_r \propto \cos\theta` profile changes sign at the
-# equatorial plane, as expected for a pure dipole field.
+# Fix the radius near the solar surface (:math:`r = r_1 \approx 1\,R_\odot`)
+# and the same mid-grid longitude, then sweep colatitude from the north pole
+# (:math:`\theta = 0`) to the south pole (:math:`\theta = \pi`).  The profile
+# captures the latitudinal structure of :math:`B_r` on the inner boundary —
+# sign reversals indicate the boundaries between open-field regions of opposite
+# polarity.
 
-r = np.array([2.0])
-t = np.linspace(0, np.pi, 180)
-p = np.array([0.0])
-data = np.cos(t)
+data, r, t, p = read_hdf_by_index(br_file, 1, None, 149)
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_1d_slice(r, t, p, data,
-                     cmap='seismic', clim=(-1, 1), line_width=5)
+plotter.add_1d_slice(r, t, p, data, cmap='seismic', clim=(-1, 1), line_width=5)
+plotter.show()
+
+# %%
+# Phi Cut
+# -------
+#
+# Fix the same near-surface radius and equatorial colatitude, then sweep
+# longitude :math:`\phi` from 0 to :math:`2\pi`.  The resulting ring around
+# the solar equator maps the longitudinal variation of the photospheric
+# :math:`B_r` at the equatorial plane — a full-sun longitudinal profile.
+
+data, r, t, p = read_hdf_by_index(br_file, 1, 71, None)
+
+plotter = Plot3d()
+plotter.show_axes()
+plotter.add_sun()
+plotter.add_1d_slice(r, t, p, data, cmap='seismic', clim=(-1, 1), line_width=5)
 plotter.show()

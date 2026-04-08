@@ -460,9 +460,7 @@ class StackMeshMixin:
             
         Examples
         --------
-        Trace fieldlines with :class:`~mapflpy.tracer.Tracer`'s
-        :meth:`~mapflpy.tracer._Tracer.trace_fwd` function, and
-        color each one with a unique random hue.
+        Trace fieldlines using :mod:`mapflpy`, and color each one with a unique random hue.
 
         .. note::
            The default seed configuration in :mod:`mapflpy` places
@@ -483,13 +481,12 @@ class StackMeshMixin:
         .. pyvista-plot::
 
             >>> import numpy as np
-            >>> from mapflpy.tracer import Tracer
+            >>> from mapflpy.scripts import run_forward_tracing
             >>> from pyvisual import Plot3d
             >>> from pyvisual.utils.data import fetch_datasets
             >>>
             >>> mag_field = fetch_datasets("cor", ["br", "bt", "bp"])
-            >>> tracer = Tracer(*mag_field)
-            >>> traces = tracer.trace_fwd()
+            >>> traces = run_forward_tracing(*mag_field, context='fork')
             >>> traces_rtp = np.moveaxis(traces.geometry, 1, 0)
             >>>
             >>> plotter = Plot3d()
@@ -512,14 +509,13 @@ class StackMeshMixin:
         .. pyvista-plot::
 
             >>> import numpy as np
-            >>> from mapflpy.tracer import Tracer
+            >>> from mapflpy.scripts import run_fwdbwd_tracing
             >>> from mapflpy.utils import get_fieldline_polarity
             >>> from pyvisual import Plot3d
             >>> from pyvisual.utils.data import fetch_datasets
             >>>
             >>> mag_field = fetch_datasets("cor", ["br", "bt", "bp"])
-            >>> tracer = Tracer(*mag_field)
-            >>> traces = tracer.trace_fbwd(n=512)
+            >>> traces = run_fwdbwd_tracing(*mag_field, context='fork')
             >>> trace_polarity = get_fieldline_polarity(1, 30, mag_field.cor_br, traces)
             >>> traces_rtp = np.moveaxis(traces.geometry, 1, 0)
             >>>

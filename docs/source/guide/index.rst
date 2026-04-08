@@ -1,11 +1,29 @@
 User Guide
 ==========
 
-To get started with **pyvisual**, please refer to the following sections:
+.. grid:: 3
+   :gutter: 2
+   :class-container: sd-mt-4
+
+   .. grid-item-card:: Installation
+      :link: installation
+      :link-type: doc
+      :text-align: center
+
+      Installation instructions, including recommended virtual environment setup
+      and required/optional dependencies.
+
+   .. grid-item-card:: Overview
+      :link: overview
+      :link-type: doc
+      :text-align: center
+
+      Overview of the package structure, design principles, and core classes — with
+      a focus on the :class:`~pyvisual.core.plot3d.Plot3d` class and its mixin components.
 
 .. toctree::
+    :hidden:
+    :maxdepth: 2
 
-   installation
-   overview
-
-
+    installation
+    overview

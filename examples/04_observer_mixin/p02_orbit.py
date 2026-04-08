@@ -24,7 +24,7 @@ from pyvisual import Plot3d
 # :math:`r = 8\,R_\odot` on the equatorial plane (:math:`\theta = \pi/2`),
 # producing a smooth orbit around the Sun.
 
-plotter = Plot3d(off_screen=True, window_size=(500, 500))
+plotter = Plot3d()
 plotter.add_sun()
 plotter.add_longlat_lines()
 plotter.add_shell(outer_radius=2.5, opacity=0.15, color='cyan')
