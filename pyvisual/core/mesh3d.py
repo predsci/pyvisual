@@ -899,9 +899,10 @@ class _BaseFrameMesh(ABC):
         msg = f"Unsupported input type: {type(uinput)}"
         raise NotImplementedError(msg)
 
-    @_dispatch_input.register
+    @_dispatch_input.register(str)
+    @_dispatch_input.register(Path)
     def _(self,
-          uinput: str | Path,
+          uinput,
           *args,
           data,
           dataid,
@@ -912,9 +913,10 @@ class _BaseFrameMesh(ABC):
         file_data, *scales = read_hdf_by_index(ifile, *args, dataset_id=dataid, return_scales=True)
         return self._parse_input(iformat, file_data if data is None else data, *scales, **kwargs)
 
-    @_dispatch_input.register
+    @_dispatch_input.register(Iterable)
+    @_dispatch_input.register(Number)
     def _(self,
-          uinput: Iterable | Number,
+          uinput,
           *args,
           data,
           iformat,
