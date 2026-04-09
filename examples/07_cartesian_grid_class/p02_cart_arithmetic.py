@@ -6,7 +6,7 @@ Arithmetic and NumPy Ufunc Support
 :class:`~pyvisual.core.mesh3d.SphericalMesh`) inherit a full arithmetic suite
 from :class:`~pyvisual.core.mesh3d._BaseFrameMesh`.  Standard Python operators
 (``+``, ``-``, ``*``, ``/``, ``**``, etc.) and NumPy ufuncs such as
-:func:`numpy.log10` and :func:`numpy.sqrt` operate element-wise on the active
+:obj:`numpy.log10` and :obj:`numpy.sqrt` operate element-wise on the active
 scalar field and return a new mesh of the same type with the result as the
 active scalar.  The coordinate arrays are never modified — only the data
 changes.
@@ -60,7 +60,7 @@ plotter.show()
 #
 # The :meth:`~pyvisual.core.mesh3d._BaseFrameMesh.__array_ufunc__` hook lets
 # any single-output NumPy ufunc act directly on the mesh.
-# :func:`numpy.log10` applied to the normalised distance converts the field to
+# :obj:`numpy.log10` applied to the normalised distance converts the field to
 # a logarithmic scale that compresses the large dynamic range near the outer
 # boundary and reveals structure close to the origin.  Points at or below zero
 # (here, the grid corner where :math:`r = 0`) are masked by the log.

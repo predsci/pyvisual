@@ -107,8 +107,8 @@ plotter.show()
 # points via :meth:`pyvista.DataObjectFilters.sample`.
 #
 # The second :meth:`~pyvista.Plotter.add_mesh` call projects the colored trajectory
-# onto the plane :math:`r = 2` using
-# :meth:`pyvista.PolyData.project_points_to_plane`, producing a "shadow" projection
+# onto the plane :math:`r = 2 R_\odot` using
+# :meth:`~pyvista.PolyDataFilters.project_points_to_plane`, producing a "shadow" projection
 # for spatial context.
 
 trajectory = spacecraft_trajectory('psp', '2024-03-28', '2024-04-01')
@@ -130,7 +130,7 @@ plotter.show()
 # Two points on the trajectory (indices 0 and 50) are converted to Cartesian
 # coordinates via :func:`~pyvisual.utils.geometry.spherical_to_cartesian`.  Their
 # cross product defines the normal to the orbital plane, which is used to orient a
-# :class:`pyvista.Disc` spanning 30 :math:`R_\odot`.
+# :class:`~pyvista.PolyData` disc spanning 30 :math:`R_\odot`.
 # :meth:`~pyvisual.core.mesh3d.SphericalMeshFilters.spherical_to_cartesian` converts
 # the :class:`pyvista.RectilinearGrid` to a Cartesian
 # :class:`pyvista.StructuredGrid`, and :meth:`pyvista.DataObjectFilters.sample` then

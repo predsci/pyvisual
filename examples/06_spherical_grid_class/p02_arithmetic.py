@@ -6,7 +6,7 @@ Arithmetic and NumPy Ufunc Support
 :class:`~pyvisual.core.mesh3d.CartesianMesh`) inherit a full arithmetic suite
 from :class:`~pyvisual.core.mesh3d._BaseFrameMesh`.  Standard Python
 operators (``+``, ``-``, ``*``, ``/``, ``**``, etc.) and NumPy ufuncs such as
-:func:`numpy.log10` and :func:`numpy.sqrt` operate element-wise on the active
+:obj:`numpy.log10` and :obj:`numpy.sqrt` operate element-wise on the active
 scalar field and return a new mesh of the same type with the result as the
 active scalar.  The coordinate arrays are never modified — only the data
 changes.
@@ -52,7 +52,7 @@ plotter.show()
 #
 # The :meth:`~pyvisual.core.mesh3d._BaseFrameMesh.__array_ufunc__` hook lets
 # any single-output NumPy ufunc act directly on the mesh.
-# :func:`numpy.log10` applied to :math:`B_r r^2` converts the field to a
+# :obj:`numpy.log10` applied to :math:`B_r r^2` converts the field to a
 # logarithmic scale.
 #
 # To account for the sign of :math:`B_r r^2`, we take the absolute value before applying
