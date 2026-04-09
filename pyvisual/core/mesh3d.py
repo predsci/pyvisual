@@ -124,7 +124,7 @@ def build_point_polydata(d1: np.ndarray,
                          d2: np.ndarray,
                          d3: np.ndarray,
                          axis: int,
-                         frame: Optional[MeshFramesType] = None):
+                         frame: Optional[MeshFramesType] = None) -> pv.PolyData:
     """Build an unconnected :class:`pyvista.PolyData` point cloud from coordinate arrays.
 
     Each element of ``d1``, ``d2``, ``d3`` along ``axis`` defines one point.
@@ -160,7 +160,7 @@ def build_spline_polydata(d1: np.ndarray,
                           d2: np.ndarray,
                           d3: np.ndarray,
                           axis: int,
-                          frame: Optional[MeshFramesType] = None):
+                          frame: Optional[MeshFramesType] = None) -> pv.PolyData:
     """Build a line-connected :class:`pyvista.PolyData` of splines from coordinate arrays.
 
     After moving ``axis`` to the leading dimension, the arrays are reshaped to
@@ -201,7 +201,7 @@ def build_slice_polydata(d1: np.ndarray,
                          d2: np.ndarray,
                          d3: np.ndarray,
                          axis: int,
-                         frame: Optional[MeshFramesType] = None):
+                         frame: Optional[MeshFramesType] = None) -> pv.PolyData:
     """Build a quad-faced :class:`pyvista.PolyData` surface patch from coordinate arrays.
 
     The coordinate arrays are moved so that ``axis`` is the leading dimension,
@@ -260,7 +260,7 @@ def build_surface_polydata(d1: np.ndarray,
                            axis: int,
                            method: SurfaceReconstructionType = 'reconstruct_surface',
                            frame: Optional[MeshFramesType] = None,
-                           **kwargs):
+                           **kwargs) -> pv.PolyData:
     """Build a surface mesh from scattered coordinate arrays using a reconstruction method.
 
     First assembles a point cloud via :func:`build_point_polydata`, then applies
@@ -315,7 +315,7 @@ def build_thompson_sphere(d1: float,
                           d3: float,
                           theta_resolution: int = 180,
                           phi_resolution: int = 360,
-                          frame: Optional[MeshFramesType] = None):
+                          frame: Optional[MeshFramesType] = None) -> pv.PolyData:
     """Build a Thomson sphere centered halfway between the origin and an observer position.
 
     The Thomson sphere for a given observer has:

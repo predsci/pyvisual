@@ -802,9 +802,9 @@ class GridMeshMixin:
             raise ValueError("1D slices requires exactly two fixed scales.")
         try:
             axis = next(i for i, s in enumerate(mesh_shape) if s > 1)
-        except StopIteration:
+        except StopIteration as e:
             msg = f"Could not infer slice axis from input shapes: {mesh_shape}"
-            raise ValueError(msg)
+            raise ValueError(msg) from e
         return self._add_grid_set(r, t, p, data,
                                   axis, dataid,
                                   slice_type='splines',
@@ -899,9 +899,9 @@ class GridMeshMixin:
             raise ValueError("2D slices requires exactly one fixed scale.")
         try:
             axis = next(i for i, s in enumerate(mesh_shape) if s == 1)
-        except StopIteration:
+        except StopIteration as e:
             msg = f"Could not infer slice axis from input shapes: {mesh_shape}"
-            raise ValueError(msg)
+            raise ValueError(msg) from e
         return self._add_grid_set(r, t, p, data,
                                   axis, dataid,
                                   slice_type='slices',
@@ -1309,7 +1309,7 @@ class ObserverMixin:
 
     @observer_viewup.setter
     @render_scene
-    def observer_viewup(self, args):
+    def observer_viewup(self, args) -> None:
         r, t, p = args
         self.camera.up = spherical_to_cartesian(r, t, p)
 
@@ -1344,7 +1344,7 @@ class ObserverMixin:
 
     @observer_position.setter
     @render_scene
-    def observer_position(self, args):
+    def observer_position(self, args) -> None:
         r, t, p = args
         self.camera.position = spherical_to_cartesian(r, t, p)
 
@@ -1363,7 +1363,7 @@ class ObserverMixin:
 
     @observer_focus.setter
     @render_scene
-    def observer_focus(self, args):
+    def observer_focus(self, args) -> None:
         r, t, p = args
         self.camera.focal_point = spherical_to_cartesian(r, t, p)
 
@@ -1401,7 +1401,7 @@ class ObserverMixin:
 
     @observer_orientation.setter
     @render_scene
-    def observer_orientation(self, arg):
+    def observer_orientation(self, arg) -> None:
         p_angle = arg
         current_p_angle = camera_roll_wrt_solar_north(*self.camera_position)
         self.camera.roll += (p_angle - current_p_angle)
@@ -1520,7 +1520,7 @@ class ObserverMixin:
 
     @observer_los_view.setter
     @render_scene
-    def observer_los_view(self, args):
+    def observer_los_view(self, args) -> None:
         x0, x1, y0, y1 = args
 
         elongation = (x0 + x1) / 2
@@ -1604,7 +1604,7 @@ class ObserverMixin:
 
     @observer_fov_view.setter
     @render_scene
-    def observer_fov_view(self, args):
+    def observer_fov_view(self, args) -> None:
         rmin = abs(args)
         dobs = self.observer_position.r
         if rmin < dobs:

@@ -24,7 +24,13 @@ from collections import namedtuple
 from os import PathLike
 from pathlib import Path
 
-from typing import Literal
+from typing import Literal, Union, TypeAlias
+
+from pyvista import VectorLike
+
+PlottableType: TypeAlias = Union[
+    VectorLike[float], 'DataSet', 'MultiBlock', 'PartitionedDataSet', str, Path
+]
 
 PathType = str | Path | PathLike[str]
 """Type alias for filesystem path arguments.

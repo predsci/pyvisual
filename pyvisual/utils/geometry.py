@@ -298,7 +298,7 @@ def cartesian_to_spherical_vec(vr: ArrayLike,
                                vt: ArrayLike,
                                vp: ArrayLike,
                                t: ArrayLike,
-                               p: ArrayLike):
+                               p: ArrayLike) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
     """Rotate vector components from the local spherical basis to the Cartesian basis.
 
     Given a vector expressed in the local orthonormal spherical basis
@@ -396,7 +396,7 @@ def spherical_to_cartesian_vec(vx: ArrayLike,
                                vy: ArrayLike,
                                vz: ArrayLike,
                                t: ArrayLike,
-                               p: ArrayLike):
+                               p: ArrayLike) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
     """Rotate vector components from the Cartesian basis to the local spherical basis.
 
     Given a vector expressed in the global Cartesian basis
@@ -493,8 +493,7 @@ def rotate_position_about_x(
     x: ArrayLike,
     y: ArrayLike,
     z: ArrayLike,
-    angle: float,
-) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
+    angle: float,) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
     """Rotate Cartesian position vectors about the :math:`+x` axis.
 
     Applies a right-handed rotation by ``angle`` degrees about :math:`+x`
@@ -567,8 +566,7 @@ def rotate_position_about_y(
     x: ArrayLike,
     y: ArrayLike,
     z: ArrayLike,
-    angle: float,
-) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
+    angle: float,) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
     """Rotate Cartesian position vectors about the :math:`+y` axis.
 
     Applies a right-handed rotation by ``angle`` degrees about :math:`+y`
@@ -641,8 +639,7 @@ def rotate_position_about_z(
     x: ArrayLike,
     y: ArrayLike,
     z: ArrayLike,
-    angle: float,
-) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
+    angle: float,) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
     """Rotate Cartesian position vectors about the :math:`+z` axis.
 
     Applies a right-handed rotation by ``angle`` degrees about :math:`+z`
@@ -712,7 +709,7 @@ def rotate_position_about_z(
 
 
 def clip_angle(angle: ArrayLike,
-               max_value: float = 180):
+               max_value: float = 180) -> np.ndarray | float:
     """Wrap an angle in degrees to a half-open interval of width 360°.
 
     Reduces ``angle`` modulo :math:`360°` and then shifts the result into
@@ -766,7 +763,7 @@ def thompson_sphere(elong: ArrayLike,
                     obs_lon: ArrayLike,
                     obs_lat: ArrayLike,
                     r_obs_rs: ArrayLike,
-                    obs_pangle: ArrayLike = 0.0):
+                    obs_pangle: ArrayLike = 0.0) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Compute the 3-D intersection of a line of sight with the Thompson sphere.
 
     The `Thompson sphere
@@ -911,7 +908,7 @@ def thompson_sphere(elong: ArrayLike,
 
 
 def los_rmin2angle(rmin_rs: ArrayLike,
-                   d_obs_rs: float):
+                   d_obs_rs: float) -> np.ndarray | float:
     """Convert a LOS impact parameter :math:`r_{min}` to a helioprojective angle.
 
     The *impact parameter* :math:`r_{min}` is the distance of closest approach
@@ -986,7 +983,7 @@ def los_rmin2angle(rmin_rs: ArrayLike,
 
 
 def los_angle2rmin(angle_deg: ArrayLike,
-                   d_obs_rs: float):
+                   d_obs_rs: float) -> np.ndarray | float:
     """Convert a helioprojective angle to a LOS impact parameter :math:`r_{min}`.
 
     The inverse of :func:`los_rmin2angle`.  Given the helioprojective
@@ -1568,7 +1565,7 @@ def spacecraft_trajectory(
     return np.stack(ephemeris, axis=0)
 
 
-def _norm(x, eps=1e-12):
+def _norm(x: ArrayLike, eps: float = 1e-12):
     """Normalise a vector, returning ``None`` for near-zero inputs.
 
     Parameters
@@ -1596,8 +1593,7 @@ def camera_roll_wrt_solar_north(
     focal_point: tuple[float, float, float],
     view_up: tuple[float, float, float],
     world_up: tuple[float, float, float] = SOLAR_NORTH,
-    degrees: bool = True,
-):
+    degrees: bool = True,) -> float:
     """Compute the camera roll angle relative to a world "up” direction.
 
     The roll is the signed rotation **about the view axis**

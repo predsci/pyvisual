@@ -11,7 +11,7 @@ import numpy as np
 
 
 def atleast_1dnull(*args,
-                   astuple: bool = False):
+                   astuple: bool = False) -> np.ndarray | None | tuple[np.ndarray | None, ...]:
     """:func:`numpy.atleast_1d` that passes ``None`` values through unchanged.
 
     A thin wrapper around :func:`numpy.atleast_1d` that treats ``None`` as a

@@ -51,8 +51,8 @@ from typing import Callable, Optional, Literal
 import numpy as np
 import pyvista as pv
 from pyvista import algorithm_to_mesh_handler
-from pyvista.plotting._typing import PlottableType
 
+from pyvisual.core._typing import PlottableType
 from pyvisual.core.constants import FRAME_ALIASES
 from pyvisual.utils.helpers import atleast_1dnull
 from pyvisual.utils.geometry import (
@@ -248,7 +248,8 @@ def parse_mesh_params(func: Callable):
     return decorator
 
 
-def generate_transforms(mframe, pframe):
+def generate_transforms(mframe: str,
+                        pframe: str) -> list[Callable]:
     """Return a list of coordinate-conversion functions from ``mframe`` to ``pframe``.
 
     Looks up the ``(canonical_mframe, canonical_pframe)`` pair in
@@ -285,7 +286,7 @@ def generate_transforms(mframe, pframe):
     return transforms
 
 
-def validate_mesh_type(mesh: PlottableType):
+def validate_mesh_type(mesh: PlottableType) -> PlottableType:
     """Ensure ``mesh`` is a valid PyVista dataset, wrapping it if necessary.
 
     Resolves any VTK algorithm objects via
@@ -317,7 +318,9 @@ def validate_mesh_type(mesh: PlottableType):
     return mesh
 
 
-def apply_mesh_transform(mesh: PlottableType, mframe, pframe):
+def apply_mesh_transform(mesh: PlottableType,
+                         mframe: str,
+                         pframe: str) -> PlottableType:
     """Convert mesh point coordinates from ``mframe`` to ``pframe`` in-place on a copy.
 
     If the mesh stores a ``'MESH_FRAME'`` key in :attr:`pyvista.DataSet.user_dict`
@@ -368,7 +371,7 @@ def apply_mesh_transform(mesh: PlottableType, mframe, pframe):
 
 def parse_stack_mesh(r: np.ndarray,
                      t: np.ndarray,
-                     p: np.ndarray):
+                     p: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Validate that three coordinate arrays share an identical shape.
 
     Used by :class:`~pyvisual.core.mixins.StackMeshMixin` methods to confirm that
@@ -402,7 +405,7 @@ def parse_stack_mesh(r: np.ndarray,
 
 def parse_grid_mesh(r: np.ndarray,
                     t: np.ndarray,
-                    p: np.ndarray):
+                    p: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Validate and optionally broadcast coordinate arrays for a structured grid.
 
     Accepts two input conventions:

@@ -54,7 +54,7 @@ classifiers = [
 requires-python = ">=3.10"
 dependencies = [
   "numpy>=2.1.0",
-  "pyvista>=0.47.0",
+  "pyvista>=0.46.0",
   "psi-io>=2.0.6",
   "sunpy>=6.0.3",
   "astropy>=6.1.3",

@@ -192,7 +192,7 @@ def fetch_datasets(domains: Iterable[str] | str = 'cor',
     return Filepaths(*(FETCHER.fetch(f"cr2282-thermo2-{dom}/{var}002.h5") for dom, var in req_pairs))
 
 
-def fetch_theme():
+def fetch_theme() -> Path:
     """Return the path to the bundled PyVisual PyVista theme file.
 
     Resolves ``pyvisual_theme.json`` from the package's ``_assets`` directory
