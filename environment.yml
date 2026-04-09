@@ -5,7 +5,7 @@ dependencies:
   - python=3.13
 
   # -------- Python Runtime --------
-  - numpy=2.3.*
+  - numpy
   - pyvista
   - scipy
   - astropy
