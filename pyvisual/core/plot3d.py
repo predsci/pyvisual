@@ -101,7 +101,7 @@ class Plot3d(ObserverMixin, GeometryMixin, GridMeshMixin, StackMeshMixin, pv.Plo
         super().__init__(*args, **kwargs)
         self._camera_update_observer = None
 
-    def _adjust_scalar_bars(self):
+    def _adjust_scalar_bars(self) -> None:
         """Reposition all scalar bars and center-align their annotation text.
 
         Iterates over the current scalar bars and places them in a vertical
@@ -123,7 +123,7 @@ class Plot3d(ObserverMixin, GeometryMixin, GridMeshMixin, StackMeshMixin, pv.Plo
                       dataset,
                       *args,
                       frame: Optional[str] = None,
-                      **kwargs):
+                      **kwargs) -> tuple[pv.Actor, pv.CompositePolyDataMapper]:
         """Add a composite (multi-block) dataset to the scene, converting coordinates if needed.
 
         Extends :meth:`pyvista.Plotter.add_composite` with an optional ``frame``
@@ -165,7 +165,7 @@ class Plot3d(ObserverMixin, GeometryMixin, GridMeshMixin, StackMeshMixin, pv.Plo
                  mesh,
                  *args,
                  frame: Optional[str] = None,
-                 **kwargs):
+                 **kwargs) -> pv.Actor:
         """Add a mesh to the scene, converting coordinates from ``frame`` if needed.
 
         Extends :meth:`pyvista.Plotter.add_mesh` with an optional ``frame``

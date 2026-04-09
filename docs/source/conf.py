@@ -2,13 +2,11 @@ from __future__ import annotations
 
 import os
 import sys
-from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from pathlib import Path
+
 import pyvista as pv
 from pyvista.plotting.utilities.sphinx_gallery import DynamicScraper
-
-# from pyvista.plotting.utilities.sphinx_gallery import DynamicScraper
 
 try:
     # First try to run sphinx_build against installed dist
@@ -115,7 +113,7 @@ exclusions = [
     '_add_stack_set', 'render_scene', '_add_grid_set',
     'TWOPI', 'XYZ_PERMUTATIONS', 'RTP_PERMUTATIONS',
     r'parsers\._', r'mesh3d\._update', r'plot3d\.Plot3d\._',
-    '_abc_impl'
+    '_abc_impl', r'utils\.geometry\._norm'
 ]
 
 node_tree = build_node_tree(root_package,

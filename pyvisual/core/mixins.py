@@ -35,7 +35,6 @@ caller-supplied overrides.
 
 from __future__ import annotations
 
-import warnings
 from collections.abc import Iterable
 from functools import wraps
 from typing import Optional, Literal
@@ -78,7 +77,10 @@ from pyvisual.utils.geometry import (
     clip_angle,
     thompson_sphere,
     los_rmin2angle,
-    camera_roll_wrt_solar_north, )
+    camera_roll_wrt_solar_north,
+    rotate_position_about_x,
+    rotate_position_about_y,
+    rotate_position_about_z, )
 
 
 def render_scene(func):
@@ -147,7 +149,7 @@ class StackMeshMixin:
                    data: Optional[ArrayLike] = None,
                    /,
                    dataid: str = 'Data',
-                   **kwargs):
+                   **kwargs) -> pv.Actor:
         """Add a single point at spherical coordinates :math:`(r, \\theta, \\phi)`.
 
         Parameters
@@ -209,7 +211,7 @@ class StackMeshMixin:
                     /,
                     axis: int = 0,
                     dataid: str = 'Data',
-                    **kwargs):
+                    **kwargs) -> pv.Actor:
         """Add a point cloud of spherical coordinates.
 
         Parameters
@@ -267,7 +269,7 @@ class StackMeshMixin:
                    data: Optional[ArrayLike] = None,
                    /,
                    dataid: str = 'Data',
-                   **kwargs):
+                   **kwargs) -> pv.Actor:
         """Add a single spline (polyline) through spherical coordinate points.
 
         Parameters
@@ -336,7 +338,7 @@ class StackMeshMixin:
                     /,
                     axis: int = 0,
                     dataid: str = 'Data',
-                    **kwargs):
+                    **kwargs) -> pv.Actor:
         """Add a bundle of splines through spherical coordinate arrays.
 
         Parameters
@@ -399,7 +401,7 @@ class StackMeshMixin:
                     axis: int = 0,
                     dataid: str = 'Data',
                     coloring: Optional[FlColorType] = None,
-                    **kwargs):
+                    **kwargs) -> pv.Actor:
         """Add a bundle of magnetic fieldlines rendered as splines.
 
         Wraps :meth:`add_splines` with optional fieldline-specific coloring
@@ -554,7 +556,7 @@ class StackMeshMixin:
                        axis: int,
                        dataid: str,
                        slice_type: Literal['points', 'splines'],
-                       **kwargs):
+                       **kwargs) -> pv.Actor:
         """Internal dispatcher for stack-mesh rendering.
 
         Validates that ``r``, ``t``, ``p`` have identical shapes via
@@ -609,7 +611,7 @@ class StackMeshMixin:
                     dataid: str = 'Data',
                     method: SurfaceReconstructionType = 'delaunay_2d',
                     surface_kwargs: Optional[dict] = None,
-                    **kwargs):
+                    **kwargs) -> pv.Actor:
         """Add a reconstructed surface through stacked spherical coordinate arrays.
 
         Builds a :class:`~pyvista.PolyData` surface via
@@ -718,7 +720,7 @@ class GridMeshMixin:
                      data: Optional[ArrayLike] = None,
                      /,
                      dataid: str = 'Data',
-                     **kwargs):
+                     **kwargs) -> pv.Actor:
         """Add a 1-D line slice along the single varying spherical coordinate axis.
 
         Exactly two of ``r``, ``t``, ``p`` must be scalar (size 1), defining a
@@ -816,7 +818,7 @@ class GridMeshMixin:
                      data: Optional[ArrayLike] = None,
                      /,
                      dataid: str = 'Data',
-                     **kwargs):
+                     **kwargs) -> pv.Actor:
         """Add a 2-D surface slice at a fixed spherical coordinate.
 
         Exactly one of ``r``, ``t``, ``p`` must be scalar (size 1), fixing that
@@ -915,7 +917,7 @@ class GridMeshMixin:
                      axis: int = 0,
                      dataid: str = 'Data',
                      slice_type: Literal['points', 'splines', 'slices'] = 'points',
-                     **kwargs):
+                     **kwargs) -> pv.Actor:
         """Add a structured set of points, splines, or slices from spherical coordinate arrays.
 
         This method is a flexible, general-purpose interface for constructing structured sets
@@ -1036,7 +1038,7 @@ class GridMeshMixin:
                       axis: int,
                       dataid: str,
                       slice_type: Literal['points', 'splines', 'slices'],
-                      **kwargs):
+                      **kwargs) -> pv.Actor:
         """Internal dispatcher for grid-mesh rendering.
 
         Validates and broadcasts ``r``, ``t``, ``p`` via
@@ -1092,7 +1094,7 @@ class GridMeshMixin:
                     /,
                     dataid: str = 'Data',
                     isovalue: Optional[ArrayLike] = None,
-                    **kwargs):
+                    **kwargs) -> pv.Actor:
         """Add an isosurface contour from a 3-D spherical scalar field.
 
         Builds a :class:`~pyvisual.core.mesh3d.SphericalMesh`, extracts the
@@ -1187,11 +1189,13 @@ class ObserverMixin:
         self.camera.roll += p_angle
         self.enable_terrain_style()
 
-    def remove_fixed_solar_north_observer(self):
+    def remove_fixed_solar_north_observer(self) -> None:
         """Disable the fixed solar north observer style and return to default camera behavior."""
         self.disable_terrain_style()
 
-    def add_camera_update(self, *, include: Optional[set[str] | str] = None, **kwargs):
+    def add_camera_update(self, *,
+                          include: Optional[set[str] | str] = None,
+                          **kwargs) -> None:
         """Add a live camera-state text overlay to the upper left corner of the plot.
 
         The text is updated on ``'ModifiedEvent'`` triggers from the active camera
@@ -1237,7 +1241,7 @@ class ObserverMixin:
         if cupdate_name is None:
             kwargs['name'] = "camera_update"
 
-        spherical_display = {"observer_position", "observer_focus", "observer_orientation", "observer_viewup"}
+        spherical_display = {"observer_position", "observer_focus", "observer_orientation", "observer_viewup", "observer_los_view"}
         cartesian_display = {"camera_position", "camera_focal_point", "camera_roll", "camera_up"}
 
         match include:
@@ -1275,12 +1279,12 @@ class ObserverMixin:
         self._camera_update_observer = self.camera.AddObserver("ModifiedEvent", _update_text)
         _update_text(self.camera, "ModifiedEvent")
 
-    def remove_camera_update(self):
+    def remove_camera_update(self) -> None:
         """Remove the camera state text observer."""
         self.iren.remove_observer(self._camera_update_observer)
 
     @property
-    def observer_viewup(self):
+    def observer_viewup(self) -> SphericalCoordinate:
         """Get or set the camera up vector in spherical coordinates.
 
         Returns
@@ -1310,7 +1314,7 @@ class ObserverMixin:
         self.camera.up = spherical_to_cartesian(r, t, p)
 
     @property
-    def observer_position(self):
+    def observer_position(self) -> SphericalCoordinate:
         """
         Get or set the observer's position in spherical coordinates.
 
@@ -1345,7 +1349,7 @@ class ObserverMixin:
         self.camera.position = spherical_to_cartesian(r, t, p)
 
     @property
-    def observer_focus(self):
+    def observer_focus(self) -> SphericalCoordinate:
         """
         Get or set the observer's focal point in spherical coordinates.
 
@@ -1364,7 +1368,7 @@ class ObserverMixin:
         self.camera.focal_point = spherical_to_cartesian(r, t, p)
 
     @property
-    def observer_orientation(self):
+    def observer_orientation(self) -> ObserverOrientation:
         """Get or set the observer's position angle (roll about the line of sight).
 
         The position angle :math:`p_{\\text{angle}}` is the signed rotation
@@ -1403,7 +1407,7 @@ class ObserverMixin:
         self.camera.roll += (p_angle - current_p_angle)
 
     @property
-    def observer_los_view(self):
+    def observer_los_view(self) -> tuple[float, float, float, float]:
         """Get or set the observer's field-of-view in helioprojective angular coordinates.
 
         The setter accepts a 4-tuple ``(x0, x1, y0, y1)`` of angular extents
@@ -1427,17 +1431,22 @@ class ObserverMixin:
            helioprojective pointing angles into an unambiguous 3-D Cartesian
            location in the scene.
 
-        **Why the focal point uses the Thomson sphere**
+        **How the getter recovers the FOV**
 
-        PyVista's camera is aimed at a single 3-D point (the focal point),
-        not at an angular direction.  To express pointing in helioprojective
-        coordinates, the central LOS must be mapped to a specific Cartesian
-        position.  The Thomson sphere — centered at
-        :math:`\\mathbf{p}_{\\text{obs}}/2` with radius
-        :math:`\\|\\mathbf{p}_{\\text{obs}}\\|/2` — provides a natural
-        reference surface: every LOS from the observer intersects it at a
-        unique point, so setting the focal point to that intersection steers
-        the camera along the correct helioprojective direction.
+        The getter derives ``(x0, x1, y0, y1)`` purely from the current
+        camera state without assuming the focal point lies on any particular
+        surface:
+
+        1. *Vertical FOV* — read directly from ``camera.view_angle``.
+        2. *Horizontal FOV* — derived from the window aspect ratio
+           ``window_size[0] / window_size[1]``.
+        3. *Central LOS* — computed from the direction
+           :math:`\\hat{d} = (\\mathbf{f} - \\mathbf{p}) / \\|\\mathbf{f} - \\mathbf{p}\\|`,
+           which is independent of where along the LOS the focal point sits.
+           :math:`\\hat{d}` is un-rotated through the inverse of the
+           observer-frame rotation chain (Carrington longitude, solar B\\ :sub:`0`,
+           P-angle) to recover the helioprojective center
+           :math:`(T_x, T_y)`.
 
         **Dependence on observer position**
 
@@ -1446,12 +1455,10 @@ class ObserverMixin:
         different Cartesian locations for different observer distances.
         Always set :attr:`observer_position` before setting this property.
 
-        .. warning::
-            The getter is not yet implemented and returns ``None``.  The
-            setter expects a 4-tuple ``(x0, x1, y0, y1)`` with
-            ``x0 < x1`` and ``y0 < y1``; a degenerate vertical extent
-            (``y0 == y1``) will raise :exc:`ZeroDivisionError` when
-            computing the aspect ratio.
+        Returns
+        -------
+        los_view : tuple[float, float, float, float]
+            ``(x0, x1, y0, y1)`` angular extents in degrees.
 
         See Also
         --------
@@ -1481,7 +1488,35 @@ class ObserverMixin:
             >>> plotter.observer_los_view = -10, 10, -8, 8
             >>> plotter.show()
         """
-        return
+        r, t, p = cartesian_to_spherical(*self.camera.position)
+        obs_lat = 90.0 - np.rad2deg(t)
+        obs_lon = clip_angle(np.rad2deg(p), max_value=180.0)
+        p_angle = self.observer_orientation.p_angle
+
+        # LOS direction: independent of where along it the focal point sits
+        d = np.asarray(self.camera.focal_point) - np.asarray(self.camera.position)
+        d = d / np.linalg.norm(d)
+
+        # Invert the thompson_sphere rotation chain to get d in the observer-local
+        # frame where the observer is at (r, 0, 0) looking toward the Sun
+        dx, dy, dz = rotate_position_about_z(d[0], d[1], d[2], -obs_lon)
+        dx, dy, dz = rotate_position_about_y(dx, dy, dz, obs_lat)
+        dx, dy, dz = rotate_position_about_x(dx, dy, dz, -p_angle)
+
+        # Recover helioprojective center from LOS unit vector components:
+        #   d = (-cos(elong)*cos(alt),  sin(elong)*cos(alt),  sin(alt))
+        elong = np.rad2deg(np.arctan2(dy, -dx))
+        alt = np.rad2deg(np.arcsin(np.clip(dz, -1.0, 1.0)))
+
+        fov_y = self.camera.view_angle
+        fov_x = fov_y * self.window_size[0] / self.window_size[1]
+
+        return (
+            float(elong - fov_x / 2),
+            float(elong + fov_x / 2),
+            float(alt - fov_y / 2),
+            float(alt + fov_y / 2),
+        )
 
     @observer_los_view.setter
     @render_scene
@@ -1504,7 +1539,7 @@ class ObserverMixin:
         self.camera.focal_point = fp
 
     @property
-    def observer_fov_view(self):
+    def observer_fov_view(self) -> Optional[float]:
         """Get or set the field-of-view by minimum line-of-sight impact radius.
 
         This is a higher-level alternative to :attr:`observer_los_view` that
@@ -1580,12 +1615,14 @@ class ObserverMixin:
             raise ValueError(msg)
 
     def set_observer_pov(self,
-                         r,
-                         t,
-                         p,
-                         p_angle,
-                         x0, x1,
-                         y0, y1):
+                         r: float,
+                         t: float,
+                         p: float,
+                         p_angle: float,
+                         x0: float,
+                         x1: float,
+                         y0: float,
+                         y1: float) -> None:
         """
         Set the observer point-of-view from a spherical position and LOS field-of-view extents.
 
@@ -1609,38 +1646,27 @@ class ObserverMixin:
             Vertical extent of the field of view in degrees (e.g. altitude range).
         """
         self.camera.position = spherical_to_cartesian(r, t, p)
-        # self.camera.up = SOLAR_NORTH
 
-        # set the camera up angle based on latitude
-        # - Avoid VTK errors when latitude is too close to the Z-axis for camera up to be along Z
-        #   by using the longitude to set x and y components. You still get the same effect
-        b_angle = 90 - np.rad2deg(t)
-        longitude = np.rad2deg(p)
-        if np.abs(b_angle) > 80.:
-            nx = -np.sign(b_angle)*np.cos(p)
-            ny = -np.sign(b_angle)*np.sin(p)
-            self.camera.up = (nx, ny, 0)
-        else:
-            self.camera.up = SOLAR_NORTH
-
-        # Set the camera up roll (not working?!?).
-        # self.camera.roll += p_angle
+        current_p_angle = camera_roll_wrt_solar_north(*self.camera_position)
+        self.camera.roll += (p_angle - current_p_angle)
 
         elongation = (x0 + x1) / 2
         altitude = (y0 + y1) / 2
+        radius, t, p = cartesian_to_spherical(*self.camera.position)
         latitude = 90 - np.rad2deg(t)
         longitude = clip_angle(np.rad2deg(p), max_value=180)
         aspect_ratio = abs(x1 - x0) / abs(y1 - y0)
         _, window_vertical_size = self.window_size
+
         self.window_size = (int(window_vertical_size * aspect_ratio), int(window_vertical_size))
         self.camera.view_angle = abs(y1 - y0)
-        self.camera.focal_point = thompson_sphere(
-            elongation, altitude, longitude, latitude, r, p_angle
+        fp = thompson_sphere(
+            elongation, altitude, longitude, latitude, radius, self.observer_orientation.p_angle,
         )
-        # self.render()
+        self.camera.focal_point = fp
 
     @render_scene
-    def set_solar_north_up(self):
+    def set_solar_north_up(self) -> None:
         """Set the camera up vector to solar north ``(0, 0, 1)`` and re-render the scene."""
         self.camera.up = SOLAR_NORTH
 
@@ -1658,7 +1684,7 @@ class GeometryMixin:
     - A general structured grid of splines via :meth:`add_grid`.
     """
 
-    def add_sun(self, **kwargs):
+    def add_sun(self, **kwargs) -> pv.Actor:
         """Add a sphere representing the Sun at the origin.
 
         Constructs a :class:`pyvista.Sphere` with radius :math:`1\\,R_\\odot`
@@ -1701,7 +1727,7 @@ class GeometryMixin:
                   p: float = 0.,
                   inner_radius: float = 0.,
                   outer_radius: float = 1.,
-                  **kwargs):
+                  **kwargs) -> pv.Actor:
         """
         Add a spherical shell to the plot, defined by inner and outer radii and centered at a given position.
 
@@ -1775,7 +1801,7 @@ class GeometryMixin:
                  inner_radius: float = 0.,
                  outer_radius: float = 1.,
                  normal: tuple[float, float, float] = (1,0,0),
-                 **kwargs):
+                 **kwargs) -> pv.Actor:
         """
         Create a planar disc in 3D space using spherical coordinates and add it to the scene.
 
@@ -1861,7 +1887,7 @@ class GeometryMixin:
                             *pos,
                             theta_resolution: int = 180,
                             phi_resolution: int = 360,
-                            **kwargs):
+                            **kwargs) -> pv.Actor:
         """
         Add a Thompson sphere centered halfway between the origin and the observer.
 
@@ -1939,7 +1965,7 @@ class GeometryMixin:
     def add_longitudinal_lines(self,
                                lon_deg: int = 30,
                                radius: float = 1.01,
-                               **kwargs):
+                               **kwargs) -> pv.Actor:
         """
         Add longitudinal (meridian) grid lines to the plot.
 
@@ -1991,7 +2017,7 @@ class GeometryMixin:
     def add_latitudinal_lines(self,
                               lat_deg: int = 15,
                               radius: float = 1.01,
-                              **kwargs):
+                              **kwargs) -> pv.Actor:
         """Add latitudinal (parallel) grid lines to the plot.
 
         Builds a collection of polylines representing parallels (constant
@@ -2034,7 +2060,7 @@ class GeometryMixin:
                           lat_deg: int = 15,
                           lon_deg: int = 30,
                           radius: float = 1.01,
-                          **kwargs):
+                          **kwargs) -> pv.Actor:
         """Add combined longitude and latitude grid lines to the plot.
 
         Convenience method that draws both meridians (constant longitude) and
@@ -2087,7 +2113,7 @@ class GeometryMixin:
                  rargs: tuple[float, float, int, int],
                  targs: tuple[float, float, int, int],
                  pargs: tuple[float, float, int, int],
-                 **kwargs):
+                 **kwargs) -> pv.Actor:
         """Add a general structured spline grid defined by spherical axis parameters.
 
         Each axis is specified as a 4-tuple ``(min, max, num_splines, resolution)``

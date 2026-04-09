@@ -209,8 +209,7 @@ def fetch_theme():
     ------
     FileNotFoundError
         If ``pyvisual_theme.json`` is not found at the expected location.
-        This typically means the file was not included in the installation
-        (e.g. a partial checkout without Git LFS assets).
+        This typically means the file was not included in the installation.
 
     Notes
     -----
@@ -230,7 +229,5 @@ def fetch_theme():
     core_dir = Path(__file__).resolve().parent.parent
     filepath = core_dir / '_assets' / 'pyvisual_theme.json'
     if not filepath.exists():
-        raise FileNotFoundError(f"Theme file `pyvisual_theme.json` not found. "
-                                f"Please ensure the file exists in the `pyvisual/assets/templates` directory, "
-                                f"or run git-lfs pull to fetch the file from the repository.")
+        raise FileNotFoundError(f"Theme file `pyvisual_theme.json` not found.")
     return filepath
