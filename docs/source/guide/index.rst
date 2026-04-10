@@ -21,6 +21,14 @@ User Guide
       Overview of the package structure, design principles, and core classes — with
       a focus on the :class:`~pyvisual.core.plot3d.Plot3d` class and its mixin components.
 
+   .. grid-item-card:: API Reference
+      :link: ../api/index
+      :link-type: doc
+      :text-align: center
+
+      Full API documentation for all public classes, methods, functions,
+      and type aliases auto-generated from source docstrings.
+
 .. toctree::
     :hidden:
     :maxdepth: 2

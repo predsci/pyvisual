@@ -17,6 +17,12 @@ To get started with **pyvisual**, you can install it directly from PyPI:
 
     pip install psi-pyvisual
 
+To run the :ref:`gallery` suite, include the following add-ons:
+
+.. code-block:: bash
+
+    pip install psi-pyvisual[tracing,data]
+
 Requirements
 ------------
 
