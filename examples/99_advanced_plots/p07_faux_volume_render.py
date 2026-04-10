@@ -24,9 +24,9 @@ helioprojective angular coordinates using
    :ref:`sphx_glr_gallery_99_advanced_plots_p01_combining_multiple_elements.py`
       Multi-layer coronal scene that combines slices, contours, and fieldlines.
 """
+# sphinx_gallery_thumbnail_path = '_static/parker_trajectory_thumb.png'
 
 import os
-from pathlib import Path
 
 import numpy as np
 from pyvisual import Plot3d
@@ -92,23 +92,13 @@ deconstructed_mesh_volume = np.log(mesh[1:, ...]).deconstruct(method='slices')
 # :math:`(x_0,\, x_1,\, y_0,\, y_1)` in degrees. Re-applying the FOV at
 # every frame ensures consistent framing as the spacecraft distance changes
 # over the trajectory.
-#
-# The movie is written to ``docs/source/_static/`` so it is available to the
-# Sphinx build without being regenerated on every ``make html`` run.  Set the
-# ``SPHINX_GALLERY_BUILD`` environment variable to skip this block during
-# documentation builds.
-
-# sphinx_gallery_start_ignore
-_MOVIE_PATH = Path(__file__).resolve().parents[2] / 'docs' / 'source' / '_static' / 'parker_trajectory.mp4'
-# sphinx_gallery_end_ignore
-
-plotter = Plot3d()
-plotter.add_axes()
-plotter.add_mesh(radial_slice_at_photosphere, show_scalar_bar=False)
-plotter.add_mesh(deconstructed_mesh_volume, opacity='sigmoid_7', show_scalar_bar=False)
 
 if not os.environ.get('SPHINX_GALLERY_BUILD'):
-    plotter.open_movie(str(_MOVIE_PATH), framerate=10)
+    plotter = Plot3d()
+    plotter.add_axes()
+    plotter.add_mesh(radial_slice_at_photosphere, show_scalar_bar=False)
+    plotter.add_mesh(deconstructed_mesh_volume, opacity='sigmoid_7', show_scalar_bar=False)
+    plotter.open_movie("parker_trajectory.mp4", framerate=10)
     for position in trajectory.T:
         plotter.observer_position = position
         plotter.observer_los_view = -50, 50, -45, 45
