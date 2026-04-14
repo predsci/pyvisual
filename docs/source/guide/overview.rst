@@ -94,8 +94,9 @@ Solar geometry (:class:`~pyvisual.core.mixins.GeometryMixin`)
     Adds reference geometry to a scene: the Sun sphere (radius
     :math:`1\,R_\odot`), spherical shells at arbitrary radii, planar discs
     (e.g., the ecliptic plane), longitude/latitude grid lines, and the Thomson
-    sphere (the sphere of unit optical depth for Thomson scattering, centered
-    halfway between the Sun and the observer).
+    sphere (the sphere defined by the closest approach of all forward lines-of-sight
+    to the Sun, or equivalently 90 degrees scattering angle). This sphere is
+    centered halfway between the Sun and the observer.
 
 Structured-grid slices (:class:`~pyvisual.core.mixins.GridMeshMixin`)
     Renders data from structured :math:`(r, \theta, \phi)` grids. Supports

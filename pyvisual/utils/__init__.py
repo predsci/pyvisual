@@ -16,7 +16,7 @@ Modules
       the PSI spherical convention :math:`(r, \\theta, \\phi)` (colatitude).
     - Vector-basis rotations for expressing field components in either frame.
     - Rigid-body rotation matrices about each Cartesian axis.
-    - Solar line-of-sight geometry: Thompson sphere intersection,
+    - Solar line-of-sight geometry: Thomson sphere intersection,
       impact-parameter ↔ angle conversions, angle wrapping.
     - Ephemeris queries via the JPL Horizons service (requires an internet
       connection and :mod:`astroquery`).

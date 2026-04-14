@@ -6,7 +6,8 @@ This example traces magnetic fieldlines seeded from the polarity inversion
 line (PIL) — the curve on the solar surface where the radial magnetic field
 :math:`B_r` changes sign.  The PIL marks the boundary between open positive
 and negative flux and is a natural seed surface for displaying the global
-topology of the coronal field.
+topology of the coronal field. It can be used to locate the apex of coronal
+arcades and/or highlight bald-patch topologies.
 
 The workflow exploits a key property of
 :class:`~pyvisual.core.mesh3d.SphericalMesh`: because it wraps a

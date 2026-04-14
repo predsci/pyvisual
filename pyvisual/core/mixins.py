@@ -1889,7 +1889,7 @@ class GeometryMixin:
                             phi_resolution: int = 360,
                             **kwargs) -> pv.Actor:
         """
-        Add a Thompson sphere centered halfway between the origin and the observer.
+        Add a Thomson sphere centered halfway between the origin and the observer.
 
         This helper constructs a :class:`pyvista.Sphere` intended to represent the
         "Thomson sphere" for a given observer location. The observer location is

@@ -8,7 +8,7 @@ rendering:
 - :class:`~pyvisual.core.mixins.ObserverMixin` — spherical-coordinate camera
   controls, line-of-sight FOV, and live camera-state readout.
 - :class:`~pyvisual.core.mixins.GeometryMixin` — solar-geometry primitives (Sun
-  sphere, shells, discs, longitude/latitude grid lines, Thompson sphere).
+  sphere, shells, discs, longitude/latitude grid lines, Thomson sphere).
 - :class:`~pyvisual.core.mixins.GridMeshMixin` — 1-D, 2-D, and 3-D structured-grid
   slices and isosurface contours from spherical coordinate arrays.
 - :class:`~pyvisual.core.mixins.StackMeshMixin` — points, splines, surfaces, and

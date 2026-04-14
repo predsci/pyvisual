@@ -145,7 +145,7 @@ Development Install
 Clone the repository and install in editable mode with all optional
 dependencies::
 
-    git clone https://bitbucket.org/predsci/pyvisual.git
+    git clone https://github.com/predsci/pyvisual.git
     cd pyvisual
     pip install -e ".[all]"
 

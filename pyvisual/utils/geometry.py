@@ -764,9 +764,9 @@ def thompson_sphere(elong: ArrayLike,
                     obs_lat: ArrayLike,
                     r_obs_rs: ArrayLike,
                     obs_pangle: ArrayLike = 0.0) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Compute the 3-D intersection of a line of sight with the Thompson sphere.
+    """Compute the 3-D intersection of a line of sight with the Thomson sphere.
 
-    The `Thompson sphere
+    The `Thomson sphere
     <https://doi.org/10.1007/s11207-006-0030-x>`_ is the sphere of radius
     :math:`d_{obs}/2` centered on the midpoint between the Sun and the observer.
     Every point on it satisfies the condition that the angle between the
@@ -777,7 +777,7 @@ def thompson_sphere(elong: ArrayLike,
     A line of sight (LOS) is specified by its helioprojective angles
     (:math:`T_x`, :math:`T_y`) and the observer's Heliographic Carrington
     position.  The function returns the Cartesian position of the point where
-    that LOS intersects the Thompson sphere, expressed in Carrington
+    that LOS intersects the Thomson sphere, expressed in Carrington
     coordinates.
 
     Parameters
@@ -805,7 +805,7 @@ def thompson_sphere(elong: ArrayLike,
     Returns
     -------
     x : np.ndarray
-        Carrington :math:`x`-coordinate of the Thompson-sphere intersection
+        Carrington :math:`x`-coordinate of the Thomson-sphere intersection
         point(s), in :math:`R_\\odot`.
     y : np.ndarray
         Carrington :math:`y`-coordinate, in :math:`R_\\odot`.
@@ -823,14 +823,14 @@ def thompson_sphere(elong: ArrayLike,
        centered at the observer corresponding to the given helioprojective
        angles.
     2. Finds the parameter :math:`t` along the LOS at which the distance to
-       Sun-center is minimised (the Thompson-sphere intersection).
+       Sun-center is minimised (the Thomson-sphere intersection).
     3. Applies the P-angle, B\ :sub:`0`-angle (Carrington latitude), and
        Carrington longitude rotations sequentially via
        :func:`rotate_position_about_x`, :func:`rotate_position_about_y`, and
        :func:`rotate_position_about_z`.
 
     For LOSs with :math:`|T_x| > 90°` (pointing away from the Sun), the
-    intersection is reflected to the back Thompson sphere.
+    intersection is reflected to the back Thomson sphere.
 
     See Also
     --------
@@ -866,7 +866,7 @@ def thompson_sphere(elong: ArrayLike,
     # - This is the point on the LOS at which it intersects the Thomson sphere.
     # - in getpb, t is in relative s/r_obs coordinates, which is used to interpolate
     #   the position vector between the vector on the R_OBS sphere and the observer
-    #   location vector. Here we just copy the solve for t at r_min (Thompson sphere).
+    #   location vector. Here we just copy the solve for t at r_min (Thomson sphere).
     t_r_min = -(v_obs_x*(v_ref_x - v_obs_x)
                 + v_obs_y*(v_ref_y - v_obs_y)
                 + v_obs_z*(v_ref_z - v_obs_z))/r_obs_rs**2
