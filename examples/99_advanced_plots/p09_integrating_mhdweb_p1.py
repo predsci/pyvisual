@@ -1,0 +1,229 @@
+"""
+MHDweb Integration Part I: Querying and Downloading Data
+=========================================================
+
+This is the first of a two-part series demonstrating how to use the
+`MHDweb REST API <https://predsci.com/mhdweb2/api>`_ to retrieve
+Predictive Science MAS model output and spacecraft connectivity data.
+
+`MHDweb <https://predsci.com/mhdweb2/api>`_ provides programmatic retrieval
+of MAS run HDF5 data files, querying of the MAS Run Database and Spacecraft
+Database, and generation of spacecraft mapping data products.  Access requires
+a PSI-issued API key passed as ``Authorization: Api-Key <key>`` on every
+request.
+
+Three endpoints are used here:
+
+- ``mas-run-db`` — searches the MAS run catalog by time, model, and variable.
+- ``mas-run-db/{id}/{domain}/{state}/{variable}`` — streams a ZIP archive of
+  HDF5 field files for the requested domain and state.
+- ``spacecraft-mapping/{id}/{sc_id}`` — returns the magnetic connectivity
+  mapping for a named spacecraft, serialized as an
+  `Astropy ECSV <https://docs.astropy.org/en/stable/io/ascii/ecsv.html>`_
+  byte stream.
+
+The downloaded files are consumed in
+:ref:`sphx_glr_gallery_99_advanced_plots_p11_integrating_mhdweb_p2.py`.
+
+.. note::
+
+   This example requires a valid ``API_KEY`` environment variable (or a
+   ``.env`` file in the working directory).  When built by Sphinx-Gallery
+   the key is read from the build environment; run the script locally with
+   your own key to reproduce the downloads.
+
+.. seealso::
+
+   :ref:`sphx_glr_gallery_99_advanced_plots_p11_integrating_mhdweb_p2.py`
+      Part II — loads the files downloaded here, traces magnetic
+      connectivity, and produces four visualizations.
+"""
+
+import os
+from pprint import pprint
+from pathlib import Path
+import requests
+from io import BytesIO
+from astropy.table import Table
+
+# %%
+# Configure Output Paths and Authentication
+# -----------------------------------------
+#
+# ``STATIC_ASSETS`` is an optional environment variable that redirects output
+# to a shared asset directory used by the Sphinx pre-build pipeline.  When
+# unset, files are written to the current working directory.
+#
+# Authentication follows the `MHDweb API key scheme
+# <https://predsci.com/mhdweb2/api>`_: the key is passed as
+# ``Authorization: Api-Key <key>`` on every request.
+
+OUTPUT_DIR = Path(os.environ.get("STATIC_ASSETS", "")).resolve()
+COR_OUTPUT_DIR = OUTPUT_DIR / 'cor_mag_field'
+HEL_OUTPUT_DIR = OUTPUT_DIR / 'hel_mag_field'
+BASE_URL = 'https://www.predsci.com/mhdweb2_bu/v2/api'
+API_KEY = os.environ.get('API_KEY')
+AUTH = dict(Authorization=f"Api-Key {API_KEY}")
+
+if not COR_OUTPUT_DIR.exists():
+    COR_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+if not HEL_OUTPUT_DIR.exists():
+    HEL_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+# %%
+# Query the MAS Run Database
+# --------------------------
+#
+# The ``mas-run-db`` endpoint searches the MAS run catalog and returns a list
+# of runs ranked by proximity to the requested time of interest (``toi``).
+# Key query parameters:
+#
+# - ``toi`` — ISO-8601 timestamp; the API selects the run whose validity
+#   window is closest to this time.
+# - ``model`` — MAS model variant; ``'thermo_2'`` is the thermodynamic
+#   two-temperature model.
+# - ``type`` — run type; ``'ss'`` is a steady-state solution.
+# - ``domain`` — list of domains to require: ``'cor'`` (corona,
+#   :math:`1\text{–}30\,R_\odot`) and ``'hel'`` (heliosphere, extending
+#   to :math:`\sim 2\,\mathrm{AU}`).
+# - ``variables`` — field components needed for tracing:
+#   :math:`(B_r, B_\theta, B_\phi)`.
+#
+# The first result is taken; its ``id`` field (``cor_id``) is the run
+# identifier used in all subsequent requests.
+
+db_query_params = {
+    'toi': '2024-05-09T12:00:00',
+    'model': 'thermo_2',
+    'type': 'ss',
+    'domain': ['cor', 'hel'],
+    'variables': ['br', 'bt', 'bp'],
+}
+
+db_response = requests.get(
+    f'{BASE_URL}/mas-run-db',
+    headers=dict(Accept='application/json') | AUTH,
+    params=db_query_params)
+db_response.raise_for_status()
+
+runs = db_response.json()
+pprint(runs)
+
+try:
+    run = runs[0]
+except IndexError:
+    raise IndexError("No results found in MAS Run DB for the specified parameters.")
+
+cor_id = run['id']
+
+# %%
+# Inspect Run Metadata
+# --------------------
+#
+# Fetching ``mas-run-db/{id}`` returns a metadata record for the run,
+# including per-domain ``states`` lists.  For steady-state runs there is
+# a single state (index ``0``); time-dependent runs have multiple states,
+# each corresponding to one simulation snapshot.  The ``omas`` list
+# records any associated in-situ observation metadata attached to the run.
+
+dbmeta_response = requests.get(
+    f'{BASE_URL}/mas-run-db/{cor_id}',
+    headers=dict(Accept='application/json') | AUTH)
+dbmeta_response.raise_for_status()
+
+run_meta = dbmeta_response.json()
+pprint(run_meta['cor'])
+len(run_meta['cor']['states'])
+
+pprint(run_meta['hel'])
+len(run_meta['hel']['states'])
+
+print(len(run_meta['omas']))
+
+# %%
+# Download Magnetic Field Files
+# ------------------------------
+#
+# The endpoint ``mas-run-db/{cor_id}/{domain}/{state}/{variable}`` streams a
+# ZIP archive containing HDF5 files for the requested field components.
+# ``state='0'`` selects the first (and for steady-state runs, only) snapshot.
+# Requesting ``variable='br,bt,bp'`` as a comma-separated string fetches all
+# three components in a single archive.
+#
+# The coronal and heliospheric archives are downloaded and written separately
+# since they will be extracted to different directories in
+# :ref:`sphx_glr_gallery_99_advanced_plots_p11_integrating_mhdweb_p2.py`.
+
+cor_files_params = {
+    'cor_id': str(cor_id),
+    'domain': 'cor',
+    'state': '0',
+    'variable': 'br,bt,bp'
+}
+
+print("Fetching coronal magnetic field files...")
+cor_files_response = requests.get(
+    f'{BASE_URL}/mas-run-db/' + '/'.join(cor_files_params.values()),
+    headers=AUTH,
+    stream=True)
+cor_files_response.raise_for_status()
+
+print("Saving coronal magnetic field files...")
+with open(COR_OUTPUT_DIR / 'cor_mag_field.zip', 'wb') as f:
+    for chunk in cor_files_response.iter_content(chunk_size=8192):
+        f.write(chunk)
+
+hel_files_params = {
+    'cor_id': str(cor_id),
+    'domain': 'hel',
+    'state': '0',
+    'variable': 'br,bt,bp'
+}
+
+print("Fetching heliospheric magnetic field files...")
+hel_files_response = requests.get(
+    f'{BASE_URL}/mas-run-db/' + '/'.join(hel_files_params.values()),
+    headers=AUTH,
+    stream=True)
+hel_files_response.raise_for_status()
+
+print("Saving heliospheric magnetic field files...")
+with open(HEL_OUTPUT_DIR / 'hel_mag_field.zip', 'wb') as f:
+    for chunk in hel_files_response.iter_content(chunk_size=8192):
+        f.write(chunk)
+
+# %%
+# Download the Spacecraft Mapping
+# --------------------------------
+#
+# The ``spacecraft-mapping/{cor_id}/{sc_id}`` endpoint returns the magnetic
+# connectivity mapping for a named spacecraft over the run's time range.
+# Here ``sc_id='solo'`` selects Solar Orbiter.
+#
+# The response is an `Astropy ECSV
+# <https://docs.astropy.org/en/stable/io/ascii/ecsv.html>`_ byte stream.
+# Reading it into an :class:`astropy.table.Table` via :func:`BytesIO` preserves
+# column units and metadata without writing a temporary file.  The table is
+# then written to disk as an ECSV file for use in Part II.
+#
+# Each row of the table corresponds to one time step and contains three sets
+# of :math:`(r, \theta, \phi)` coordinates (in :math:`R_\odot` and radians):
+#
+# - ``sc_pos_{r,t,p}`` — actual spacecraft position in the Carrington frame.
+# - ``r1_pos_{r,t,p}`` — position ballistically mapped inward to the outer
+#   coronal boundary (:math:`r_1 \approx 30\,R_\odot`).
+# - ``r0_pos_{r,t,p}`` — magnetic footpoint traced to the inner boundary
+#   (:math:`r_0 = 1\,R_\odot`).
+
+sc_id = 'solo'
+
+response = requests.get(
+    f'{BASE_URL}/spacecraft-mapping/{cor_id}/{sc_id}',
+    headers=AUTH,
+    stream=True)
+response.raise_for_status()
+
+spacecraft_mapping = Table.read(BytesIO(response.content), format='ascii.ecsv')
+print(spacecraft_mapping.info(out=None))
+
+spacecraft_mapping.write(OUTPUT_DIR / "spacecraft_mapping.ecsv", format='ascii.ecsv', overwrite=True)

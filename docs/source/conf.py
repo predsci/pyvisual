@@ -352,15 +352,18 @@ import matplotlib
 matplotlib.use("Agg")
 os.environ.setdefault('SPHINX_GALLERY_BUILD', '1')
 
+from dotenv import load_dotenv
+load_dotenv()
+
 sphinx_gallery_conf = {
     "examples_dirs": ["../../examples"],
     "gallery_dirs": ["gallery"],
     "within_subsection_order": "FileNameSortKey",
     "download_all_examples": False,
     "remove_config_comments": True,
-    "filename_pattern": r"\.py$",
+    "filename_pattern": r"p[0-9][0-9].*\.py$",
     "plot_gallery": True,
-    "run_stale_examples": True,
+    "run_stale_examples": False,
     "matplotlib_animations": True,
     "image_scrapers": (DynamicScraper(), 'matplotlib'),
 }

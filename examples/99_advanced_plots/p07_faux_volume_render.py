@@ -1,6 +1,6 @@
 """
-Faux Volume Rendering Along a Spacecraft Trajectory
-====================================================
+Faux Volume Rendering
+=====================
 
 This example demonstrates a technique for simulating volumetric rendering of
 coronal density by deconstructing a 3-D
@@ -9,7 +9,7 @@ radial shells — a *faux* volume that avoids the GPU memory cost of true
 volumetric rendering while still conveying the large-scale 3-D structure of
 the corona.
 
-The scene is animated along a real Parker Solar Probe (PSP) trajectory
+The scene is animated along a Parker Solar Probe (PSP) trajectory
 obtained from the JPL Horizons ephemeris service via
 :func:`~pyvisual.utils.geometry.spacecraft_trajectory`, placing the virtual
 observer at each spacecraft position and framing the field of view in
@@ -24,9 +24,10 @@ helioprojective angular coordinates using
    :ref:`sphx_glr_gallery_99_advanced_plots_p01_combining_multiple_elements.py`
       Multi-layer coronal scene that combines slices, contours, and fieldlines.
 """
-# sphinx_gallery_thumbnail_path = '_static/parker_trajectory_thumb.png'
+# sphinx_gallery_thumbnail_path = '_static/assets/p07_faux_volume_render.png'
 
 import os
+from pathlib import Path
 
 import numpy as np
 from pyvisual import Plot3d
@@ -92,22 +93,43 @@ deconstructed_mesh_volume = np.log(mesh[1:, ...]).deconstruct(method='slices')
 # :math:`(x_0,\, x_1,\, y_0,\, y_1)` in degrees. Re-applying the FOV at
 # every frame ensures consistent framing as the spacecraft distance changes
 # over the trajectory.
+#
+# .. warning::
+#
+#    The interactive 3-D viewer is omitted here because the deconstructed
+#    shell mesh is prohibitively large to embed in a browser. The animation
+#    is also generated and cached outside the sphinx-gallery pipeline:
+#    sphinx-gallery natively scrapes GIF output, but the 256-color palette
+#    limit of the GIF format renders poorly at this scene's dynamic range, so
+#    the movie is written as an MP4 via a separate pre-build step and embedded
+#    below using a raw HTML ``<video>`` tag.  To regenerate the MP4 locally,
+#    run the script directly (without the ``SPHINX_GALLERY_BUILD`` environment
+#    variable set).
 
 if not os.environ.get('SPHINX_GALLERY_BUILD'):
+    # The following lines are included to standardize the output path for the sphinx-gallery
+    # pre-processing pipeline mentioned above. These values can be omitted/altered if running
+    # the script directly.
+
+    output_dir = Path(os.environ.get("STATIC_ASSETS", "")).resolve()
+    movie_name = f"p07_faux_volume_render.mp4"
+    screenshot_name = f"p07_faux_volume_render.png"
+
     plotter = Plot3d()
     plotter.add_axes()
     plotter.add_mesh(radial_slice_at_photosphere, show_scalar_bar=False)
     plotter.add_mesh(deconstructed_mesh_volume, opacity='sigmoid_7', show_scalar_bar=False)
-    plotter.open_movie("parker_trajectory.mp4", framerate=10)
+    plotter.open_movie(output_dir / movie_name, framerate=10)
     for position in trajectory.T:
         plotter.observer_position = position
         plotter.observer_los_view = -50, 50, -45, 45
         plotter.write_frame()
+    plotter.screenshot(output_dir / screenshot_name)
     plotter.close()
 
 # %%
 # .. raw:: html
 #
 #    <video autoplay loop muted playsinline style="width:100%;border-radius:4px;">
-#      <source src="../../_static/parker_trajectory.mp4" type="video/mp4">
+#      <source src="../../_static/assets/p07_faux_volume_render.mp4" type="video/mp4">
 #    </video>
