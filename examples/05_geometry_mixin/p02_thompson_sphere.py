@@ -7,7 +7,7 @@ This example demonstrates :meth:`~pyvisual.core.mixins.GeometryMixin.add_thompso
 position.
 
 The Thomson sphere is the sphere centered halfway between the Sun and the
-observer, with radius :math:`\|\mathbf{p}_\text{obs}\|/2`.  It represents the
+observer, with radius :math:`\\|\\mathbf{p}_\\text{obs}\\|/2`.  It represents the
 locus of points of maximum Thomson scattering efficiency along any line of
 sight through the corona: a photon emitted from a coronal electron contributes
 most strongly to an observer's signal when that electron lies on or near this

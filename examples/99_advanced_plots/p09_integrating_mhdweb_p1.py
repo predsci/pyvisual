@@ -1,16 +1,21 @@
 """
-MHDweb Integration Part I: Querying and Downloading Data
-=========================================================
+MHDweb Integration Part I
+=========================
 
 This is the first of a two-part series demonstrating how to use the
 `MHDweb REST API <https://predsci.com/mhdweb2/api>`_ to retrieve
 Predictive Science MAS model output and spacecraft connectivity data.
 
-`MHDweb <https://predsci.com/mhdweb2/api>`_ provides programmatic retrieval
-of MAS run HDF5 data files, querying of the MAS Run Database and Spacecraft
-Database, and generation of spacecraft mapping data products.  Access requires
-a PSI-issued API key passed as ``Authorization: Api-Key <key>`` on every
-request.
+`MHDweb <https://predsci.com/mhdweb2>`_ provides programmatic retrieval
+of MAS run HDF5 data files, querying of MHDweb's *MAS Run Database* /
+*Spacecraft Database*, and generation of various data products.
+
+.. attention::
+   Access requires a PSI-issued API key (passed as ``Authorization: Api-Key <key>`` in the
+   header of every request).
+
+   **To request a key, visit the link:** `MHDweb API Key <https://predsci.com/mhdweb2/api>`_.
+
 
 Three endpoints are used here:
 
@@ -28,16 +33,22 @@ The downloaded files are consumed in
 .. note::
 
    This example requires a valid ``API_KEY`` environment variable (or a
-   ``.env`` file in the working directory).  When built by Sphinx-Gallery
-   the key is read from the build environment; run the script locally with
+   ``.env`` file in the working directory). Run the script locally with
    your own key to reproduce the downloads.
+
+   **To safeguard your API key, do not commit it to version control or share
+   it publicly. Use environment variables or secure vaults to manage your credentials.**
 
 .. seealso::
 
    :ref:`sphx_glr_gallery_99_advanced_plots_p11_integrating_mhdweb_p2.py`
       Part II — loads the files downloaded here, traces magnetic
       connectivity, and produces four visualizations.
+   `MHDweb References <https://predsci.com/mhdweb2/references>`_
+      A collections of resources for learning more about MHDweb, the MAS model, and related topics.
 """
+
+# sphinx_gallery_thumbnail_path = '_static/psi_logo.png'
 
 import os
 from pprint import pprint
@@ -78,14 +89,13 @@ if not HEL_OUTPUT_DIR.exists():
 # of runs ranked by proximity to the requested time of interest (``toi``).
 # Key query parameters:
 #
-# - ``toi`` — ISO-8601 timestamp; the API selects the run whose validity
-#   window is closest to this time.
-# - ``model`` — MAS model variant; ``'thermo_2'`` is the thermodynamic
-#   two-temperature model.
+# - ``toi`` — ISO-8601 timestamp; the API selects all runs with a run time
+#   range encompassing the requested time and ranks them by proximity to it.
+# - ``model`` — MAS model variant *e.g.* ``'thermo_2'``, ``'thermo_1'``, ``'poly'``.
 # - ``type`` — run type; ``'ss'`` is a steady-state solution.
 # - ``domain`` — list of domains to require: ``'cor'`` (corona,
 #   :math:`1\text{–}30\,R_\odot`) and ``'hel'`` (heliosphere, extending
-#   to :math:`\sim 2\,\mathrm{AU}`).
+#   to :math:`\sim 1\,\mathrm{AU}`).
 # - ``variables`` — field components needed for tracing:
 #   :math:`(B_r, B_\theta, B_\phi)`.
 #
@@ -123,8 +133,7 @@ cor_id = run['id']
 # Fetching ``mas-run-db/{id}`` returns a metadata record for the run,
 # including per-domain ``states`` lists.  For steady-state runs there is
 # a single state (index ``0``); time-dependent runs have multiple states,
-# each corresponding to one simulation snapshot.  The ``omas`` list
-# records any associated in-situ observation metadata attached to the run.
+# each corresponding to one simulation snapshot.
 
 dbmeta_response = requests.get(
     f'{BASE_URL}/mas-run-db/{cor_id}',
@@ -202,9 +211,10 @@ with open(HEL_OUTPUT_DIR / 'hel_mag_field.zip', 'wb') as f:
 #
 # The response is an `Astropy ECSV
 # <https://docs.astropy.org/en/stable/io/ascii/ecsv.html>`_ byte stream.
-# Reading it into an :class:`astropy.table.Table` via :func:`BytesIO` preserves
-# column units and metadata without writing a temporary file.  The table is
-# then written to disk as an ECSV file for use in Part II.
+# Reading it into an :class:`astropy.table.Table` via :class:`~io.BytesIO` preserves
+# column units and metadata without writing a temporary file. In this case – for
+# continuity with :ref:`sphx_glr_gallery_99_advanced_plots_p11_integrating_mhdweb_p2.py` –
+# the table is written to disk as an ECSV file for use in Part II.
 #
 # Each row of the table corresponds to one time step and contains three sets
 # of :math:`(r, \theta, \phi)` coordinates (in :math:`R_\odot` and radians):

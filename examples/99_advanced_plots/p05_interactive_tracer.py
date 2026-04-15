@@ -4,7 +4,7 @@ Interactive Fieldline Tracer
 
 This example builds a two-panel interactive scene for exploring coronal magnetic
 connectivity.  The top panel displays a longitude–latitude map of :math:`B_r`
-at :math:`r = 1\,R_\odot`; right-clicking any point triggers a callback that
+at :math:`r = 1\\,R_\\odot`; right-clicking any point triggers a callback that
 constructs a :math:`5 \\times 5` grid of launch points spanning
 :math:`\\pm 1^\\circ` around the selection, traces fieldlines forward from
 those seeds via :class:`~mapflpy.tracer.Tracer`, and renders the result in the

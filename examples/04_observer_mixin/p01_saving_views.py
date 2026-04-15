@@ -8,7 +8,7 @@ it exactly — a useful workflow when you want to reproduce a specific viewpoint
 across multiple plot sessions.
 
 The :class:`~pyvisual.core._typing.ObserverOrientation` named tuple returned
-by the getter stores the position angle :math:`p_\mathrm{angle}` (roll about
+by the getter stores the position angle :math:`p_\\mathrm{angle}` (roll about
 the line of sight, in degrees).  Combined with
 :attr:`~pyvisual.core.mixins.ObserverMixin.observer_position`, this fully
 describes the camera state in a serialisable form.

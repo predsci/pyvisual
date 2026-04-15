@@ -1,19 +1,19 @@
 """
-MHDweb Integration Part II: Visualizing Magnetic Connectivity
-=============================================================
+MHDweb Integration Part II
+==========================
 
 This is the second of a two-part series.
 :ref:`sphx_glr_gallery_99_advanced_plots_p09_integrating_mhdweb_p1.py`
 queried the `MHDweb REST API <https://predsci.com/mhdweb2/api>`_ to download
-coronal and heliospheric :math:`(B_r, B_\theta, B_\phi)` field files and the
+coronal and heliospheric :math:`(B_r, B_\\theta, B_\\phi)` field files and the
 Solar Orbiter spacecraft connectivity mapping; this example loads those
 outputs and produces four visualizations:
 
 1. A radially scaled overview of :math:`B_r` in both model domains.
 2. A static scene of the coronal :math:`B_r` slice with spacecraft positions,
    ballistically mapped positions, and backward-traced coronal connectivity.
-3. An animation of inter-domain and spacecraft mapping traces in the
-   heliospheric frame.
+3. An animation of inter-domain and spacecraft mapping traces from a fixed
+   wide-angle heliospheric perspective.
 4. A close-up coronal animation whose camera follows each spacecraft's
    longitude through the sequence.
 
@@ -21,20 +21,13 @@ Magnetic connectivity is computed in two ways:
 
 - **Spacecraft mapping** — :class:`~mapflpy.tracer.TracerMP` traces backward
   from the ballistically mapped positions at
-  :math:`r_1 \approx 30\,R_\odot` through the coronal domain.  The
+  :math:`r_1 \\approx 30\\,R_\\odot` through the coronal domain.  The
   spacecraft position is then prepended to form a continuous path from
   the heliosphere to the solar surface.
 - **Inter-domain tracing** — :func:`~mapflpy.scripts._inter_domain_tracing`
   launches field-line integration from the spacecraft positions directly,
   crossing the coronal–heliospheric domain boundary to produce end-to-end
-  connectivity from the spacecraft to :math:`r_0 = 1\,R_\odot`.
-
-.. note::
-
-   This example writes GIF animations to ``STATIC_ASSETS`` (or the current
-   working directory when unset).  The gallery thumbnails are scraped from
-   the two :meth:`~pyvisual.core.plot3d.Plot3d.show` calls; the GIF files
-   must be embedded manually if desired.
+  connectivity from the spacecraft to :math:`r_0 = 1\\,R_\\odot`.
 
 .. seealso::
 

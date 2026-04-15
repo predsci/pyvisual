@@ -42,7 +42,7 @@ print(f"data range : [{mesh.data.min():.2f}, {mesh.data.max():.2f}]")
 # field and return a new :class:`~pyvisual.core.mesh3d.CartesianMesh` — the
 # point coordinates are untouched.  Here we subtract the field minimum to
 # shift the distribution to zero, then divide by the resulting maximum to
-# normalise to the range :math:`[0, 1]`.
+# normalize to the range :math:`[0, 1]`.
 
 mesh_shifted = mesh - mesh.data.min()
 mesh_norm = mesh_shifted / mesh_shifted.data.max()
@@ -60,7 +60,7 @@ plotter.show()
 #
 # The :meth:`~pyvisual.core.mesh3d._BaseFrameMesh.__array_ufunc__` hook lets
 # any single-output NumPy ufunc act directly on the mesh.
-# :obj:`numpy.log10` applied to the normalised distance converts the field to
+# :obj:`numpy.log10` applied to the normalized distance converts the field to
 # a logarithmic scale that compresses the large dynamic range near the outer
 # boundary and reveals structure close to the origin.  Points at or below zero
 # (here, the grid corner where :math:`r = 0`) are masked by the log.
