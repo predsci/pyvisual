@@ -13,7 +13,8 @@ The primary entry point is :class:`~pyvisual.core.plot3d.Plot3d`, which exposes
 methods for adding solar geometry primitives, rendering structured-grid slices and
 isosurface contours, plotting point clouds and splines, and tracing magnetic
 fieldlines — all from spherical :math:`(r, \theta, \phi)` coordinate arrays.
-Because **pyvisual** renders through `PyVista <https://docs.pyvista.org/>`_ and VTK,
+Because **pyvisual** renders through `PyVista <https://docs.pyvista.org/>`_ (which is,
+itself, a pythonic interface for the `VTK <https://vtk.org/>`_ library),
 it is strongly recommended to familiarise yourself with the PyVista documentation to
 get the most out of the package.
 

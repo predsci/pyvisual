@@ -41,11 +41,11 @@ The following packages are installed automatically:
      - Min. version
      - Role in **pyvisual**
    * - `NumPy <https://numpy.org/doc/stable/>`_
-     - —
+     - 2.1.0
      - Array operations underpinning all coordinate transforms, mesh
        construction, and data manipulation throughout the library.
    * - `PyVista <https://docs.pyvista.org/>`_
-     - —
+     - 0.46.0
      - 3-D rendering engine.  **pyvisual** subclasses
        :class:`pyvista.Plotter` and uses PyVista mesh types
        (:class:`~pyvista.PolyData`, :class:`~pyvista.StructuredGrid`,
@@ -53,18 +53,19 @@ The following packages are installed automatically:
        for all visualizations.
    * - `psi-io <https://predsci.com/doc/psi-io/guide/index.html>`_
      - 2.0.6
-     - PSI library for reading HDF4/HDF5 model output files.  Provides
-       :func:`~psi_io.read_hdf_by_index` for loading subsets of coronal
-       data arrays by index, and is required for all examples that use
-       real PSI MAS model data.
+     - PSI library for reading HDF4/HDF5 model output files. Provides *e.g.*
+       :func:`~psi_io.psi_io.read_hdf_by_index` for loading subsets of
+       HDF datasets by index (without having to load the entire file
+       into memory), and is required for all examples that use
+       PSI's MAS model data.
    * - `SunPy <https://docs.sunpy.org/>`_
-     - —
+     - 6.0.3
      - Solar physics toolkit used for coordinate frame transformations
        (e.g. Heliocentric Earth Ecliptic and Carrington frames) and
        spacecraft ephemeris calculations that drive the observer
        positioning utilities.
    * - `Astropy <https://docs.astropy.org/>`_
-     - —
+     - 6.1.3
      - Astronomical units, time handling, and coordinate infrastructure
        underlying SunPy's frame system; used indirectly via SunPy for
        JPL Horizons queries and observer geometry.
@@ -99,13 +100,13 @@ Install these via extras (see `Standard Install`_ below):
        into :meth:`~pyvisual.core.mixins.StackMeshMixin.add_fieldlines`.
        Enabled by the ``tracing`` extra.
    * - `Pooch <https://www.fatiando.org/pooch/latest/>`_
-     - —
+     - 1.8.2
      - Asset fetching and caching.  Powers
        :func:`~pyvisual.utils.data.fetch_datasets`, which downloads
        sample PSI MAS model files to ``~/.cache/psi/`` on first use.
        Enabled by the ``data`` extra.
    * - `Matplotlib <https://matplotlib.org/stable/>`_
-     - —
+     - 3.10.7
      - Colour maps and scalar-bar rendering used internally by PyVista.
        Pulled in automatically by the ``data`` extra.
 

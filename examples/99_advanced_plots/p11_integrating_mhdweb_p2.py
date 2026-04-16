@@ -48,7 +48,8 @@ from zipfile import ZipFile
 from mapflpy.tracer import TracerMP
 from mapflpy.scripts import _inter_domain_tracing
 from mapflpy.utils import combine_and_pad_fieldlines
-
+import astropy.units as u
+from sunpy.sun.constants import sidereal_rotation_rate
 from astropy.table import QTable
 import numpy as np
 
@@ -105,6 +106,27 @@ balmapped_positions = np.stack(tuple(spacecraft_mapping[f'r1_pos_{dim}'].value f
 traced_positions = np.stack(tuple(spacecraft_mapping[f'r0_pos_{dim}'].value for dim in 'rtp'))
 
 # %%
+# To properly visualize the ballistic mappings, we need to construct a continuous
+# path from the spacecraft position through the heliosphere to the coronal footpoint.
+#
+# For each time step, a radial path is constructed from 50 linearly spaced radial
+# positions (beginning from the spacecraft position and ending at :math:`30\,R_\odot`).
+# The time shift for each radial position is computed based on the in situ flow speed, and the
+# corresponding longitudinal shift is calculated using
+# :mod:`sunpy`'s :class:`~sunpy.sun.constants.sidereal_rotation_rate`.
+
+balmapping_radial_path = np.linspace(spacecraft_mapping['sc_pos_r'].value, 30, 50) * u.R_sun
+time_shift = (spacecraft_mapping['sc_pos_r'] - balmapping_radial_path) / (spacecraft_mapping['flow_speed'])
+longitudinal_shift = time_shift * sidereal_rotation_rate
+balmapping_longitudinal_path = ((spacecraft_mapping['sc_pos_p'] + longitudinal_shift) % (360 * u.deg)).to(u.rad)
+
+ballistic_mapping_trajectory = np.stack(
+    (balmapping_radial_path.value,
+     np.full_like(balmapping_radial_path.value, spacecraft_positions[1]),
+     balmapping_longitudinal_path.value),
+    axis=1)
+
+# %%
 # Trace Magnetic Connectivity
 # ----------------------------
 #
@@ -135,7 +157,7 @@ with ExitStack() as cstack:
     spacecraft_mapping_traces = cor_tracer.trace_bwd(
         launch_points=balmapped_positions)
     spacecraft_mapping_traces = np.concatenate(
-        (spacecraft_positions[np.newaxis, ...], spacecraft_mapping_traces.geometry))
+        (ballistic_mapping_trajectory, spacecraft_mapping_traces.geometry))
 
     inter_domain_traces, *_ = _inter_domain_tracing(cor_tracer, hel_tracer,
         launch_points=spacecraft_positions)

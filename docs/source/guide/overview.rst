@@ -183,9 +183,12 @@ dependency. Fieldline tracing (for use with
 `mapflpy <https://predsci.com/doc/mapflpy/>`_, an optional dependency installed
 via the ``tracing`` extra.
 
-For a more general solar-physics visualization toolkit with coordinate-frame
-awareness beyond what **pyvisual** provides, consider
-`sunkit-pyvista <https://docs.sunpy.org/projects/sunkit-pyvista/en/latest/>`_.
+.. attention::
+
+   For a more general solar-physics visualization toolkit with coordinate-frame
+   awareness beyond what **pyvisual** provides, we strongly urge users to explore
+   the `sunkit-pyvista <https://docs.sunpy.org/projects/sunkit-pyvista/en/latest/>`_
+   package.
 
 .. seealso::
 
