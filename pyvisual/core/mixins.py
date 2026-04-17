@@ -2011,7 +2011,7 @@ class GeometryMixin:
         """
         rargs = (radius, radius, 1, 1)
         targs = (0, np.pi, 0, 360)
-        pargs = (0, 2 * np.pi, int(360 / lon_deg), 360)
+        pargs = (0, 2 * np.pi, int(360 / lon_deg) + 1, 360)
         return self.add_grid(rargs, targs, pargs, **kwargs)
 
     def add_latitudinal_lines(self,
@@ -2052,7 +2052,7 @@ class GeometryMixin:
             >>> plotter.show()
         """
         rargs = (radius, radius, 1, 1)
-        targs = (0, np.pi, int(180 / lat_deg), 360)
+        targs = (0, np.pi, int(180 / lat_deg) + 1, 360)
         pargs = (0, 2 * np.pi, 0, 180)
         return self.add_grid(rargs, targs, pargs, **kwargs)
 
@@ -2105,8 +2105,8 @@ class GeometryMixin:
             >>> plotter.show()
         """
         rargs = (radius, radius, 1, 1)
-        targs = (0, np.pi, int(180 / lat_deg), 180)
-        pargs = (0, 2 * np.pi, int(360 / lon_deg), 360)
+        targs = (0, np.pi, int(180 / lat_deg) + 1, 180)
+        pargs = (0, 2 * np.pi, int(360 / lon_deg) + 1, 360)
         return self.add_grid(rargs, targs, pargs, **kwargs)
 
     def add_grid(self,
