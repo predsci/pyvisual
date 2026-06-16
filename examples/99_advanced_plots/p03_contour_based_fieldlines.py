@@ -30,7 +30,7 @@ import numpy as np
 from mapflpy.scripts import run_fwdbwd_tracing
 from pyvisual import Plot3d
 from pyvisual.core.mesh3d import SphericalMesh
-from pyvisual.utils.data import fetch_datasets
+from psi_data import fetch_mas_data
 
 # %%
 # Load Data and Extract the Polarity Inversion Line
@@ -49,7 +49,7 @@ from pyvisual.utils.data import fetch_datasets
 # because the internal axes of :class:`~pyvisual.core.mesh3d.SphericalMesh`
 # *are* the spherical coordinates, not Cartesian positions.
 
-mag_field = fetch_datasets("cor", ["br", "bt", "bp"])
+mag_field = fetch_mas_data(domains="cor", variables=["br", "bt", "bp"])
 
 mesh = SphericalMesh(mag_field.cor_br)
 neutraline = mesh[5, ...].contour(isosurfaces=[0])

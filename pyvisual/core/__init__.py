@@ -29,7 +29,7 @@ This sub-package contains the primary classes and supporting infrastructure for
   dictionaries of per-render-type default kwargs.
 
 On import this module attempts to load the PSI color theme for PyVista via
-:func:`~pyvisual.utils.data.fetch_theme`.  If the theme file cannot be retrieved a
+:func:`~pyvisual.utils.helpers.fetch_theme`.  If the theme file cannot be retrieved a
 :class:`UserWarning` is emitted and PyVista's built-in
 :class:`~pyvista.themes.DarkTheme` is used as a fallback.
 
@@ -53,7 +53,7 @@ import os
 import warnings
 
 import pyvista as pv
-from pyvisual.utils.data import fetch_theme
+from pyvisual.utils.helpers import fetch_theme
 
 # Load the global theme for PyVista
 try:

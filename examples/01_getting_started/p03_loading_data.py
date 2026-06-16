@@ -5,7 +5,7 @@ Loading and Plotting MHD Data
 This example introduces the two steps needed to go from a PSI data file to a
 rendered scene:
 
-1. **Fetching a dataset** — :func:`~pyvisual.utils.data.fetch_datasets`
+1. **Fetching a dataset** — :func:`psi_data.fetch_mas_data`
    downloads (or retrieves from cache) a version-pinned HDF5 file from the
    PSI asset server and returns its local path.
 2. **Reading the data** — :func:`~psi_io.psi_io.read_hdf_by_index` loads the array
@@ -13,27 +13,27 @@ rendered scene:
    file.  Passing ``None`` for a dimension selects its full extent; passing an
    integer index fixes that dimension to a single grid point.
 
-The dataset used here is the radial magnetic field :math:`B_r` from a
-Thermo 2 steady-state coronal simulation for Carrington Rotation 2282
-(CR 2282), covering the domain :math:`r \\in [1,\\,30]\\,R_\\odot`.
+The dataset used here is the radial magnetic field :math:`B_r` from an
+HMI-driven MAS standard run for Carrington Rotation 2309
+(CR 2309), covering the coronal domain :math:`r \\in [1,\\,30]\\,R_\\odot`.
 """
 
 from psi_io import read_hdf_by_index
 from pyvisual import Plot3d
-from pyvisual.utils.data import fetch_datasets
+from psi_data import fetch_mas_data
 
 # %%
 # Fetching a Dataset
 # ------------------
 #
-# :func:`~pyvisual.utils.data.fetch_datasets` accepts a *domain* identifier
+# :func:`psi_data.fetch_mas_data` accepts a *domain* identifier
 # (``'cor'`` for the coronal domain, ``'hel'`` for heliospheric) and a
 # *variable* name.  It returns a :func:`~collections.namedtuple` whose fields
 # are named ``"{domain}_{variable}"``.  The first call downloads the file to
 # the local cache; subsequent calls return the cached copy immediately without
 # hitting the network.
 
-datasets = fetch_datasets("cor", "br")
+datasets = fetch_mas_data(domains="cor", variables="br")
 br_file = datasets.cor_br
 
 # %%

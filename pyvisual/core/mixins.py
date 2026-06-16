@@ -485,9 +485,9 @@ class StackMeshMixin:
             >>> import numpy as np
             >>> from mapflpy.scripts import run_forward_tracing
             >>> from pyvisual import Plot3d
-            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_data import fetch_mas_data
             >>>
-            >>> mag_field = fetch_datasets("cor", ["br", "bt", "bp"])
+            >>> mag_field = fetch_mas_data(domains="cor", variables=["br", "bt", "bp"])
             >>> traces = run_forward_tracing(*mag_field, context='fork')
             >>> traces_rtp = np.moveaxis(traces.geometry, 1, 0)
             >>>
@@ -514,9 +514,9 @@ class StackMeshMixin:
             >>> from mapflpy.scripts import run_fwdbwd_tracing
             >>> from mapflpy.utils import get_fieldline_polarity
             >>> from pyvisual import Plot3d
-            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_data import fetch_mas_data
             >>>
-            >>> mag_field = fetch_datasets("cor", ["br", "bt", "bp"])
+            >>> mag_field = fetch_mas_data(domains="cor", variables=["br", "bt", "bp"])
             >>> traces = run_fwdbwd_tracing(*mag_field, context='fork')
             >>> trace_polarity = get_fieldline_polarity(1, 30, mag_field.cor_br, traces)
             >>> traces_rtp = np.moveaxis(traces.geometry, 1, 0)
@@ -767,10 +767,10 @@ class GridMeshMixin:
         .. pyvista-plot::
 
             >>> from pyvisual import Plot3d
-            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_data import fetch_mas_data
             >>> from psi_io import read_hdf_by_index
             >>>
-            >>> datafile = fetch_datasets("cor", "br")
+            >>> datafile = fetch_mas_data(domains="cor", variables="br")
             >>> data, r, t, p = read_hdf_by_index(datafile.cor_br, 1, 71, None)
             >>>
             >>> plotter = Plot3d()
@@ -785,10 +785,10 @@ class GridMeshMixin:
         .. pyvista-plot::
 
             >>> from pyvisual import Plot3d
-            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_data import fetch_mas_data
             >>> from psi_io import read_hdf_by_index
             >>>
-            >>> datafile = fetch_datasets("cor", "br")
+            >>> datafile = fetch_mas_data(domains="cor", variables="br")
             >>> data, r, t, p = read_hdf_by_index(datafile.cor_br, 1, None, 71)
             >>>
             >>> plotter = Plot3d()
@@ -862,10 +862,10 @@ class GridMeshMixin:
         .. pyvista-plot::
 
             >>> from pyvisual import Plot3d
-            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_data import fetch_mas_data
             >>> from psi_io import read_hdf_by_index
             >>>
-            >>> datafile = fetch_datasets("cor", "br")
+            >>> datafile = fetch_mas_data(domains="cor", variables="br")
             >>> data, r, t, p = read_hdf_by_index(datafile.cor_br, 1, None, None)
             >>>
             >>> plotter = Plot3d()
@@ -882,10 +882,10 @@ class GridMeshMixin:
         .. pyvista-plot::
 
             >>> from pyvisual import Plot3d
-            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_data import fetch_mas_data
             >>> from psi_io import read_hdf_by_index
             >>>
-            >>> datafile = fetch_datasets("cor", "br")
+            >>> datafile = fetch_mas_data(domains="cor", variables="br")
             >>> data, r, t, p = read_hdf_by_index(datafile.cor_br, None, 71, None)
             >>>
             >>> plotter = Plot3d()
@@ -988,10 +988,10 @@ class GridMeshMixin:
         .. pyvista-plot::
 
             >>> from pyvisual import Plot3d
-            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_data import fetch_mas_data
             >>> from psi_io import read_hdf_by_index
             >>>
-            >>> datafile = fetch_datasets("cor", "br")
+            >>> datafile = fetch_mas_data(domains="cor", variables="br")
             >>> data, r, t, p = read_hdf_by_index(datafile.cor_br, (128, None), (50, 92), None)
             >>>
             >>> plotter = Plot3d()
@@ -1012,10 +1012,10 @@ class GridMeshMixin:
         .. pyvista-plot::
 
             >>> from pyvisual import Plot3d
-            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_data import fetch_mas_data
             >>> from psi_io import read_hdf_by_index
             >>>
-            >>> datafile = fetch_datasets("cor", "br")
+            >>> datafile = fetch_mas_data(domains="cor", variables="br")
             >>> data, r, t, p = read_hdf_by_index(datafile.cor_br, (None, 128), (50, 92), None)
             >>>
             >>> plotter = Plot3d()
@@ -1131,10 +1131,10 @@ class GridMeshMixin:
         .. pyvista-plot::
 
             >>> from pyvisual import Plot3d
-            >>> from pyvisual.utils.data import fetch_datasets
+            >>> from psi_data import fetch_mas_data
             >>> from psi_io import read_hdf_data
             >>>
-            >>> datafile = fetch_datasets("cor", "br")
+            >>> datafile = fetch_mas_data(domains="cor", variables="br")
             >>> data, r, t, p = read_hdf_data(datafile.cor_br)
             >>>
             >>> plotter = Plot3d()

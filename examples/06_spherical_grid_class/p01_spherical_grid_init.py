@@ -16,16 +16,16 @@ This example demonstrates the three ways to initialise a
 
 All three routes produce an equivalent mesh; the choice depends on how much
 control over the read step you need.  Real coronal magnetic field data
-:math:`B_r` from a PSI Thermo 2 run for Carrington Rotation 2282 (CR 2282) is
-used throughout.
+:math:`B_r` from a PSI MAS standard run for Carrington Rotation 2309 (CR 2309)
+is used throughout.
 """
 
 from psi_io import read_hdf_by_index
 from pyvisual import Plot3d
 from pyvisual.core.mesh3d import SphericalMesh
-from pyvisual.utils.data import fetch_datasets
+from psi_data import fetch_mas_data
 
-br_file = fetch_datasets("cor", "br").cor_br
+br_file = fetch_mas_data(domains="cor", variables="br").cor_br
 
 # %%
 # From an HDF File Path

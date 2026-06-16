@@ -27,9 +27,11 @@ Sub-packages
 
 :mod:`pyvisual.utils`
     Coordinate-transform geometry utilities
-    (:mod:`~pyvisual.utils.geometry`), pooch-based asset fetching
-    (:mod:`~pyvisual.utils.data`), and miscellaneous helpers
-    (:mod:`~pyvisual.utils.helpers`).
+    (:mod:`~pyvisual.utils.geometry`) and miscellaneous helpers
+    (:mod:`~pyvisual.utils.helpers`), including bundled-asset resolution via
+    :func:`~pyvisual.utils.helpers.fetch_theme`.  Sample MHD datasets for the
+    example gallery are fetched separately with the external
+    :mod:`psi_data` package (:func:`psi_data.fetch_mas_data`).
 
 See Also
 --------

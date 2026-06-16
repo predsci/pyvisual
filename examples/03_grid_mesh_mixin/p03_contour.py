@@ -70,9 +70,9 @@ plotter.show()
 # using :func:`~psi_io.psi_io.read_hdf_data`.
 
 from psi_io import read_hdf_data
-from pyvisual.utils.data import fetch_datasets
+from psi_data import fetch_mas_data
 
-br_file = fetch_datasets("cor", "br").cor_br
+br_file = fetch_mas_data(domains="cor", variables="br").cor_br
 br, r, t, p = read_hdf_data(br_file)
 
 plotter = Plot3d()

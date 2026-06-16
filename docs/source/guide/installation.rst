@@ -99,12 +99,12 @@ Install these via extras (see `Standard Install`_ below):
        :func:`~mapflpy.scripts.run_fwdbwd_tracing`, which feed directly
        into :meth:`~pyvisual.core.mixins.StackMeshMixin.add_fieldlines`.
        Enabled by the ``tracing`` extra.
-   * - `Pooch <https://www.fatiando.org/pooch/latest/>`_
-     - 1.8.2
-     - Asset fetching and caching.  Powers
-       :func:`~pyvisual.utils.data.fetch_datasets`, which downloads
-       sample PSI MAS model files to ``~/.cache/psi/`` on first use.
-       Enabled by the ``data`` extra.
+   * - `psi-data-utils <https://pypi.org/project/psi-data-utils/>`_
+     - 1.0.0
+     - PSI sample-data fetching and caching (imported as :mod:`psi_data`).
+       Provides :func:`psi_data.fetch_mas_data`, which downloads sample PSI
+       MAS model files (Carrington rotation 2309 HMI-driven MAS standard run)
+       to ``~/.cache/psi/`` on first use.  Enabled by the ``data`` extra.
    * - `Matplotlib <https://matplotlib.org/stable/>`_
      - 3.10.7
      - Colour maps and scalar-bar rendering used internally by PyVista.

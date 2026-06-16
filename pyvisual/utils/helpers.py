@@ -1,11 +1,16 @@
 """General-purpose helper utilities for pyvisual internals.
 
 This module collects small, reusable helpers that do not belong to any single
-subsystem.  The functions here are intentionally minimal and have no
-dependencies beyond :mod:`numpy` — they exist to reduce boilerplate in the
-core parsing and mesh-construction layers (see :mod:`pyvisual.core.parsers`
-and :mod:`pyvisual.core.mesh3d`).
+subsystem.  The functions here are intentionally minimal and depend only on
+the standard library and :mod:`numpy` — they exist to reduce boilerplate in
+the core parsing and mesh-construction layers (see :mod:`pyvisual.core.parsers`
+and :mod:`pyvisual.core.mesh3d`), and to resolve bundled package assets such as
+the PyVista colour theme (see :func:`fetch_theme`).
 """
+
+from __future__ import annotations
+
+from pathlib import Path
 
 import numpy as np
 
@@ -62,3 +67,49 @@ def atleast_1dnull(*args,
     if len(args) == 1 and not astuple:
         return np.atleast_1d(args[0]) if args[0] is not None else None
     return tuple(np.atleast_1d(arg) if arg is not None else None for arg in args)
+
+
+def fetch_theme() -> Path:
+    """Return the path to the bundled PyVisual PyVista theme file.
+
+    Resolves ``pyvisual_theme.json`` from the package's ``_assets`` directory
+    and returns its absolute :class:`~pathlib.Path`.  This file is loaded
+    automatically at import time by :mod:`pyvisual.core` to apply the default
+    PyVista colour theme.
+
+    Returns
+    -------
+    filepath : pathlib.Path
+        Absolute path to ``pyvisual_theme.json``.
+
+    Raises
+    ------
+    FileNotFoundError
+        If ``pyvisual_theme.json`` is not found at the expected location.
+        This typically means the file was not included in the installation.
+
+    Notes
+    -----
+    The path is resolved relative to this module's parent package directory:
+
+    .. code-block:: python
+
+        pkg_dir = Path(__file__).resolve().parent.parent
+        filepath = pkg_dir / "_assets" / "pyvisual_theme.json"
+
+    See Also
+    --------
+    :data:`pyvista.global_theme` : The PyVista theme this file configures.
+
+    Examples
+    --------
+    >>> theme_path = fetch_theme()
+    >>> theme_path.name
+    'pyvisual_theme.json'
+    """
+    pkg_dir = Path(__file__).resolve().parent.parent
+    filepath = pkg_dir / "_assets" / "pyvisual_theme.json"
+    if not filepath.exists():
+        msg = "Theme file `pyvisual_theme.json` not found."
+        raise FileNotFoundError(msg)
+    return filepath

@@ -13,16 +13,17 @@ import numpy as np
 from mapflpy.tracer import Tracer
 
 from pyvisual import Plot3d
-from pyvisual.utils.data import fetch_datasets
+from psi_data import fetch_mas_data, fetch_mas_quantities
 from psi_io import read_hdf_data
 
-data_files = fetch_datasets("cor", ["br", "bt", "bp", "ch_map"])
+data_files = fetch_mas_data(domains="cor", variables=["br", "bt", "bp"])
+chmap_files = fetch_mas_quantities(quantities="ch_pm")
 
 tracer = Tracer(data_files.cor_br, data_files.cor_bt, data_files.cor_bp)
 fieldlines = tracer.trace_fwd(r=1., n=256)
 
 
-chmap, *chmap_scales = read_hdf_data(data_files.cor_ch_map)
+chmap, *chmap_scales = read_hdf_data(chmap_files.ch_pm)
 br, *br_scales = read_hdf_data(data_files.cor_br)
 
 plotter = Plot3d()

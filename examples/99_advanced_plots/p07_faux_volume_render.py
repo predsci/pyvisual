@@ -1,5 +1,5 @@
 """
-Faux Volume Rendering
+Faux Volume Rendering.
 =====================
 
 This example demonstrates a technique for simulating volumetric rendering of
@@ -24,6 +24,7 @@ helioprojective angular coordinates using
    :ref:`sphx_glr_gallery_99_advanced_plots_p01_combining_multiple_elements.py`
       Multi-layer coronal scene that combines slices, contours, and fieldlines.
 """
+
 # sphinx_gallery_thumbnail_path = '_static/assets/p07_faux_volume_render.png'
 
 import os
@@ -32,7 +33,7 @@ from pathlib import Path
 import numpy as np
 from pyvisual import Plot3d
 from pyvisual.core.mesh3d import SphericalMesh
-from pyvisual.utils.data import fetch_datasets
+from psi_data import fetch_mas_data
 from pyvisual.utils.geometry import spacecraft_trajectory
 
 # %%
@@ -45,13 +46,13 @@ from pyvisual.utils.geometry import spacecraft_trajectory
 # :math:`(r,\,\theta,\,\phi)` in the Carrington frame, sampled at the default
 # 1-hour cadence.
 #
-# :func:`~pyvisual.utils.data.fetch_datasets` downloads (or loads from cache)
-# the CR 2282 coronal density field on the
+# :func:`psi_data.fetch_mas_data` downloads (or loads from cache)
+# the CR 2309 coronal density field on the
 # :math:`1\text{–}30\,R_\odot` grid and returns the path to the HDF5 file as
 # the named attribute ``cor_rho``.
 
 trajectory = spacecraft_trajectory('psp', '2024-03-27', '2024-03-31')
-rho_file = fetch_datasets("cor", "rho").cor_rho
+rho_file = fetch_mas_data(domains="cor", variables="rho").cor_rho
 
 # %%
 # Build the Faux Volume Representation

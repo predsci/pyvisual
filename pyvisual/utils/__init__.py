@@ -26,19 +26,19 @@ Modules
     - Convenience array partials: :data:`~pyvisual.utils.geometry.ij_meshgrid`
       and :data:`~pyvisual.utils.geometry.moveaxis_to_start`.
 
-:mod:`~pyvisual.utils.data`
-    Pooch-based downloading and caching of PSI example datasets and bundled
-    package assets.  Provides :func:`~pyvisual.utils.data.fetch_datasets` for
-    retrieving version-pinned MHD output files (CR 2282 Thermo 2 run in both
-    coronal and heliospheric domains), and
-    :func:`~pyvisual.utils.data.fetch_theme` for resolving the bundled PyVista
-    color-theme file.
-
 :mod:`~pyvisual.utils.helpers`
-    Minimal helpers with no dependencies beyond :mod:`numpy`.  Currently
-    exposes :func:`~pyvisual.utils.helpers.atleast_1dnull`, a
-    ``None``-preserving wrapper around :func:`numpy.atleast_1d` used
-    throughout the core parsing and mesh-construction layers.
+    Minimal helpers with no dependencies beyond the standard library and
+    :mod:`numpy`.  Exposes :func:`~pyvisual.utils.helpers.atleast_1dnull`, a
+    ``None``-preserving wrapper around :func:`numpy.atleast_1d` used throughout
+    the core parsing and mesh-construction layers, and
+    :func:`~pyvisual.utils.helpers.fetch_theme`, which resolves the bundled
+    PyVista colour-theme file.
+
+.. note::
+    Sample MHD datasets used by the example gallery are fetched with the
+    external `psi-data-utils <https://pypi.org/project/psi-data-utils/>`_
+    package (import name :mod:`psi_data`); see
+    :func:`psi_data.fetch_mas_data`.  Install it via the ``data`` extra.
 
 Notes
 -----
@@ -48,7 +48,7 @@ top-level :mod:`pyvisual` namespace.  Import them explicitly as needed:
 .. code-block:: python
 
     from pyvisual.utils.geometry import spherical_to_cartesian
-    from pyvisual.utils.data import fetch_datasets
+    from pyvisual.utils.helpers import fetch_theme
 
 See Also
 --------

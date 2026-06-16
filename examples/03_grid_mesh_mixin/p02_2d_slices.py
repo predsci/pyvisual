@@ -20,7 +20,7 @@ remaining two axes.
 
 from psi_io import read_hdf_by_index
 from pyvisual import Plot3d
-from pyvisual.utils.data import fetch_datasets
+from psi_data import fetch_mas_data
 
 # %%
 # Radial Shell
@@ -31,7 +31,7 @@ from pyvisual.utils.data import fetch_datasets
 # shell at the inner coronal boundary, colored by the radial magnetic field
 # :math:`B_r` — the photospheric boundary condition for the MAS coronal model.
 
-br_file = fetch_datasets("cor", "br").cor_br
+br_file = fetch_mas_data(domains="cor", variables="br").cor_br
 data, r, t, p = read_hdf_by_index(br_file, 1, None, None)
 
 plotter = Plot3d()

@@ -30,17 +30,17 @@ Data Access
 -----------
 
 Examples that use Predictive Science Inc's MAS model data call
-:func:`~pyvisual.utils.data.fetch_datasets`, which downloads a small
+:func:`psi_data.fetch_mas_data`, which downloads a small
 set of data files from the PSI asset server on first run and
-caches them under ``~/.cache/psi/`` (or ``$PYVISUAL_CACHE`` if set).
+caches them under ``~/.cache/psi/`` (or ``$PSI_DATA_CACHE`` if set).
 Examples that use only NumPy arrays run without any network access.
 
 MHDweb
 ------
 
-These data-fetching routines (:mod:`pyvisual.utils.data`) are
-designed to provide ready access to a sample MAS run for *testing
-and demonstration purposes*.
+These data-fetching routines (:mod:`psi_data`, distributed as
+``psi-data-utils``) are designed to provide ready access to a sample MAS
+run for *testing and demonstration purposes*.
 
 **For access to the full catalogue of Predictive Science Inc's publically
 available** `MAS <https://www.predsci.com/corona/model_desc.html>`_

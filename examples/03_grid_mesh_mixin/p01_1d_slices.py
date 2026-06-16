@@ -10,8 +10,8 @@ coordinates.  The one array with more than one element defines the slice
 direction; **pyvisual** infers the varying axis automatically and renders the
 result as a polyline colored by the supplied ``data`` array.
 
-Real coronal magnetic field data from a PSI MAS model (CR 2282) is loaded
-via :func:`~pyvisual.utils.data.fetch_datasets` and sliced using
+Real coronal magnetic field data from a PSI MAS model (CR 2309) is loaded
+via :func:`psi_data.fetch_mas_data` and sliced using
 :func:`~psi_io.psi_io.read_hdf_by_index`.  Passing a single integer index for a
 dimension fixes it to a single grid point; ``None`` selects the full extent.
 The function returns the data and the three coordinate arrays in
@@ -21,7 +21,7 @@ The function returns the data and the three coordinate arrays in
 
 from psi_io import read_hdf_by_index
 from pyvisual import Plot3d
-from pyvisual.utils.data import fetch_datasets
+from psi_data import fetch_mas_data
 
 # %%
 # Radial Cut
@@ -32,7 +32,7 @@ from pyvisual.utils.data import fetch_datasets
 # from the solar surface to the outer coronal boundary.  The profile shows how
 # :math:`B_r` falls off (and changes sign) with distance from the Sun.
 
-br_file = fetch_datasets("cor", "br").cor_br
+br_file = fetch_mas_data(domains="cor", variables="br").cor_br
 data, r, t, p = read_hdf_by_index(br_file, None, 71, 149)
 
 plotter = Plot3d()

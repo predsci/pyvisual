@@ -41,7 +41,7 @@ release = pyvisual.__version__
 extensions = []
 
 # --- HTML Theme
-_logo = "https://predsci.com/doc/assets/static/psi_logo.png"
+_logo = "https://predsci.com/doc/psi_logo.png"
 html_favicon = _logo
 html_logo = _logo
 html_theme = "sphinx_book_theme"
@@ -232,13 +232,6 @@ numpydoc_xref_aliases = {
     "RegularGridInterpolator": "scipy.interpolate.RegularGridInterpolator",
 
     # ------------------------------------------------------------------
-    # Third-party (pooch, requests)
-    # ------------------------------------------------------------------
-    "RequestException": "requests.exceptions.RequestException",
-    "HashMismatchError": "pooch.exceptions.HashMismatchError",
-    "Pooch": "pooch.Pooch",
-
-    # ------------------------------------------------------------------
     # pyvisual — primary classes
     # ------------------------------------------------------------------
     "Plot3d": "pyvisual.core.plot3d.Plot3d",
@@ -298,11 +291,6 @@ intersphinx_mapping = {
         # (INV / "matplotlib-objects.inv").as_posix(),
         None
     ),
-    "pooch": (
-        "https://www.fatiando.org/pooch/latest/",
-        # (INV / "pooch-objects.inv").as_posix(),
-        None
-    ),
     "h5py": (
         "https://docs.h5py.org/en/stable/",
         # (INV / "h5py-objects.inv").as_posix(),
@@ -324,6 +312,10 @@ intersphinx_mapping = {
     ),
     "psi-io": (
         "https://predsci.com/doc/psi-io/",
+        None
+    ),
+    "psi-data-utils": (
+        "https://predsci.com/doc/psi-data-utils/",
         None
     ),
 }

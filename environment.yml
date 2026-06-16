@@ -9,7 +9,6 @@ dependencies:
   - pyvista
   - scipy
   - astropy
-  - pandas
   - sunpy
 
   # -------- Build Toolchain --------
@@ -29,19 +28,18 @@ dependencies:
   - sphinx
   - sphinx-book-theme
   - sphinx-gallery
+  - sphinx-design
   - sphinx-copybutton
   - numpydoc
   - matplotlib
-  - pooch
-
-  # psi-io Dependencies (Conda Precedence)
-  - h5py
-  - pyhdf
+  - python-dotenv
+  - imageio-ffmpeg
 
   # -------- Pip installs --------
   - pip
   - pip:
       - pthree
-      - psi-io[hdf4,interp]==2.0.6
-      - mapflpy[hdf4]==1.1.9
+      - psi-io[hdf4,interp]>=2.2.1
+      - mapflpy[hdf4]>=1.2.1
+      - psi-data-utils>=1.0.0
       - pyvista[all]

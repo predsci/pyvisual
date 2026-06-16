@@ -15,9 +15,9 @@ changes.
 import numpy as np
 from pyvisual import Plot3d
 from pyvisual.core.mesh3d import SphericalMesh
-from pyvisual.utils.data import fetch_datasets
+from psi_data import fetch_mas_data
 
-br_file = fetch_datasets("cor", "br").cor_br
+br_file = fetch_mas_data(domains="cor", variables="br").cor_br
 
 # %%
 # Build a Mesh

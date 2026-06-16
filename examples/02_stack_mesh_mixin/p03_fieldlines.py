@@ -24,7 +24,7 @@ import numpy as np
 from mapflpy.scripts import run_forward_tracing, run_fwdbwd_tracing
 from mapflpy.utils import get_fieldline_polarity
 from pyvisual import Plot3d
-from pyvisual.utils.data import fetch_datasets
+from psi_data import fetch_mas_data
 
 # %%
 # Random Coloring
@@ -35,7 +35,7 @@ from pyvisual.utils.data import fetch_datasets
 # :mod:`mapflpy` places :math:`n = 128` seed points quasi-uniformly at
 # :math:`r = 1.01\,R_\odot` using the Fibonacci lattice algorithm.
 
-mag_field = fetch_datasets("cor", ["br", "bt", "bp"])
+mag_field = fetch_mas_data(domains="cor", variables=["br", "bt", "bp"])
 traces = run_forward_tracing(*mag_field, context='fork')
 r, t, p = np.moveaxis(traces.geometry, 1, 0)
 

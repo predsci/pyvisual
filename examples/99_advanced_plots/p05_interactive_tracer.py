@@ -33,7 +33,7 @@ keeps the scene from accumulating unbounded trace bundles.
 
 import pyvista as pv
 from pyvisual import Plot3d, SphericalMesh
-from pyvisual.utils.data import fetch_datasets
+from psi_data import fetch_mas_data
 from psi_io import np_interpolate_slice_from_hdf
 from mapflpy.tracer import Tracer
 import numpy as np
@@ -42,13 +42,13 @@ import numpy as np
 # Load Data
 # ---------
 #
-# :func:`~pyvisual.utils.data.fetch_datasets` returns paths to the CR 2282
+# :func:`psi_data.fetch_mas_data` returns paths to the CR 2309
 # coronal field components :math:`(B_r, B_\theta, B_\phi)`.
 # :func:`~psi_io.np_interpolate_slice_from_hdf` interpolates a 2-D
 # :math:`(\theta, \phi)` shell of :math:`B_r` at radial index ``1``
 # (:math:`r = 1\,R_\odot`) and returns the scalar array with its coordinate axes.
 
-data = fetch_datasets("cor", ["br", "bt", "bp"])
+data = fetch_mas_data(domains="cor", variables=["br", "bt", "bp"])
 br, *scales = np_interpolate_slice_from_hdf(data.cor_br, 1, None, None)
 br_t, br_p = scales
 
