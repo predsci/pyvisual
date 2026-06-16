@@ -1,4 +1,4 @@
-"""
+r"""
 2-D Surface Slices
 ==================
 
@@ -11,8 +11,8 @@ inferred automatically, and the result is rendered as a quad-faced surface
 colored by the supplied ``data`` array.
 
 The three fundamental 2-D slice orientations in spherical geometry are the
-*radial shell* (fixed :math:`r`), the *theta cut* (fixed :math:`\\theta`), and
-the *phi cut* (fixed :math:`\\phi`).  Each is produced here by passing a single
+*radial shell* (fixed :math:`r`), the *theta cut* (fixed :math:`\theta`), and
+the *phi cut* (fixed :math:`\phi`).  Each is produced here by passing a single
 integer index for the pinned dimension to
 :func:`~psi_io.psi_io.read_hdf_by_index`; ``None`` selects the full extent of the
 remaining two axes.

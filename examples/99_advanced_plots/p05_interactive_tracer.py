@@ -1,12 +1,12 @@
-"""
+r"""
 Interactive Fieldline Tracer
 =============================
 
 This example builds a two-panel interactive scene for exploring coronal magnetic
 connectivity.  The top panel displays a longitude–latitude map of :math:`B_r`
-at :math:`r = 1\\,R_\\odot`; right-clicking any point triggers a callback that
-constructs a :math:`5 \\times 5` grid of launch points spanning
-:math:`\\pm 1^\\circ` around the selection, traces fieldlines forward from
+at :math:`r = 1\,R_\odot`; right-clicking any point triggers a callback that
+constructs a :math:`5 \times 5` grid of launch points spanning
+:math:`\pm 1^\circ` around the selection, traces fieldlines forward from
 those seeds via :class:`~mapflpy.tracer.Tracer`, and renders the result in the
 bottom 3-D panel.  A rolling buffer of :data:`BUFFER_SIZE` named actor groups
 keeps the scene from accumulating unbounded trace bundles.

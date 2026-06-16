@@ -1,4 +1,4 @@
-"""
+r"""
 Line-of-Sight and Field-of-View Control
 =========================================
 
@@ -10,7 +10,7 @@ observer's camera in helioprojective coordinates:
   degrees, measured from Sun-center along the observer's line of sight.
 - :attr:`~pyvisual.core.mixins.ObserverMixin.observer_fov_view` — sets the
   (square) field of view by specifying the minimum impact radius
-  :math:`r_{\\min}` (in :math:`R_\\odot`) that any line of sight must clear.
+  :math:`r_{\min}` (in :math:`R_\odot`) that any line of sight must clear.
 
 Both properties require :attr:`~pyvisual.core.mixins.ObserverMixin.observer_position`
 to be set first, because the focal-point calculation depends on the observer

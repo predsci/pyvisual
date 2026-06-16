@@ -85,42 +85,42 @@ meshes in other frames are converted before being passed to PyVista.
 """
 
 SolarCoordinate = namedtuple('SolarCoordinate', ['radius', 'b_angle', 'longitude'])
-"""Named tuple representing a heliographic Carrington coordinate.
+r"""Named tuple representing a heliographic Carrington coordinate.
 
 Fields
 ------
 radius : float
-    Heliocentric distance in solar radii :math:`R_\\odot`.
+    Heliocentric distance in solar radii :math:`R_\odot`.
 b_angle : float
-    Heliographic latitude (B\\ :sub:`0` angle) in degrees.
+    Heliographic latitude (B\ :sub:`0` angle) in degrees.
 longitude : float
     Carrington longitude in degrees.
 """
 
 SphericalCoordinate = namedtuple('SphericalCoordinate', ['r', 't', 'p'])
-"""Named tuple representing a PSI spherical coordinate :math:`(r, \\theta, \\phi)`.
+r"""Named tuple representing a PSI spherical coordinate :math:`(r, \theta, \phi)`.
 
 Fields
 ------
 r : float
-    Radial distance in solar radii :math:`R_\\odot`.
+    Radial distance in solar radii :math:`R_\odot`.
 t : float
-    Colatitude :math:`\\theta` in radians, measured from the north pole.
+    Colatitude :math:`\theta` in radians, measured from the north pole.
 p : float
-    Longitude :math:`\\phi` in radians.
+    Longitude :math:`\phi` in radians.
 """
 
 CartesianCoordinate = namedtuple('CartesianCoordinates', ['x', 'y', 'z'])
-"""Named tuple representing a Cartesian coordinate :math:`(x, y, z)`.
+r"""Named tuple representing a Cartesian coordinate :math:`(x, y, z)`.
 
 Fields
 ------
 x : float
-    Cartesian x-coordinate in solar radii :math:`R_\\odot`.
+    Cartesian x-coordinate in solar radii :math:`R_\odot`.
 y : float
-    Cartesian y-coordinate in solar radii :math:`R_\\odot`.
+    Cartesian y-coordinate in solar radii :math:`R_\odot`.
 z : float
-    Cartesian z-coordinate in solar radii :math:`R_\\odot`.
+    Cartesian z-coordinate in solar radii :math:`R_\odot`.
 """
 
 ObserverView = namedtuple('ObserverView', ['x0', 'x1', 'y0', 'y1'])

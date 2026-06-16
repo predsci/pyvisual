@@ -31,9 +31,9 @@ from types import MappingProxyType
 import numpy as np
 
 SOLAR_NORTH = np.array((0, 0, 1))
-"""Canonical solar-north unit vector in Cartesian coordinates :math:`(x, y, z)`.
+r"""Canonical solar-north unit vector in Cartesian coordinates :math:`(x, y, z)`.
 
-Solar north is fixed at :math:`+\\hat{z}` throughout the library.  It is used as
+Solar north is fixed at :math:`+\hat{z}` throughout the library.  It is used as
 the default camera up-vector and as the reference direction for position-angle
 calculations.
 
@@ -45,7 +45,7 @@ array([0, 0, 1])
 """
 
 TWOPI = 2 * np.pi
-"""Convenience constant :math:`2\\pi`.
+r"""Convenience constant :math:`2\pi`.
 
 Examples
 --------

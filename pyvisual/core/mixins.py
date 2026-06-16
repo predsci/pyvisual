@@ -150,7 +150,7 @@ class StackMeshMixin:
                    /,
                    dataid: str = 'Data',
                    **kwargs) -> pv.Actor:
-        """Add a single point at spherical coordinates :math:`(r, \\theta, \\phi)`.
+        r"""Add a single point at spherical coordinates :math:`(r, \theta, \phi)`.
 
         Parameters
         ----------
@@ -181,8 +181,8 @@ class StackMeshMixin:
 
         Examples
         --------
-        A single point at :math:`r = 1.5\\,R_\\odot` on the equatorial plane
-        (:math:`\\theta = \\pi/2`) at 90° longitude (:math:`\\phi = \\pi/2`).
+        A single point at :math:`r = 1.5\,R_\odot` on the equatorial plane
+        (:math:`\theta = \pi/2`) at 90° longitude (:math:`\phi = \pi/2`).
 
         .. pyvista-plot::
 
@@ -212,7 +212,7 @@ class StackMeshMixin:
                     axis: int = 0,
                     dataid: str = 'Data',
                     **kwargs) -> pv.Actor:
-        """Add a point cloud of spherical coordinates.
+        r"""Add a point cloud of spherical coordinates.
 
         Parameters
         ----------
@@ -237,8 +237,8 @@ class StackMeshMixin:
         Examples
         --------
         Twenty points distributed along the equatorial plane
-        (:math:`\\theta = \\pi/2`) from :math:`r = 1\\,R_\\odot` to
-        :math:`r = 30\\,R_\\odot`, spanning a full longitude sweep and colored
+        (:math:`\theta = \pi/2`) from :math:`r = 1\,R_\odot` to
+        :math:`r = 30\,R_\odot`, spanning a full longitude sweep and colored
         by radial distance.
 
         .. pyvista-plot::
@@ -270,7 +270,7 @@ class StackMeshMixin:
                    /,
                    dataid: str = 'Data',
                    **kwargs) -> pv.Actor:
-        """Add a single spline (polyline) through spherical coordinate points.
+        r"""Add a single spline (polyline) through spherical coordinate points.
 
         Parameters
         ----------
@@ -303,8 +303,8 @@ class StackMeshMixin:
         Examples
         --------
         An equatorial Archimedean spiral tracing outward from
-        :math:`r = 1\\,R_\\odot` to :math:`r = 30\\,R_\\odot` over one full
-        longitude sweep (:math:`\\phi \\in [0, 2\\pi]`), colored by radial
+        :math:`r = 1\,R_\odot` to :math:`r = 30\,R_\odot` over one full
+        longitude sweep (:math:`\phi \in [0, 2\pi]`), colored by radial
         distance.
 
         .. pyvista-plot::
@@ -402,7 +402,7 @@ class StackMeshMixin:
                     dataid: str = 'Data',
                     coloring: Optional[FlColorType] = None,
                     **kwargs) -> pv.Actor:
-        """Add a bundle of magnetic fieldlines rendered as splines.
+        r"""Add a bundle of magnetic fieldlines rendered as splines.
 
         Wraps :meth:`add_splines` with optional fieldline-specific coloring
         presets.  When ``coloring`` is set, the ``data`` array and default
@@ -466,13 +466,13 @@ class StackMeshMixin:
 
         .. note::
            The default seed configuration in :mod:`mapflpy` places
-           :math:`n = 128` seed points at :math:`r = 1.01\\,R_\\odot`,
+           :math:`n = 128` seed points at :math:`r = 1.01\,R_\odot`,
            distributed quasi-uniformly on the sphere via the Fibonacci
            lattice algorithm.
 
            The array ``traces.geometry`` has shape :math:`(M, 3, N)`, where
            :math:`M` is the per-fieldline point buffer, the axis of length 3
-           indexes the spherical components :math:`(r,\\,\\theta,\\,\\phi)`, and
+           indexes the spherical components :math:`(r,\,\theta,\,\phi)`, and
            :math:`N` is the number of fieldlines.  :func:`numpy.moveaxis`
            transposes this to :math:`(3, M, N)` so that unpacking with ``*``
            yields three coordinate arrays each of shape :math:`(M, N)`.  With
@@ -612,7 +612,7 @@ class StackMeshMixin:
                     method: SurfaceReconstructionType = 'delaunay_2d',
                     surface_kwargs: Optional[dict] = None,
                     **kwargs) -> pv.Actor:
-        """Add a reconstructed surface through stacked spherical coordinate arrays.
+        r"""Add a reconstructed surface through stacked spherical coordinate arrays.
 
         Builds a :class:`~pyvista.PolyData` surface via
         :func:`~pyvisual.core.mesh3d.build_surface_polydata` and adds it to the
@@ -658,9 +658,9 @@ class StackMeshMixin:
         Examples
         --------
         Reconstruct a closed surface of revolution defined by
-        :math:`r = 5\\sin\\theta\\,R_\\odot`, sampled at 10 equally-spaced
+        :math:`r = 5\sin\theta\,R_\odot`, sampled at 10 equally-spaced
         longitudes and 100 latitudinal points per meridian.  The surface is
-        colored by colatitude :math:`\\theta`.
+        colored by colatitude :math:`\theta`.
 
         ``'delaunay_3d'`` is required here because the point cloud forms a
         closed, non-planar surface — the default ``'delaunay_2d'`` projects
@@ -721,7 +721,7 @@ class GridMeshMixin:
                      /,
                      dataid: str = 'Data',
                      **kwargs) -> pv.Actor:
-        """Add a 1-D line slice along the single varying spherical coordinate axis.
+        r"""Add a 1-D line slice along the single varying spherical coordinate axis.
 
         Exactly two of ``r``, ``t``, ``p`` must be scalar (size 1), defining a
         fixed coordinate value.  The one array with more than one element defines
@@ -761,8 +761,8 @@ class GridMeshMixin:
         Examples
         --------
         A longitudinal profile of :math:`B_r` at a fixed radial shell and
-        colatitude — a 1-D line scan in :math:`\\phi` at constant
-        :math:`(r, \\theta)`.
+        colatitude — a 1-D line scan in :math:`\phi` at constant
+        :math:`(r, \theta)`.
 
         .. pyvista-plot::
 
@@ -779,7 +779,7 @@ class GridMeshMixin:
             >>> plotter.add_1d_slice(r, t, p, data, cmap='seismic', clim=(-1, 1), line_width=5)
             >>> plotter.show()
 
-        A meridional profile of :math:`B_r` at fixed :math:`r` and :math:`\\phi`
+        A meridional profile of :math:`B_r` at fixed :math:`r` and :math:`\phi`
         — a 1-D colatitude scan from the north pole to the south pole.
 
         .. pyvista-plot::
@@ -819,7 +819,7 @@ class GridMeshMixin:
                      /,
                      dataid: str = 'Data',
                      **kwargs) -> pv.Actor:
-        """Add a 2-D surface slice at a fixed spherical coordinate.
+        r"""Add a 2-D surface slice at a fixed spherical coordinate.
 
         Exactly one of ``r``, ``t``, ``p`` must be scalar (size 1), fixing that
         coordinate.  The other two axes define the surface grid; the fixed axis is
@@ -874,7 +874,7 @@ class GridMeshMixin:
             >>> plotter.add_2d_slice(r, t, p, data, cmap='seismic', clim=(-30, 30))
             >>> plotter.show()
 
-        A 2-D cut at fixed colatitude :math:`\\theta`, showing the signed
+        A 2-D cut at fixed colatitude :math:`\theta`, showing the signed
         radial flux :math:`B_r r^2`.  Multiplying by :math:`r^2` removes the
         geometric falloff and highlights flux concentration regardless of
         distance.
@@ -1150,12 +1150,12 @@ class GridMeshMixin:
 
 
 class ObserverMixin:
-    """Mixin for camera and observer controls expressed in spherical coordinates.
+    r"""Mixin for camera and observer controls expressed in spherical coordinates.
 
     Provides properties and methods for:
 
     - Setting the observer position, focal point, and up vector in
-      :math:`(r, \\theta, \\phi)` spherical coordinates.
+      :math:`(r, \theta, \phi)` spherical coordinates.
     - Controlling the observer's position angle (roll about the line of sight).
     - Defining the line-of-sight field of view by angular extents or by minimum
       impact radius.
@@ -1285,12 +1285,12 @@ class ObserverMixin:
 
     @property
     def observer_viewup(self) -> SphericalCoordinate:
-        """Get or set the camera up vector in spherical coordinates.
+        r"""Get or set the camera up vector in spherical coordinates.
 
         Returns
         -------
         out : SphericalCoordinate
-            The camera up vector expressed as :math:`(r, \\theta, \\phi)`.
+            The camera up vector expressed as :math:`(r, \theta, \phi)`.
 
         Examples
         --------
@@ -1315,7 +1315,7 @@ class ObserverMixin:
 
     @property
     def observer_position(self) -> SphericalCoordinate:
-        """
+        r"""
         Get or set the observer's position in spherical coordinates.
 
         Returns
@@ -1326,7 +1326,7 @@ class ObserverMixin:
         Examples
         --------
         Set the observer position to
-        :math:`(r, \\theta, \\phi) = (10\\,R_\\odot,\\,\\pi/4,\\,\\pi/4)`.
+        :math:`(r, \theta, \phi) = (10\,R_\odot,\,\pi/4,\,\pi/4)`.
 
         .. pyvista-plot::
 
@@ -1369,22 +1369,22 @@ class ObserverMixin:
 
     @property
     def observer_orientation(self) -> ObserverOrientation:
-        """Get or set the observer's position angle (roll about the line of sight).
+        r"""Get or set the observer's position angle (roll about the line of sight).
 
-        The position angle :math:`p_{\\text{angle}}` is the signed rotation
+        The position angle :math:`p_{\text{angle}}` is the signed rotation
         about the view axis
-        :math:`\\hat{v} = (\\mathbf{f} - \\mathbf{p})/\\|\\mathbf{f} - \\mathbf{p}\\|`
+        :math:`\hat{v} = (\mathbf{f} - \mathbf{p})/\|\mathbf{f} - \mathbf{p}\|`
         that brings the projection of solar north
-        :math:`\\hat{z} = (0, 0, 1)` onto the image plane into alignment with
+        :math:`\hat{z} = (0, 0, 1)` onto the image plane into alignment with
         the camera up vector.  It is therefore a **derived** quantity that
         depends jointly on three camera state variables:
 
-        - :attr:`observer_position` :math:`\\mathbf{p}` — the camera location,
-        - :attr:`observer_focus` :math:`\\mathbf{f}` — the look-at point,
+        - :attr:`observer_position` :math:`\mathbf{p}` — the camera location,
+        - :attr:`observer_focus` :math:`\mathbf{f}` — the look-at point,
         - :attr:`observer_viewup` — the camera up direction.
 
         .. warning::
-           Because :math:`p_{\\text{angle}}` is derived, any interactive
+           Because :math:`p_{\text{angle}}` is derived, any interactive
            manipulation of the scene (rotation, pan, zoom) that changes
            position, focal point, or up vector will silently update the
            returned value.  Programmatically setting this property via the
@@ -1408,7 +1408,7 @@ class ObserverMixin:
 
     @property
     def observer_los_view(self) -> tuple[float, float, float, float]:
-        """Get or set the observer's field-of-view in helioprojective angular coordinates.
+        r"""Get or set the observer's field-of-view in helioprojective angular coordinates.
 
         The setter accepts a 4-tuple ``(x0, x1, y0, y1)`` of angular extents
         in **degrees**, where ``(x0, x1)`` span the horizontal (elongation,
@@ -1426,7 +1426,7 @@ class ObserverMixin:
         2. *Vertical view angle* — set to :math:`|y_1 - y_0|` degrees, which
            together with the aspect ratio fully defines the camera frustum.
         3. *Focal point* — placed at the intersection of the central LOS
-           :math:`(T_x, T_y) = ((x_0+x_1)/2,\\,(y_0+y_1)/2)` with the
+           :math:`(T_x, T_y) = ((x_0+x_1)/2,\,(y_0+y_1)/2)` with the
            :func:`~pyvisual.utils.geometry.thompson_sphere`.  This converts
            helioprojective pointing angles into an unambiguous 3-D Cartesian
            location in the scene.
@@ -1441,16 +1441,16 @@ class ObserverMixin:
         2. *Horizontal FOV* — derived from the window aspect ratio
            ``window_size[0] / window_size[1]``.
         3. *Central LOS* — computed from the direction
-           :math:`\\hat{d} = (\\mathbf{f} - \\mathbf{p}) / \\|\\mathbf{f} - \\mathbf{p}\\|`,
+           :math:`\hat{d} = (\mathbf{f} - \mathbf{p}) / \|\mathbf{f} - \mathbf{p}\|`,
            which is independent of where along the LOS the focal point sits.
-           :math:`\\hat{d}` is un-rotated through the inverse of the
-           observer-frame rotation chain (Carrington longitude, solar B\\ :sub:`0`,
+           :math:`\hat{d}` is un-rotated through the inverse of the
+           observer-frame rotation chain (Carrington longitude, solar B\ :sub:`0`,
            P-angle) to recover the helioprojective center
            :math:`(T_x, T_y)`.
 
         **Dependence on observer position**
 
-        Because the Thomson sphere scales with :math:`\\|\\mathbf{p}_{\\text{obs}}\\|`,
+        Because the Thomson sphere scales with :math:`\|\mathbf{p}_{\text{obs}}\|`,
         the same ``(x0, x1, y0, y1)`` tuple will place the focal point at
         different Cartesian locations for different observer distances.
         Always set :attr:`observer_position` before setting this property.
@@ -1472,8 +1472,8 @@ class ObserverMixin:
         Examples
         --------
         Point a simulated coronagraph at the corona from
-        :math:`r = 50\\,R_\\odot` on the equatorial plane, with a
-        :math:`\\pm 10°` horizontal by :math:`\\pm 8°` vertical FOV centered
+        :math:`r = 50\,R_\odot` on the equatorial plane, with a
+        :math:`\pm 10°` horizontal by :math:`\pm 8°` vertical FOV centered
         on the Sun.
 
         .. pyvista-plot::
@@ -1540,7 +1540,7 @@ class ObserverMixin:
 
     @property
     def observer_fov_view(self) -> Optional[float]:
-        """Get or set the field-of-view by minimum line-of-sight impact radius.
+        r"""Get or set the field-of-view by minimum line-of-sight impact radius.
 
         This is a higher-level alternative to :attr:`observer_los_view` that
         expresses the FOV in physically intuitive units — the closest distance
@@ -1548,22 +1548,22 @@ class ObserverMixin:
 
         **How the FOV is determined**
 
-        Given a minimum impact radius :math:`r_{\\min}` (in :math:`R_\\odot`)
-        and the current observer distance :math:`d_{\\text{obs}}`, the
-        symmetric half-angle :math:`\\alpha` is computed via
+        Given a minimum impact radius :math:`r_{\min}` (in :math:`R_\odot`)
+        and the current observer distance :math:`d_{\text{obs}}`, the
+        symmetric half-angle :math:`\alpha` is computed via
 
         .. math::
 
-           \\alpha = \\arcsin\\!\\left(\\frac{r_{\\min}}{d_{\\text{obs}}}\\right)
+           \alpha = \arcsin\!\left(\frac{r_{\min}}{d_{\text{obs}}}\right)
 
         using :func:`~pyvisual.utils.geometry.los_rmin2angle`. The result is
         then forwarded to :attr:`observer_los_view` as the symmetric 4-tuple
-        :math:`(-\\alpha, +\\alpha, -\\alpha, +\\alpha)`, producing a square
-        viewport whose edge lines of sight graze :math:`r_{\\min}`.
+        :math:`(-\alpha, +\alpha, -\alpha, +\alpha)`, producing a square
+        viewport whose edge lines of sight graze :math:`r_{\min}`.
 
         **Relationship to observer position**
 
-        Because :math:`\\alpha` depends on :math:`d_{\\text{obs}}`, the same
+        Because :math:`\alpha` depends on :math:`d_{\text{obs}}`, the same
         ``rmin`` value produces a wider angular FOV for a distant observer and
         a narrower one for a close observer — the physical scale on the sky
         is always anchored to the solar surface.  Always set
@@ -1571,7 +1571,7 @@ class ObserverMixin:
 
         .. warning::
             The getter is not yet implemented and returns ``None``.  The
-            setter raises :exc:`ValueError` if :math:`r_{\\min} \\geq d_{\\text{obs}}`
+            setter raises :exc:`ValueError` if :math:`r_{\min} \geq d_{\text{obs}}`
             (impact radius larger than or equal to the observer distance is
             geometrically impossible).
 
@@ -1584,9 +1584,9 @@ class ObserverMixin:
 
         Examples
         --------
-        View the corona from :math:`r = 50\\,R_\\odot` on the equatorial plane,
+        View the corona from :math:`r = 50\,R_\odot` on the equatorial plane,
         with the FOV sized so that the closest LOS grazes the solar surface
-        at :math:`r_{\\min} = 4\\,R_\\odot`.
+        at :math:`r_{\min} = 4\,R_\odot`.
 
         .. pyvista-plot::
 
@@ -1672,11 +1672,11 @@ class ObserverMixin:
 
 
 class GeometryMixin:
-    """Mixin for adding solar geometry primitives to the 3-D scene.
+    r"""Mixin for adding solar geometry primitives to the 3-D scene.
 
     Provides convenience methods for:
 
-    - The Sun sphere centered at the origin with radius :math:`1\\,R_\\odot`.
+    - The Sun sphere centered at the origin with radius :math:`1\,R_\odot`.
     - Concentric spherical shells defined by inner/outer radii.
     - Planar discs specified in a local spherical basis.
     - The Thomson sphere for a given observer position.
@@ -1685,9 +1685,9 @@ class GeometryMixin:
     """
 
     def add_sun(self, **kwargs) -> pv.Actor:
-        """Add a sphere representing the Sun at the origin.
+        r"""Add a sphere representing the Sun at the origin.
 
-        Constructs a :class:`pyvista.Sphere` with radius :math:`1\\,R_\\odot`
+        Constructs a :class:`pyvista.Sphere` with radius :math:`1\,R_\odot`
         centered at the origin with a resolution of 180 × 360.
 
         Parameters
@@ -1728,7 +1728,7 @@ class GeometryMixin:
                   inner_radius: float = 0.,
                   outer_radius: float = 1.,
                   **kwargs) -> pv.Actor:
-        """
+        r"""
         Add a spherical shell to the plot, defined by inner and outer radii and centered at a given position.
 
         Parameters
@@ -1753,7 +1753,7 @@ class GeometryMixin:
 
         Examples
         --------
-        A translucent shell at :math:`r = 10\\,R_\\odot` centered on the Sun,
+        A translucent shell at :math:`r = 10\,R_\odot` centered on the Sun,
         representing a source-surface or heliospheric boundary marker.
 
         .. pyvista-plot::
@@ -1766,8 +1766,8 @@ class GeometryMixin:
             >>> plotter.add_shell(outer_radius=10, opacity=0.8)
             >>> plotter.show()
 
-        Two small shells placed at :math:`(r=2\\,R_\\odot,\\,\\theta=\\pi/4)` and
-        :math:`(r=2\\,R_\\odot,\\,\\theta=3\\pi/4)` — symmetric about the equatorial
+        Two small shells placed at :math:`(r=2\,R_\odot,\,\theta=\pi/4)` and
+        :math:`(r=2\,R_\odot,\,\theta=3\pi/4)` — symmetric about the equatorial
         plane — useful as positional markers in the northern and southern
         hemispheres.
 
@@ -1802,7 +1802,7 @@ class GeometryMixin:
                  outer_radius: float = 1.,
                  normal: tuple[float, float, float] = (1,0,0),
                  **kwargs) -> pv.Actor:
-        """
+        r"""
         Create a planar disc in 3D space using spherical coordinates and add it to the scene.
 
         The disc center is defined by the spherical position ``(r, t, p)`` and converted to
@@ -1841,9 +1841,9 @@ class GeometryMixin:
 
         Examples
         --------
-        A solid disc centered at :math:`r = 2\\,R_\\odot` on the equatorial
+        A solid disc centered at :math:`r = 2\,R_\odot` on the equatorial
         plane, with its normal pointing radially outward
-        (:math:`\\hat{n} = \\hat{r}`).
+        (:math:`\hat{n} = \hat{r}`).
 
         .. pyvista-plot::
 
@@ -1856,8 +1856,8 @@ class GeometryMixin:
             >>> plotter.show()
 
         Three discs at the same equatorial position illustrating each of the
-        local spherical basis directions: :math:`\\hat{r}` (blue),
-        :math:`\\hat{\\theta}` (white), and :math:`\\hat{\\phi}` (red).
+        local spherical basis directions: :math:`\hat{r}` (blue),
+        :math:`\hat{\theta}` (white), and :math:`\hat{\phi}` (red).
 
         .. pyvista-plot::
 
@@ -1888,7 +1888,7 @@ class GeometryMixin:
                             theta_resolution: int = 180,
                             phi_resolution: int = 360,
                             **kwargs) -> pv.Actor:
-        """
+        r"""
         Add a Thomson sphere centered halfway between the origin and the observer.
 
         This helper constructs a :class:`pyvista.Sphere` intended to represent the
@@ -1933,9 +1933,9 @@ class GeometryMixin:
 
         Examples
         --------
-        The Thomson sphere for an observer at :math:`r = 10\\,R_\\odot` on
+        The Thomson sphere for an observer at :math:`r = 10\,R_\odot` on
         the equatorial plane.  It is centered at the midpoint between the Sun
-        and the observer with radius :math:`5\\,R_\\odot`, and represents the
+        and the observer with radius :math:`5\,R_\odot`, and represents the
         locus of points of maximum Thomson scattering efficiency along any
         line of sight through the corona.
 
@@ -1966,7 +1966,7 @@ class GeometryMixin:
                                lon_deg: int = 30,
                                radius: float = 1.01,
                                **kwargs) -> pv.Actor:
-        """
+        r"""
         Add longitudinal (meridian) grid lines to the plot.
 
         This builds a collection of polylines representing meridians (constant
@@ -1998,7 +1998,7 @@ class GeometryMixin:
 
         Examples
         --------
-        Meridians every 30° of longitude drawn at :math:`r = 1.01\\,R_\\odot`
+        Meridians every 30° of longitude drawn at :math:`r = 1.01\,R_\odot`
         to avoid z-fighting with the solar surface.
 
         .. pyvista-plot::
@@ -2018,7 +2018,7 @@ class GeometryMixin:
                               lat_deg: int = 15,
                               radius: float = 1.01,
                               **kwargs) -> pv.Actor:
-        """Add latitudinal (parallel) grid lines to the plot.
+        r"""Add latitudinal (parallel) grid lines to the plot.
 
         Builds a collection of polylines representing parallels (constant
         colatitude / varying longitude) on a sphere of the given ``radius``.
@@ -2041,7 +2041,7 @@ class GeometryMixin:
 
         Examples
         --------
-        Parallels every 15° of latitude drawn at :math:`r = 1.01\\,R_\\odot`.
+        Parallels every 15° of latitude drawn at :math:`r = 1.01\,R_\odot`.
 
         .. pyvista-plot::
 
@@ -2061,7 +2061,7 @@ class GeometryMixin:
                           lon_deg: int = 30,
                           radius: float = 1.01,
                           **kwargs) -> pv.Actor:
-        """Add combined longitude and latitude grid lines to the plot.
+        r"""Add combined longitude and latitude grid lines to the plot.
 
         Convenience method that draws both meridians (constant longitude) and
         parallels (constant colatitude) simultaneously on a sphere of the given
@@ -2094,7 +2094,7 @@ class GeometryMixin:
         Examples
         --------
         A full Carrington-style graticule: meridians every 30° and parallels
-        every 15°, drawn at :math:`r = 1.01\\,R_\\odot`.
+        every 15°, drawn at :math:`r = 1.01\,R_\odot`.
 
         .. pyvista-plot::
 
@@ -2114,7 +2114,7 @@ class GeometryMixin:
                  targs: tuple[float, float, int, int],
                  pargs: tuple[float, float, int, int],
                  **kwargs) -> pv.Actor:
-        """Add a general structured spline grid defined by spherical axis parameters.
+        r"""Add a general structured spline grid defined by spherical axis parameters.
 
         Each axis is specified as a 4-tuple ``(min, max, num_splines, resolution)``
         where:
@@ -2147,9 +2147,9 @@ class GeometryMixin:
             
         Examples
         --------
-        A 3-D structured box between :math:`r \\in [15,\\,30]\\,R_\\odot`,
-        :math:`\\theta \\in [\\pi/4,\\,3\\pi/4]` and
-        :math:`\\phi \\in [\\pi/4,\\,3\\pi/4]`, showing 3 radial lines, 6
+        A 3-D structured box between :math:`r \in [15,\,30]\,R_\odot`,
+        :math:`\theta \in [\pi/4,\,3\pi/4]` and
+        :math:`\phi \in [\pi/4,\,3\pi/4]`, showing 3 radial lines, 6
         colatitudinal lines, and 6 longitudinal lines within the volume.
 
         .. pyvista-plot::
@@ -2167,8 +2167,8 @@ class GeometryMixin:
             >>> plotter.add_grid(radial_args, theta_args, phi_args)
             >>> plotter.show()
 
-        A meridional cross-section at :math:`\\phi = 0` with 10 radial lines
-        spanning :math:`r \\in [1,\\,30]\\,R_\\odot` and 12 colatitudinal
+        A meridional cross-section at :math:`\phi = 0` with 10 radial lines
+        spanning :math:`r \in [1,\,30]\,R_\odot` and 12 colatitudinal
         lines from pole to pole.
 
         .. pyvista-plot::

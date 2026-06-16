@@ -1,4 +1,4 @@
-"""
+r"""
 Loading and Plotting MHD Data
 ==============================
 
@@ -9,13 +9,13 @@ rendered scene:
    downloads (or retrieves from cache) a version-pinned HDF5 file from the
    PSI asset server and returns its local path.
 2. **Reading the data** — :func:`~psi_io.psi_io.read_hdf_by_index` loads the array
-   values and the three coordinate grids :math:`(r, \\theta, \\phi)` from the
+   values and the three coordinate grids :math:`(r, \theta, \phi)` from the
    file.  Passing ``None`` for a dimension selects its full extent; passing an
    integer index fixes that dimension to a single grid point.
 
 The dataset used here is the radial magnetic field :math:`B_r` from an
 HMI-driven MAS standard run for Carrington Rotation 2309
-(CR 2309), covering the coronal domain :math:`r \\in [1,\\,30]\\,R_\\odot`.
+(CR 2309), covering the coronal domain :math:`r \in [1,\,30]\,R_\odot`.
 """
 
 from psi_io import read_hdf_by_index

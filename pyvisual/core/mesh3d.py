@@ -316,16 +316,16 @@ def build_thompson_sphere(d1: float,
                           theta_resolution: int = 180,
                           phi_resolution: int = 360,
                           frame: Optional[MeshFramesType] = None) -> pv.PolyData:
-    """Build a Thomson sphere centered halfway between the origin and an observer position.
+    r"""Build a Thomson sphere centered halfway between the origin and an observer position.
 
     The Thomson sphere for a given observer has:
 
     .. math::
 
-       \\text{radius} = \\frac{\\|\\mathbf{r}_{\\text{obs}}\\|}{2}, \\quad
-       \\text{center} = \\frac{\\mathbf{r}_{\\text{obs}}}{2}
+       \text{radius} = \frac{\|\mathbf{r}_{\text{obs}}\|}{2}, \quad
+       \text{center} = \frac{\mathbf{r}_{\text{obs}}}{2}
 
-    where :math:`\\mathbf{r}_{\\text{obs}}` is the Cartesian observer position.
+    where :math:`\mathbf{r}_{\text{obs}}` is the Cartesian observer position.
     If ``frame`` is not ``'cartesian'``, the input coordinates are converted
     before computing the sphere parameters.
 
@@ -385,12 +385,12 @@ class _BaseFrameFilters(ABC):
 
     @abstractmethod
     def radially_scale(self, *args, exp: Optional[Number] = None):
-        """Multiply the active scalars by a power of the radial coordinate.
+        r"""Multiply the active scalars by a power of the radial coordinate.
 
         When ``args`` are provided they are interpreted as ``(xp, fp)`` lookup
         tables passed to :func:`numpy.interp` to define a spatially-varying scale
         factor :math:`s(r)`.  The data are then multiplied by
-        :math:`(s(r) \\cdot r)^{\\exp}` where :math:`\\exp = e` when omitted.
+        :math:`(s(r) \cdot r)^{\exp}` where :math:`\exp = e` when omitted.
 
         Parameters
         ----------
@@ -430,10 +430,10 @@ class _BaseFrameFilters(ABC):
 
     @abstractmethod
     def logspace(self, base: Optional[Number] = None, offset: float = 1):
-        """Remap mesh point positions from linear to logarithmic radial spacing.
+        r"""Remap mesh point positions from linear to logarithmic radial spacing.
 
         Replaces each radial coordinate :math:`r` with
-        :math:`\\log_b(r) + \\text{offset}` (natural log when ``base`` is ``None``).
+        :math:`\log_b(r) + \text{offset}` (natural log when ``base`` is ``None``).
         Useful for displaying data that spans several decades in radius.
 
         Parameters
@@ -453,16 +453,16 @@ class _BaseFrameFilters(ABC):
 
     @abstractmethod
     def expspace(self, base: Optional[Number] = None, offset: float = 1):
-        """Remap mesh point positions from linear to exponential radial spacing.
+        r"""Remap mesh point positions from linear to exponential radial spacing.
 
         Inverse of :meth:`logspace`.  Replaces each radial coordinate :math:`r`
-        with :math:`b^{r - \\text{offset}}` (natural exponent when ``base`` is
+        with :math:`b^{r - \text{offset}}` (natural exponent when ``base`` is
         ``None``).
 
         Parameters
         ----------
         base : Number | None, optional
-            Exponentiation base.  If ``None``, :math:`e^{r - \\text{offset}}` is
+            Exponentiation base.  If ``None``, :math:`e^{r - \text{offset}}` is
             used.  Default is ``None``.
         offset : float, optional
             Subtractive offset applied before exponentiation.  Default is ``1``.
@@ -565,13 +565,13 @@ class CartesianMeshFilters(_BaseFrameFilters):
         return dec_mesh
 
     def cartesian_to_spherical(self):
-        """Convert this mesh's point coordinates from Cartesian to spherical.
+        r"""Convert this mesh's point coordinates from Cartesian to spherical.
 
         Returns
         -------
         out : pyvista.StructuredGrid
             A new :class:`pyvista.StructuredGrid` with points expressed in
-            :math:`(r, \\theta, \\phi)` coordinates and
+            :math:`(r, \theta, \phi)` coordinates and
             ``user_dict['MESH_FRAME'] = 'spherical'``.
         """
         mesh = pv.StructuredGrid(self)
@@ -1078,7 +1078,7 @@ class _BaseFrameMesh(ABC):
 
 
 class CartesianMesh(_BaseFrameMesh, pv.StructuredGrid, CartesianMeshFilters):
-    """A :class:`pyvista.StructuredGrid` for data on a Cartesian :math:`(x, y, z)` grid.
+    r"""A :class:`pyvista.StructuredGrid` for data on a Cartesian :math:`(x, y, z)` grid.
 
     Inherits the full :class:`_BaseFrameMesh` operator suite, the
     :class:`CartesianMeshFilters` methods, and PyVista's structured-grid API.
@@ -1135,7 +1135,7 @@ class CartesianMesh(_BaseFrameMesh, pv.StructuredGrid, CartesianMeshFilters):
     See Also
     --------
     :class:`SphericalMesh`
-        Companion class for spherical :math:`(r, \\theta, \\phi)` grids.
+        Companion class for spherical :math:`(r, \theta, \phi)` grids.
     """
 
     MESH_FRAME = 'cartesian'
@@ -1210,10 +1210,10 @@ class CartesianMesh(_BaseFrameMesh, pv.StructuredGrid, CartesianMeshFilters):
 
 
 class SphericalMesh(_BaseFrameMesh, pv.RectilinearGrid, SphericalMeshFilters):
-    """A :class:`pyvista.RectilinearGrid` for data on a spherical :math:`(r, \\theta, \\phi)` grid.
+    r"""A :class:`pyvista.RectilinearGrid` for data on a spherical :math:`(r, \theta, \phi)` grid.
 
-    The three PSI spherical axes — radius :math:`r`, colatitude :math:`\\theta`,
-    and longitude :math:`\\phi` — are stored in the underlying
+    The three PSI spherical axes — radius :math:`r`, colatitude :math:`\theta`,
+    and longitude :math:`\phi` — are stored in the underlying
     :class:`pyvista.RectilinearGrid` as the ``x``, ``y``, and ``z`` axes
     respectively.  Convenience properties :attr:`r`, :attr:`t`, and :attr:`p`
     alias these axes for clarity.
@@ -1333,13 +1333,13 @@ class SphericalMesh(_BaseFrameMesh, pv.RectilinearGrid, SphericalMeshFilters):
 
     @property
     def r(self):
-        """Radial axis :math:`r` (alias for :attr:`~pyvista.RectilinearGrid.x`).
+        r"""Radial axis :math:`r` (alias for :attr:`~pyvista.RectilinearGrid.x`).
 
         Returns
         -------
         out : np.ndarray
             1-D array of radial coordinate values in solar radii
-            :math:`R_\\odot`.
+            :math:`R_\odot`.
         """
         return self.x
 
@@ -1349,7 +1349,7 @@ class SphericalMesh(_BaseFrameMesh, pv.RectilinearGrid, SphericalMeshFilters):
 
     @property
     def t(self):
-        """Colatitude axis :math:`\\theta` (alias for :attr:`~pyvista.RectilinearGrid.y`).
+        r"""Colatitude axis :math:`\theta` (alias for :attr:`~pyvista.RectilinearGrid.y`).
 
         Returns
         -------
@@ -1365,7 +1365,7 @@ class SphericalMesh(_BaseFrameMesh, pv.RectilinearGrid, SphericalMeshFilters):
 
     @property
     def p(self):
-        """Longitude axis :math:`\\phi` (alias for :attr:`~pyvista.RectilinearGrid.z`).
+        r"""Longitude axis :math:`\phi` (alias for :attr:`~pyvista.RectilinearGrid.z`).
 
         Returns
         -------
@@ -1380,7 +1380,7 @@ class SphericalMesh(_BaseFrameMesh, pv.RectilinearGrid, SphericalMeshFilters):
 
     @property
     def interpolator(self):
-        """A :class:`~scipy.interpolate.RegularGridInterpolator` over the active scalar data.
+        r"""A :class:`~scipy.interpolate.RegularGridInterpolator` over the active scalar data.
 
         Constructed with ``bounds_error=False`` so that out-of-bounds queries
         return ``NaN`` rather than raising an exception.
@@ -1389,7 +1389,7 @@ class SphericalMesh(_BaseFrameMesh, pv.RectilinearGrid, SphericalMeshFilters):
         -------
         out : scipy.interpolate.RegularGridInterpolator
             Interpolator for the current :attr:`data` array on the
-            :math:`(r, \\theta, \\phi)` grid.
+            :math:`(r, \theta, \phi)` grid.
         """
         return RegularGridInterpolator(self.scales, self.data, bounds_error=False)
 

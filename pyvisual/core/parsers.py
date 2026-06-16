@@ -1,4 +1,4 @@
-"""
+r"""
 Input-normalisation utilities and the ``@parse_mesh_params`` decorator.
 
 This module provides the low-level API that translates user-supplied coordinate arrays,
@@ -21,7 +21,7 @@ Key responsibilities
 - **Frame resolution** — :func:`_normalize_frame` / :func:`fetch_canonical_frame`
   normalise any accepted alias to ``'spherical'`` or ``'cartesian'``.
 - **Coordinate parsing** — :func:`parse_stack_mesh` and :func:`parse_grid_mesh`
-  validate and optionally broadcast :math:`(r, \\theta, \\phi)` arrays to a common
+  validate and optionally broadcast :math:`(r, \theta, \phi)` arrays to a common
   shape.
 - **Data alignment** — :func:`parse_data` reshapes scalar arrays to match a target
   mesh shape, handling transposition, broadcasting, and flattening.

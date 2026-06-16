@@ -1,4 +1,4 @@
-"""
+r"""
 Polarity-Inversion-Line Seeded Fieldlines
 ==========================================
 
@@ -12,10 +12,10 @@ arcades and/or highlight bald-patch topologies.
 The workflow exploits a key property of
 :class:`~pyvisual.core.mesh3d.SphericalMesh`: because it wraps a
 :class:`pyvista.RectilinearGrid` whose internal axes store
-:math:`(r, \\theta, \\phi)` directly, PyVista's
+:math:`(r, \theta, \phi)` directly, PyVista's
 :meth:`pyvista.DataSetFilters.contour` returns a
 :class:`pyvista.PolyData` whose ``points`` array is already in
-:math:`(r, \\theta, \\phi)` coordinates.  This means the contour points can
+:math:`(r, \theta, \phi)` coordinates.  This means the contour points can
 be passed straight to
 :func:`~mapflpy.scripts.run_fwdbwd_tracing` as ``launch_points`` without
 any intermediate coordinate conversion.

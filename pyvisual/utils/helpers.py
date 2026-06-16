@@ -17,13 +17,13 @@ import numpy as np
 
 def atleast_1dnull(*args,
                    astuple: bool = False) -> np.ndarray | None | tuple[np.ndarray | None, ...]:
-    """:func:`numpy.atleast_1d` that passes ``None`` values through unchanged.
+    r""":func:`numpy.atleast_1d` that passes ``None`` values through unchanged.
 
     A thin wrapper around :func:`numpy.atleast_1d` that treats ``None`` as a
     sentinel meaning "not provided" rather than raising or converting it.
     This is useful when optional coordinate arrays or scale factors may
     legitimately be absent, as is common in PSI mesh-parsing routines where
-    individual :math:`(r, \\theta, \\phi)` coordinate arrays may be omitted.
+    individual :math:`(r, \theta, \phi)` coordinate arrays may be omitted.
 
     Parameters
     ----------

@@ -1,11 +1,11 @@
-"""
+r"""
 MHDweb Integration Part II
 ==========================
 
 This is the second of a two-part series.
 :ref:`sphx_glr_gallery_99_advanced_plots_p09_integrating_mhdweb_p1.py`
 queried the `MHDweb REST API <https://predsci.com/mhdweb2/api>`_ to download
-coronal and heliospheric :math:`(B_r, B_\\theta, B_\\phi)` field files and the
+coronal and heliospheric :math:`(B_r, B_\theta, B_\phi)` field files and the
 Solar Orbiter spacecraft connectivity mapping; this example loads those
 outputs and produces four visualizations:
 
@@ -21,13 +21,13 @@ Magnetic connectivity is computed in two ways:
 
 - **Spacecraft mapping** — :class:`~mapflpy.tracer.TracerMP` traces backward
   from the ballistically mapped positions at
-  :math:`r_1 \\approx 30\\,R_\\odot` through the coronal domain.  The
+  :math:`r_1 \approx 30\,R_\odot` through the coronal domain.  The
   spacecraft position is then prepended to form a continuous path from
   the heliosphere to the solar surface.
 - **Inter-domain tracing** — :func:`~mapflpy.scripts._inter_domain_tracing`
   launches field-line integration from the spacecraft positions directly,
   crossing the coronal–heliospheric domain boundary to produce end-to-end
-  connectivity from the spacecraft to :math:`r_0 = 1\\,R_\\odot`.
+  connectivity from the spacecraft to :math:`r_0 = 1\,R_\odot`.
 
 .. seealso::
 

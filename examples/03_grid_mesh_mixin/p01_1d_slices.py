@@ -1,4 +1,4 @@
-"""
+r"""
 1-D Line Slices
 ===============
 
@@ -15,7 +15,7 @@ via :func:`psi_data.fetch_mas_data` and sliced using
 :func:`~psi_io.psi_io.read_hdf_by_index`.  Passing a single integer index for a
 dimension fixes it to a single grid point; ``None`` selects the full extent.
 The function returns the data and the three coordinate arrays in
-:math:`(r, \\theta, \\phi)` order, ready for direct use with
+:math:`(r, \theta, \phi)` order, ready for direct use with
 :meth:`~pyvisual.core.mixins.GridMeshMixin.add_1d_slice`.
 """
 

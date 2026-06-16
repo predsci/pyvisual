@@ -1,4 +1,4 @@
-"""
+r"""
 CartesianMesh Filter Methods
 ============================
 
@@ -20,7 +20,7 @@ and :meth:`~pyvista.DataObjectFilters.slice_along_axis` behave differently on ea
   true spatial :math:`(x, y, z)` point coordinates, so slices are flat planes
   in 3D space.
 - On a :class:`~pyvisual.core.mesh3d.SphericalMesh` PyVista treats the stored
-  :math:`(r, \\theta, \\phi)` axis arrays as if they were :math:`(x, y, z)`,
+  :math:`(r, \theta, \phi)` axis arrays as if they were :math:`(x, y, z)`,
   so the same filter methods instead cut surfaces of constant radius,
   colatitude, and longitude.
 

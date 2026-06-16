@@ -1,4 +1,4 @@
-"""
+r"""
 Plotting Magnetic Fieldlines
 =============================
 
@@ -13,7 +13,7 @@ spherical grids.
 :math:`(M, 3, N)`:
 
 - :math:`M` — the per-fieldline point buffer (NaN-padded to a uniform length).
-- :math:`3` — spherical coordinate components :math:`(r,\\,\\theta,\\,\\phi)`.
+- :math:`3` — spherical coordinate components :math:`(r,\,\theta,\,\phi)`.
 - :math:`N` — the number of fieldlines.
 
 :func:`numpy.moveaxis` transposes this to :math:`(3, M, N)` so that unpacking

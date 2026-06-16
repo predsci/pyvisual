@@ -1,4 +1,4 @@
-"""Utility sub-package for pyvisual.
+r"""Utility sub-package for pyvisual.
 
 This sub-package collects self-contained helper modules that support the
 core rendering and data-access layers of :mod:`pyvisual`.  Nothing here
@@ -13,7 +13,7 @@ Modules
     coordinate systems.  Covers:
 
     - Scalar coordinate transforms between Cartesian :math:`(x, y, z)` and
-      the PSI spherical convention :math:`(r, \\theta, \\phi)` (colatitude).
+      the PSI spherical convention :math:`(r, \theta, \phi)` (colatitude).
     - Vector-basis rotations for expressing field components in either frame.
     - Rigid-body rotation matrices about each Cartesian axis.
     - Solar line-of-sight geometry: Thomson sphere intersection,

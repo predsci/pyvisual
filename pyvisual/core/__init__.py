@@ -1,4 +1,4 @@
-"""
+r"""
 Core sub-package for the **pyvisual** library.
 
 This sub-package contains the primary classes and supporting infrastructure for
@@ -8,7 +8,7 @@ This sub-package contains the primary classes and supporting infrastructure for
   :class:`pyvista.Plotter` with spherical-coordinate awareness, observer controls,
   solar geometry helpers, and MHD dataset rendering.
 - :class:`~pyvisual.core.mesh3d.SphericalMesh` — a :class:`pyvista.RectilinearGrid`
-  subclass for data on spherical :math:`(r, \\theta, \\phi)` grids, with built-in
+  subclass for data on spherical :math:`(r, \theta, \phi)` grids, with built-in
   arithmetic operators and NumPy ufunc support.
 - :class:`~pyvisual.core.mesh3d.CartesianMesh` — a :class:`pyvista.StructuredGrid`
   subclass with an identical operator/ufunc interface for Cartesian :math:`(x, y, z)`
