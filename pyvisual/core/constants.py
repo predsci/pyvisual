@@ -55,7 +55,7 @@ Examples
 True
 """
 
-timestamp_format_ms = '%Y-%m-%dT%H:%M:%S.%f'
+timestamp_format_ms = "%Y-%m-%dT%H:%M:%S.%f"
 """ISO 8601 timestamp format string with microsecond precision.
 
 Used when parsing or formatting date-time strings associated with
@@ -69,7 +69,9 @@ Examples
 datetime.datetime(2023, 1, 15, 12, 0)
 """
 
-RTP_PERMUTATIONS = {''.join(perm) for i in range(1, len('rtp') + 1) for perm in permutations('rtp', i)}
+RTP_PERMUTATIONS = {
+	"".join(perm) for i in range(1, len("rtp") + 1) for perm in permutations("rtp", i)
+}
 """All non-empty substrings formed by permuting the letters ``r``, ``t``, ``p``.
 
 These strings are added to the ``'spherical'`` alias set so that single-axis labels
@@ -77,16 +79,20 @@ These strings are added to the ``'spherical'`` alias set so that single-axis lab
 recognised as spherical-frame aliases.
 """
 
-XYZ_PERMUTATIONS = {''.join(perm) for i in range(1, len('xyz') + 1) for perm in permutations('xyz', i)}
+XYZ_PERMUTATIONS = {
+	"".join(perm) for i in range(1, len("xyz") + 1) for perm in permutations("xyz", i)
+}
 """All non-empty substrings formed by permuting the letters ``x``, ``y``, ``z``.
 
 Analogous to :data:`RTP_PERMUTATIONS` for the Cartesian frame.
 """
 
-FRAMES = MappingProxyType({
-    "cartesian": {"xyz", "cartesian", "rectilinear"} | XYZ_PERMUTATIONS,
-    "spherical": {"rtp", "spherical", "psi", "polar"} | RTP_PERMUTATIONS,
-})
+FRAMES = MappingProxyType(
+	{
+		"cartesian": {"xyz", "cartesian", "rectilinear"} | XYZ_PERMUTATIONS,
+		"spherical": {"rtp", "spherical", "psi", "polar"} | RTP_PERMUTATIONS,
+	}
+)
 """Immutable mapping from canonical frame name to the full set of accepted aliases.
 
 Keys are ``'cartesian'`` and ``'spherical'``.  Values are :class:`frozenset`-like
@@ -97,9 +103,7 @@ See Also
 :data:`FRAME_ALIASES` : Flat alias → canonical lookup derived from this mapping.
 """
 
-FRAME_ALIASES = {
-    alias: canonical for canonical, aliases in FRAMES.items() for alias in aliases
-}
+FRAME_ALIASES = {alias: canonical for canonical, aliases in FRAMES.items() for alias in aliases}
 """Flat mapping from every accepted frame alias to its canonical name.
 
 Built automatically from :data:`FRAMES` at import time.  Used by
@@ -116,8 +120,8 @@ Examples
 """
 
 FRAME_SCALES = {
-    "cartesian": 'xyz',
-    "spherical": 'rtp',
+	"cartesian": "xyz",
+	"spherical": "rtp",
 }
 """Mapping from canonical frame name to its ordered axis-letter key.
 

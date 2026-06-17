@@ -28,10 +28,10 @@ from pyvisual.core.mesh3d import CartesianMesh
 x = np.linspace(-5, 5, 20)
 y = np.linspace(-5, 5, 20)
 z = np.linspace(-5, 5, 20)
-X, Y, Z = np.meshgrid(x, y, z, indexing='ij')
-dist = np.sqrt(X ** 2 + Y ** 2 + Z ** 2)
+X, Y, Z = np.meshgrid(x, y, z, indexing="ij")
+dist = np.sqrt(X**2 + Y**2 + Z**2)
 
-mesh = CartesianMesh(X, Y, Z, data=dist, dataid='r')
+mesh = CartesianMesh(X, Y, Z, data=dist, dataid="r")
 print(f"data range : [{mesh.data.min():.2f}, {mesh.data.max():.2f}]")
 
 # %%
@@ -51,7 +51,7 @@ print(f"normalised range : [{mesh_norm.data.min():.2f}, {mesh_norm.data.max():.2
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(mesh_norm, cmap='plasma', clim=(0, 1), opacity=0.3, show_scalar_bar=False)
+plotter.add_mesh(mesh_norm, cmap="plasma", clim=(0, 1), opacity=0.3, show_scalar_bar=False)
 plotter.show()
 
 # %%
@@ -71,5 +71,5 @@ print(f"log10 range : [{mesh_log.data.min():.2f}, {mesh_log.data.max():.2f}]")
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(mesh_log, cmap='rainbow', clim=(-3, 0), opacity=0.3, show_scalar_bar=False)
+plotter.add_mesh(mesh_log, cmap="rainbow", clim=(-3, 0), opacity=0.3, show_scalar_bar=False)
 plotter.show()

@@ -45,8 +45,7 @@ sub_mesh
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(sub_mesh,
-                 cmap='seismic', clim=(-1e-1, 1e-1), opacity=0.5, show_scalar_bar=False)
+plotter.add_mesh(sub_mesh, cmap="seismic", clim=(-1e-1, 1e-1), opacity=0.5, show_scalar_bar=False)
 plotter.show()
 
 # %%
@@ -56,15 +55,20 @@ plotter.show()
 # :meth:`~pyvisual.core.mesh3d.SphericalMeshFilters.logspace` remaps each radial
 # coordinate :math:`r \to \ln(r) + 1`, compressing the large dynamic range in
 # :math:`r`.  :meth:`~pyvisual.core.mesh3d.SphericalMeshFilters.radially_scale`
-# with ``exp=3`` then multiplies the scalar data by :math:`r^3`. 
+# with ``exp=3`` then multiplies the scalar data by :math:`r^3`.
 # Together these two operations make weak outer-corona signal visible
 # alongside strong inner-corona signal.
 
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(sub_mesh.logspace().radially_scale(exp=3),
-                 cmap='seismic', clim=(-1e-1, 1e-1), opacity=0.5, show_scalar_bar=False)
+plotter.add_mesh(
+	sub_mesh.logspace().radially_scale(exp=3),
+	cmap="seismic",
+	clim=(-1e-1, 1e-1),
+	opacity=0.5,
+	show_scalar_bar=False,
+)
 plotter.show()
 
 # %%
@@ -89,8 +93,13 @@ plotter.show()
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(sub_mesh.deconstruct(axis=1, method='slices'),
-                 cmap='seismic', clim=(-1e-1, 1e-1), opacity=0.5, show_scalar_bar=False)
+plotter.add_mesh(
+	sub_mesh.deconstruct(axis=1, method="slices"),
+	cmap="seismic",
+	clim=(-1e-1, 1e-1),
+	opacity=0.5,
+	show_scalar_bar=False,
+)
 plotter.show()
 
 # %%
@@ -111,16 +120,26 @@ plotter.show()
 # :meth:`~pyvista.PolyDataFilters.project_points_to_plane`, producing a "shadow" projection
 # for spatial context.
 
-trajectory = spacecraft_trajectory('psp', '2024-03-28', '2024-04-01')
+trajectory = spacecraft_trajectory("psp", "2024-03-28", "2024-04-01")
 trajectory_polydata = build_spline_polydata(*trajectory, axis=0)
 interpolated_path = mesh.interpolate_mesh(trajectory_polydata)
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(interpolated_path,
-                 cmap='seismic', clim=(-5e-3, 5e-3), render_lines_as_tubes=True, line_width=5,)
-plotter.add_mesh(interpolated_path.project_points_to_plane(origin=(2,0,0), normal=(1,0,0)),
-                 cmap='seismic', clim=(-5e-3, 5e-3), render_lines_as_tubes=True, line_width=5,)
+plotter.add_mesh(
+	interpolated_path,
+	cmap="seismic",
+	clim=(-5e-3, 5e-3),
+	render_lines_as_tubes=True,
+	line_width=5,
+)
+plotter.add_mesh(
+	interpolated_path.project_points_to_plane(origin=(2, 0, 0), normal=(1, 0, 0)),
+	cmap="seismic",
+	clim=(-5e-3, 5e-3),
+	render_lines_as_tubes=True,
+	line_width=5,
+)
 plotter.show()
 
 # %%
@@ -137,16 +156,26 @@ plotter.show()
 # interpolates :math:`B_r` onto the disc's points — producing a filled orbital-plane
 # slice colored by the model field.
 
-p0 = spherical_to_cartesian(*trajectory[:,0])
-p1 = spherical_to_cartesian(*trajectory[:,50])
+p0 = spherical_to_cartesian(*trajectory[:, 0])
+p1 = spherical_to_cartesian(*trajectory[:, 50])
 normal = np.cross(np.array(p0), np.array(p1))
-unit_normal = normal/np.linalg.norm(normal)
-trajecotry_plane = pv.Disc(center=(0,0,0), inner=0, outer=30, normal=unit_normal, r_res=255, c_res=255)
+unit_normal = normal / np.linalg.norm(normal)
+trajecotry_plane = pv.Disc(
+	center=(0, 0, 0), inner=0, outer=30, normal=unit_normal, r_res=255, c_res=255
+)
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(interpolated_path,
-                 cmap='seismic', clim=(-5e-3, 5e-3), render_lines_as_tubes=True, line_width=5,)
-plotter.add_mesh(trajecotry_plane.sample(mesh.spherical_to_cartesian()),
-                 cmap='seismic', clim=(-5e-3, 5e-3),)
+plotter.add_mesh(
+	interpolated_path,
+	cmap="seismic",
+	clim=(-5e-3, 5e-3),
+	render_lines_as_tubes=True,
+	line_width=5,
+)
+plotter.add_mesh(
+	trajecotry_plane.sample(mesh.spherical_to_cartesian()),
+	cmap="seismic",
+	clim=(-5e-3, 5e-3),
+)
 plotter.show()

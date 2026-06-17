@@ -51,7 +51,7 @@ from pyvisual.utils.geometry import spacecraft_trajectory
 # :math:`1\text{–}30\,R_\odot` grid and returns the path to the HDF5 file as
 # the named attribute ``cor_rho``.
 
-trajectory = spacecraft_trajectory('psp', '2024-03-27', '2024-03-31')
+trajectory = spacecraft_trajectory("psp", "2024-03-27", "2024-03-31")
 rho_file = fetch_mas_data(domains="cor", variables="rho").cor_rho
 
 # %%
@@ -78,7 +78,7 @@ rho_file = fetch_mas_data(domains="cor", variables="rho").cor_rho
 
 mesh = SphericalMesh(rho_file)
 radial_slice_at_photosphere = mesh[0, ...]
-deconstructed_mesh_volume = np.log(mesh[1:, ...]).deconstruct(method='slices')
+deconstructed_mesh_volume = np.log(mesh[1:, ...]).deconstruct(method="slices")
 
 # %%
 # Animate Along the Spacecraft Trajectory
@@ -107,26 +107,26 @@ deconstructed_mesh_volume = np.log(mesh[1:, ...]).deconstruct(method='slices')
 #    run the script directly (without the ``SPHINX_GALLERY_BUILD`` environment
 #    variable set).
 
-if not os.environ.get('SPHINX_GALLERY_BUILD'):
-    # The following lines are included to standardize the output path for the sphinx-gallery
-    # pre-processing pipeline mentioned above. These values can be omitted/altered if running
-    # the script directly.
+if not os.environ.get("SPHINX_GALLERY_BUILD"):
+	# The following lines are included to standardize the output path for the sphinx-gallery
+	# pre-processing pipeline mentioned above. These values can be omitted/altered if running
+	# the script directly.
 
-    output_dir = Path(os.environ.get("STATIC_ASSETS", "")).resolve()
-    movie_name = f"p07_faux_volume_render.mp4"
-    screenshot_name = f"p07_faux_volume_render.png"
+	output_dir = Path(os.environ.get("STATIC_ASSETS", "")).resolve()
+	movie_name = f"p07_faux_volume_render.mp4"
+	screenshot_name = f"p07_faux_volume_render.png"
 
-    plotter = Plot3d()
-    plotter.add_axes()
-    plotter.add_mesh(radial_slice_at_photosphere, show_scalar_bar=False)
-    plotter.add_mesh(deconstructed_mesh_volume, opacity='sigmoid_7', show_scalar_bar=False)
-    plotter.open_movie(output_dir / movie_name, framerate=10)
-    for position in trajectory.T:
-        plotter.observer_position = position
-        plotter.observer_los_view = -50, 50, -45, 45
-        plotter.write_frame()
-    plotter.screenshot(output_dir / screenshot_name)
-    plotter.close()
+	plotter = Plot3d()
+	plotter.add_axes()
+	plotter.add_mesh(radial_slice_at_photosphere, show_scalar_bar=False)
+	plotter.add_mesh(deconstructed_mesh_volume, opacity="sigmoid_7", show_scalar_bar=False)
+	plotter.open_movie(output_dir / movie_name, framerate=10)
+	for position in trajectory.T:
+		plotter.observer_position = position
+		plotter.observer_los_view = -50, 50, -45, 45
+		plotter.write_frame()
+	plotter.screenshot(output_dir / screenshot_name)
+	plotter.close()
 
 # %%
 # .. raw:: html

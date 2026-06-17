@@ -64,20 +64,20 @@ from pyvisual import Plot3d, SphericalMesh
 # ``br002.h5`` file directly.
 
 OUTPUT_DIR = Path(os.environ.get("STATIC_ASSETS", "")).resolve()
-COR_OUTPUT_DIR = OUTPUT_DIR / 'cor_mag_field'
-HEL_OUTPUT_DIR = OUTPUT_DIR / 'hel_mag_field'
+COR_OUTPUT_DIR = OUTPUT_DIR / "cor_mag_field"
+HEL_OUTPUT_DIR = OUTPUT_DIR / "hel_mag_field"
 
 print("Extracting coronal magnetic field files...")
-with ZipFile(COR_OUTPUT_DIR / 'cor_mag_field.zip') as cor_zip:
-    print(f'cor_mag_field.zip namelist: {cor_zip.namelist()}')
-    cor_zip.extractall(path=COR_OUTPUT_DIR)
+with ZipFile(COR_OUTPUT_DIR / "cor_mag_field.zip") as cor_zip:
+	print(f"cor_mag_field.zip namelist: {cor_zip.namelist()}")
+	cor_zip.extractall(path=COR_OUTPUT_DIR)
 print("Extracting heliospheric magnetic field files...")
-with ZipFile(HEL_OUTPUT_DIR / 'hel_mag_field.zip') as hel_zip:
-    print(f'hel_mag_field.zip namelist: {hel_zip.namelist()}')
-    hel_zip.extractall(path=OUTPUT_DIR / 'hel_mag_field')
+with ZipFile(HEL_OUTPUT_DIR / "hel_mag_field.zip") as hel_zip:
+	print(f"hel_mag_field.zip namelist: {hel_zip.namelist()}")
+	hel_zip.extractall(path=OUTPUT_DIR / "hel_mag_field")
 
-cor_br_mesh = SphericalMesh(COR_OUTPUT_DIR / 'br002.h5')
-hel_br_mesh = SphericalMesh(HEL_OUTPUT_DIR / 'br002.h5')
+cor_br_mesh = SphericalMesh(COR_OUTPUT_DIR / "br002.h5")
+hel_br_mesh = SphericalMesh(HEL_OUTPUT_DIR / "br002.h5")
 
 # %%
 # Parse the Spacecraft Mapping Table
@@ -99,11 +99,11 @@ hel_br_mesh = SphericalMesh(HEL_OUTPUT_DIR / 'br002.h5')
 # - ``traced_positions`` — magnetic footpoint at the inner boundary
 #   :math:`r_0 = 1\,R_\odot`.
 
-spacecraft_mapping = QTable.read(OUTPUT_DIR / 'spacecraft_mapping.ecsv', format='ascii.ecsv')
+spacecraft_mapping = QTable.read(OUTPUT_DIR / "spacecraft_mapping.ecsv", format="ascii.ecsv")
 
-spacecraft_positions = np.stack(tuple(spacecraft_mapping[f'sc_pos_{dim}'].value for dim in 'rtp'))
-balmapped_positions = np.stack(tuple(spacecraft_mapping[f'r1_pos_{dim}'].value for dim in 'rtp'))
-traced_positions = np.stack(tuple(spacecraft_mapping[f'r0_pos_{dim}'].value for dim in 'rtp'))
+spacecraft_positions = np.stack(tuple(spacecraft_mapping[f"sc_pos_{dim}"].value for dim in "rtp"))
+balmapped_positions = np.stack(tuple(spacecraft_mapping[f"r1_pos_{dim}"].value for dim in "rtp"))
+traced_positions = np.stack(tuple(spacecraft_mapping[f"r0_pos_{dim}"].value for dim in "rtp"))
 
 # %%
 # To properly visualize the ballistic mappings, we need to construct a continuous
@@ -115,16 +115,23 @@ traced_positions = np.stack(tuple(spacecraft_mapping[f'r0_pos_{dim}'].value for 
 # corresponding longitudinal shift is calculated using
 # :mod:`sunpy`'s :class:`~sunpy.sun.constants.sidereal_rotation_rate`.
 
-balmapping_radial_path = np.linspace(spacecraft_mapping['sc_pos_r'].value, 30, 50) * u.R_sun
-time_shift = (spacecraft_mapping['sc_pos_r'] - balmapping_radial_path) / (spacecraft_mapping['flow_speed'])
+balmapping_radial_path = np.linspace(spacecraft_mapping["sc_pos_r"].value, 30, 50) * u.R_sun
+time_shift = (spacecraft_mapping["sc_pos_r"] - balmapping_radial_path) / (
+	spacecraft_mapping["flow_speed"]
+)
 longitudinal_shift = time_shift * sidereal_rotation_rate
-balmapping_longitudinal_path = ((spacecraft_mapping['sc_pos_p'] + longitudinal_shift) % (360 * u.deg)).to(u.rad)
+balmapping_longitudinal_path = (
+	(spacecraft_mapping["sc_pos_p"] + longitudinal_shift) % (360 * u.deg)
+).to(u.rad)
 
 ballistic_mapping_trajectory = np.stack(
-    (balmapping_radial_path.value,
-     np.full_like(balmapping_radial_path.value, spacecraft_positions[1]),
-     balmapping_longitudinal_path.value),
-    axis=1)
+	(
+		balmapping_radial_path.value,
+		np.full_like(balmapping_radial_path.value, spacecraft_positions[1]),
+		balmapping_longitudinal_path.value,
+	),
+	axis=1,
+)
 
 # %%
 # Trace Magnetic Connectivity
@@ -149,21 +156,24 @@ ballistic_mapping_trajectory = np.stack(
 # :meth:`~pyvisual.core.mixins.StackMeshMixin.add_splines`.
 
 with ExitStack() as cstack:
-    cor_tracer = cstack.enter_context(
-        TracerMP(*[COR_OUTPUT_DIR / f'b{dim}002.h5' for dim in 'rtp'], context='fork'))
-    hel_tracer = cstack.enter_context(
-        TracerMP(*[HEL_OUTPUT_DIR / f'b{dim}002.h5' for dim in 'rtp'], context='fork'))
+	cor_tracer = cstack.enter_context(
+		TracerMP(*[COR_OUTPUT_DIR / f"b{dim}002.h5" for dim in "rtp"], context="fork")
+	)
+	hel_tracer = cstack.enter_context(
+		TracerMP(*[HEL_OUTPUT_DIR / f"b{dim}002.h5" for dim in "rtp"], context="fork")
+	)
 
-    spacecraft_mapping_traces = cor_tracer.trace_bwd(
-        launch_points=balmapped_positions)
-    spacecraft_mapping_traces = np.concatenate(
-        (ballistic_mapping_trajectory, spacecraft_mapping_traces.geometry))
+	spacecraft_mapping_traces = cor_tracer.trace_bwd(launch_points=balmapped_positions)
+	spacecraft_mapping_traces = np.concatenate(
+		(ballistic_mapping_trajectory, spacecraft_mapping_traces.geometry)
+	)
 
-    inter_domain_traces, *_ = _inter_domain_tracing(cor_tracer, hel_tracer,
-        launch_points=spacecraft_positions)
-    inter_domain_traces = combine_and_pad_fieldlines(inter_domain_traces)
+	inter_domain_traces, *_ = _inter_domain_tracing(
+		cor_tracer, hel_tracer, launch_points=spacecraft_positions
+	)
+	inter_domain_traces = combine_and_pad_fieldlines(inter_domain_traces)
 
-common_kwargs = dict(cmap='seismic', clim=10, show_scalar_bar=False)
+common_kwargs = dict(cmap="seismic", clim=10, show_scalar_bar=False)
 
 # %%
 # Two-Domain :math:`B_r` Overview
@@ -191,15 +201,12 @@ plotter.show()
 
 plotter = Plot3d()
 plotter.add_axes()
-plotter.add_mesh(cor_br_mesh.slice(normal='x', origin=(1, 0, 0)), opacity=0.8, **common_kwargs)
-plotter.add_points(*spacecraft_positions,
-                   np.arange(len(spacecraft_mapping)),
-                   point_size=3)
-plotter.add_points(*balmapped_positions,
-                   np.arange(len(spacecraft_mapping)),
-                   point_size=3)
-plotter.add_splines(*np.moveaxis(spacecraft_mapping_traces, 1, 0),
-                    np.arange(len(spacecraft_mapping)))
+plotter.add_mesh(cor_br_mesh.slice(normal="x", origin=(1, 0, 0)), opacity=0.8, **common_kwargs)
+plotter.add_points(*spacecraft_positions, np.arange(len(spacecraft_mapping)), point_size=3)
+plotter.add_points(*balmapped_positions, np.arange(len(spacecraft_mapping)), point_size=3)
+plotter.add_splines(
+	*np.moveaxis(spacecraft_mapping_traces, 1, 0), np.arange(len(spacecraft_mapping))
+)
 plotter.show()
 
 # %%
@@ -215,18 +222,19 @@ plotter.show()
 
 plotter = Plot3d()
 plotter.add_axes()
-plotter.add_points(*spacecraft_positions,
-                   np.arange(len(spacecraft_mapping)),
-                   point_size=3)
+plotter.add_points(*spacecraft_positions, np.arange(len(spacecraft_mapping)), point_size=3)
 plotter.add_mesh(cor_br_mesh[1, ...], **common_kwargs)
 plotter.observer_position = 400, pi / 4, 0
 plotter.observer_fov_view = 200
-plotter.open_gif(OUTPUT_DIR / 'spacecraft_mapping_heliosphere.gif', fps=40)
+plotter.open_gif(OUTPUT_DIR / "spacecraft_mapping_heliosphere.gif", fps=40)
 for i, (scmap_trace, interdomain_trace) in enumerate(
-        zip(spacecraft_mapping_traces.T, inter_domain_traces.T)):
-    plotter.add_spline(*scmap_trace, name=f'scmap_trace_{i % 5}', color='white', line_width=3)
-    plotter.add_spline(*interdomain_trace, name=f'interdomain_trace_{i % 5}', color='red', line_width=3)
-    plotter.write_frame()
+	zip(spacecraft_mapping_traces.T, inter_domain_traces.T)
+):
+	plotter.add_spline(*scmap_trace, name=f"scmap_trace_{i % 5}", color="white", line_width=3)
+	plotter.add_spline(
+		*interdomain_trace, name=f"interdomain_trace_{i % 5}", color="red", line_width=3
+	)
+	plotter.write_frame()
 plotter.close()
 
 # %%
@@ -241,16 +249,17 @@ plotter.close()
 
 plotter = Plot3d()
 plotter.add_axes()
-plotter.add_points(*spacecraft_positions,
-                   np.arange(len(spacecraft_mapping)),
-                   point_size=3)
+plotter.add_points(*spacecraft_positions, np.arange(len(spacecraft_mapping)), point_size=3)
 plotter.add_mesh(cor_br_mesh[1, ...], **common_kwargs)
-plotter.open_gif(OUTPUT_DIR / 'spacecraft_mapping_corona.gif', fps=40)
+plotter.open_gif(OUTPUT_DIR / "spacecraft_mapping_corona.gif", fps=40)
 for i, (scmap_trace, interdomain_trace) in enumerate(
-        zip(spacecraft_mapping_traces.T, inter_domain_traces.T)):
-    plotter.observer_position = 15, 3 * pi / 8, spacecraft_positions[2, i] + pi / 6
-    plotter.observer_fov_view = 4
-    plotter.add_spline(*scmap_trace, name=f'scmap_trace_{i % 5}', color='white', line_width=3)
-    plotter.add_spline(*interdomain_trace, name=f'interdomain_trace_{i % 5}', color='red', line_width=3)
-    plotter.write_frame()
+	zip(spacecraft_mapping_traces.T, inter_domain_traces.T)
+):
+	plotter.observer_position = 15, 3 * pi / 8, spacecraft_positions[2, i] + pi / 6
+	plotter.observer_fov_view = 4
+	plotter.add_spline(*scmap_trace, name=f"scmap_trace_{i % 5}", color="white", line_width=3)
+	plotter.add_spline(
+		*interdomain_trace, name=f"interdomain_trace_{i % 5}", color="red", line_width=3
+	)
+	plotter.write_frame()
 plotter.close()

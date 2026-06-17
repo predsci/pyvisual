@@ -62,7 +62,7 @@ print(f"data range : [{mesh_from_path.data.min():.4f}, {mesh_from_path.data.max(
 
 data, r, t, p = read_hdf_by_index(br_file)
 
-mesh_from_arrays = SphericalMesh(r, t, p, data=data, dataid='Br')
+mesh_from_arrays = SphericalMesh(r, t, p, data=data, dataid="Br")
 
 # Dimensions and data range are identical to the file-path route.
 print(f"dimensions match : {mesh_from_arrays.dimensions == mesh_from_path.dimensions}")
@@ -95,5 +95,5 @@ equatorial = mesh_from_path[:, 71, :]
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(equatorial, cmap='seismic', clim=(-1, 1), show_scalar_bar=True)
+plotter.add_mesh(equatorial, cmap="seismic", clim=(-1, 1), show_scalar_bar=True)
 plotter.show()

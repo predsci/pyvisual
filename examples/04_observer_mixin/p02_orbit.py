@@ -27,10 +27,10 @@ from pyvisual import Plot3d
 plotter = Plot3d()
 plotter.add_sun()
 plotter.add_longlat_lines()
-plotter.add_shell(outer_radius=2.5, opacity=0.15, color='cyan')
+plotter.add_shell(outer_radius=2.5, opacity=0.15, color="cyan")
 
 plotter.open_gif("observer_orbit.gif")
 for phi in np.linspace(0, 2 * np.pi, 36, endpoint=False):
-    plotter.observer_position = 8, np.pi / 2, phi
-    plotter.write_frame()
+	plotter.observer_position = 8, np.pi / 2, phi
+	plotter.write_frame()
 plotter.close()

@@ -38,8 +38,8 @@ from pyvisual import Plot3d
 
 plotter = Plot3d()
 plotter.add_sun()
-plotter.add_shell(inner_radius=2.0, outer_radius=2.0, opacity=0.15, color='cyan')
-plotter.add_shell(inner_radius=6.0, outer_radius=6.0, opacity=0.10, color='orange')
+plotter.add_shell(inner_radius=2.0, outer_radius=2.0, opacity=0.15, color="cyan")
+plotter.add_shell(inner_radius=6.0, outer_radius=6.0, opacity=0.10, color="orange")
 plotter.observer_position = 50, np.pi / 2, 0
 plotter.observer_los_view = -15, 15, -8, 8
 plotter.show()
@@ -55,7 +55,7 @@ plotter.show()
 
 plotter = Plot3d()
 plotter.add_sun()
-plotter.add_shell(inner_radius=2.0, outer_radius=2.0, opacity=0.15, color='cyan')
+plotter.add_shell(inner_radius=2.0, outer_radius=2.0, opacity=0.15, color="cyan")
 plotter.observer_position = 50, np.pi / 2, 0
 plotter.observer_los_view = -5, 15, -8, 8
 plotter.show()
@@ -75,7 +75,7 @@ plotter.show()
 
 plotter = Plot3d()
 plotter.add_sun()
-plotter.add_shell(inner_radius=2.5, outer_radius=2.5, opacity=0.15, color='cyan')
+plotter.add_shell(inner_radius=2.5, outer_radius=2.5, opacity=0.15, color="cyan")
 plotter.observer_position = 50, np.pi / 2, 0
 plotter.observer_fov_view = 4
 plotter.show()
@@ -94,9 +94,9 @@ plotter.show()
 #    move the camera.
 
 for rmin in (1.5, 4.0, 10.0):
-    plotter = Plot3d()
-    plotter.add_sun()
-    plotter.add_shell(inner_radius=rmin, outer_radius=rmin, opacity=0.2, color='yellow')
-    plotter.observer_position = 50, np.pi / 2, 0
-    plotter.observer_fov_view = rmin
-    plotter.show()
+	plotter = Plot3d()
+	plotter.add_sun()
+	plotter.add_shell(inner_radius=rmin, outer_radius=rmin, opacity=0.2, color="yellow")
+	plotter.observer_position = 50, np.pi / 2, 0
+	plotter.observer_fov_view = rmin
+	plotter.show()

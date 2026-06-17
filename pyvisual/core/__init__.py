@@ -49,6 +49,7 @@ See Also
 :mod:`pyvisual.core.mesh3d`
     Mesh classes and polydata builder functions.
 """
+
 import os
 import warnings
 
@@ -57,9 +58,11 @@ from pyvisual.utils.helpers import fetch_theme
 
 # Load the global theme for PyVista
 try:
-    theme = fetch_theme()
-    pv.global_theme.load_theme(str(theme))
+	theme = fetch_theme()
+	pv.global_theme.load_theme(str(theme))
 except Exception as e:
-    if not os.environ.get('SPHINX_GALLERY_BUILD'):
-        warnings.warn("Failed to load PyVisual theme. Using default PyVista theme. Error: " + str(e))
-    pv.global_theme.load_theme(pv.themes.DarkTheme())
+	if not os.environ.get("SPHINX_GALLERY_BUILD"):
+		warnings.warn(
+			"Failed to load PyVisual theme. Using default PyVista theme. Error: " + str(e)
+		)
+	pv.global_theme.load_theme(pv.themes.DarkTheme())

@@ -28,11 +28,11 @@ from pyvisual import Plot3d
 # method, we can display the scene in an interactive window.
 
 plotter = Plot3d(
-    off_screen=True,
-    border=True,
-    border_color='white',
-    lighting='three lights',
-    window_size=(500, 500)
+	off_screen=True,
+	border=True,
+	border_color="white",
+	lighting="three lights",
+	window_size=(500, 500),
 )
 
 plotter.show_axes()
@@ -50,11 +50,11 @@ plotter.show()
 #       necessary to re-instantiate it. In practice, multiple ``show()`` calls can be executed
 #       without re-instantiating the plotter.
 plotter = Plot3d(
-    off_screen=True,
-    border=True,
-    border_color='white',
-    lighting='three lights',
-    window_size=(500, 500)
+	off_screen=True,
+	border=True,
+	border_color="white",
+	lighting="three lights",
+	window_size=(500, 500),
 )
 
 plotter.show_axes()

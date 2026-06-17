@@ -70,16 +70,16 @@ from astropy.table import Table
 # ``Authorization: Api-Key <key>`` on every request.
 
 OUTPUT_DIR = Path(os.environ.get("STATIC_ASSETS", "")).resolve()
-COR_OUTPUT_DIR = OUTPUT_DIR / 'cor_mag_field'
-HEL_OUTPUT_DIR = OUTPUT_DIR / 'hel_mag_field'
-BASE_URL = 'https://www.predsci.com/mhdweb2_bu/v2/api'
-API_KEY = os.environ.get('API_KEY')
+COR_OUTPUT_DIR = OUTPUT_DIR / "cor_mag_field"
+HEL_OUTPUT_DIR = OUTPUT_DIR / "hel_mag_field"
+BASE_URL = "https://www.predsci.com/mhdweb2_bu/v2/api"
+API_KEY = os.environ.get("API_KEY")
 AUTH = dict(Authorization=f"Api-Key {API_KEY}")
 
 if not COR_OUTPUT_DIR.exists():
-    COR_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+	COR_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 if not HEL_OUTPUT_DIR.exists():
-    HEL_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+	HEL_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # %%
 # Query the MAS Run Database
@@ -103,28 +103,27 @@ if not HEL_OUTPUT_DIR.exists():
 # identifier used in all subsequent requests.
 
 db_query_params = {
-    'toi': '2024-05-09T12:00:00',
-    'model': 'thermo_2',
-    'type': 'ss',
-    'domain': ['cor', 'hel'],
-    'variables': ['br', 'bt', 'bp'],
+	"toi": "2024-05-09T12:00:00",
+	"model": "thermo_2",
+	"type": "ss",
+	"domain": ["cor", "hel"],
+	"variables": ["br", "bt", "bp"],
 }
 
 db_response = requests.get(
-    f'{BASE_URL}/mas-run-db',
-    headers=dict(Accept='application/json') | AUTH,
-    params=db_query_params)
+	f"{BASE_URL}/mas-run-db", headers=dict(Accept="application/json") | AUTH, params=db_query_params
+)
 db_response.raise_for_status()
 
 runs = db_response.json()
 pprint(runs)
 
 try:
-    run = runs[0]
+	run = runs[0]
 except IndexError:
-    raise IndexError("No results found in MAS Run DB for the specified parameters.")
+	raise IndexError("No results found in MAS Run DB for the specified parameters.")
 
-cor_id = run['id']
+cor_id = run["id"]
 
 # %%
 # Inspect Run Metadata
@@ -136,18 +135,18 @@ cor_id = run['id']
 # each corresponding to one simulation snapshot.
 
 dbmeta_response = requests.get(
-    f'{BASE_URL}/mas-run-db/{cor_id}',
-    headers=dict(Accept='application/json') | AUTH)
+	f"{BASE_URL}/mas-run-db/{cor_id}", headers=dict(Accept="application/json") | AUTH
+)
 dbmeta_response.raise_for_status()
 
 run_meta = dbmeta_response.json()
-pprint(run_meta['cor'])
-len(run_meta['cor']['states'])
+pprint(run_meta["cor"])
+len(run_meta["cor"]["states"])
 
-pprint(run_meta['hel'])
-len(run_meta['hel']['states'])
+pprint(run_meta["hel"])
+len(run_meta["hel"]["states"])
 
-print(len(run_meta['omas']))
+print(len(run_meta["omas"]))
 
 # %%
 # Download Magnetic Field Files
@@ -163,43 +162,31 @@ print(len(run_meta['omas']))
 # since they will be extracted to different directories in
 # :ref:`sphx_glr_gallery_99_advanced_plots_p11_integrating_mhdweb_p2.py`.
 
-cor_files_params = {
-    'cor_id': str(cor_id),
-    'domain': 'cor',
-    'state': '0',
-    'variable': 'br,bt,bp'
-}
+cor_files_params = {"cor_id": str(cor_id), "domain": "cor", "state": "0", "variable": "br,bt,bp"}
 
 print("Fetching coronal magnetic field files...")
 cor_files_response = requests.get(
-    f'{BASE_URL}/mas-run-db/' + '/'.join(cor_files_params.values()),
-    headers=AUTH,
-    stream=True)
+	f"{BASE_URL}/mas-run-db/" + "/".join(cor_files_params.values()), headers=AUTH, stream=True
+)
 cor_files_response.raise_for_status()
 
 print("Saving coronal magnetic field files...")
-with open(COR_OUTPUT_DIR / 'cor_mag_field.zip', 'wb') as f:
-    for chunk in cor_files_response.iter_content(chunk_size=8192):
-        f.write(chunk)
+with open(COR_OUTPUT_DIR / "cor_mag_field.zip", "wb") as f:
+	for chunk in cor_files_response.iter_content(chunk_size=8192):
+		f.write(chunk)
 
-hel_files_params = {
-    'cor_id': str(cor_id),
-    'domain': 'hel',
-    'state': '0',
-    'variable': 'br,bt,bp'
-}
+hel_files_params = {"cor_id": str(cor_id), "domain": "hel", "state": "0", "variable": "br,bt,bp"}
 
 print("Fetching heliospheric magnetic field files...")
 hel_files_response = requests.get(
-    f'{BASE_URL}/mas-run-db/' + '/'.join(hel_files_params.values()),
-    headers=AUTH,
-    stream=True)
+	f"{BASE_URL}/mas-run-db/" + "/".join(hel_files_params.values()), headers=AUTH, stream=True
+)
 hel_files_response.raise_for_status()
 
 print("Saving heliospheric magnetic field files...")
-with open(HEL_OUTPUT_DIR / 'hel_mag_field.zip', 'wb') as f:
-    for chunk in hel_files_response.iter_content(chunk_size=8192):
-        f.write(chunk)
+with open(HEL_OUTPUT_DIR / "hel_mag_field.zip", "wb") as f:
+	for chunk in hel_files_response.iter_content(chunk_size=8192):
+		f.write(chunk)
 
 # %%
 # Download the Spacecraft Mapping
@@ -225,15 +212,16 @@ with open(HEL_OUTPUT_DIR / 'hel_mag_field.zip', 'wb') as f:
 # - ``r0_pos_{r,t,p}`` — magnetic footpoint traced to the inner boundary
 #   (:math:`r_0 = 1\,R_\odot`).
 
-sc_id = 'solo'
+sc_id = "solo"
 
 response = requests.get(
-    f'{BASE_URL}/spacecraft-mapping/{cor_id}/{sc_id}',
-    headers=AUTH,
-    stream=True)
+	f"{BASE_URL}/spacecraft-mapping/{cor_id}/{sc_id}", headers=AUTH, stream=True
+)
 response.raise_for_status()
 
-spacecraft_mapping = Table.read(BytesIO(response.content), format='ascii.ecsv')
+spacecraft_mapping = Table.read(BytesIO(response.content), format="ascii.ecsv")
 print(spacecraft_mapping.info(out=None))
 
-spacecraft_mapping.write(OUTPUT_DIR / "spacecraft_mapping.ecsv", format='ascii.ecsv', overwrite=True)
+spacecraft_mapping.write(
+	OUTPUT_DIR / "spacecraft_mapping.ecsv", format="ascii.ecsv", overwrite=True
+)

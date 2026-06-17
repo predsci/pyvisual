@@ -33,7 +33,7 @@ plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
 plotter.observer_position = observer_position
-plotter.add_thompson_sphere(opacity=0.3, color='cyan')
-plotter.add_point(*observer_position, color='red', point_size=10)
+plotter.add_thompson_sphere(opacity=0.3, color="cyan")
+plotter.add_point(*observer_position, color="red", point_size=10)
 plotter.observer_position = 50, pi / 2, pi / 6
 plotter.show()

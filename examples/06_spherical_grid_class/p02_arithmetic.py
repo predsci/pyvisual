@@ -43,7 +43,7 @@ print(f"Br r^2 range: [{mesh_r2.data.min():.4f}, {mesh_r2.data.max():.4f}]")
 
 plotter = Plot3d()
 plotter.show_axes()
-plotter.add_mesh(mesh_r2, cmap='seismic', clim=(-1, 1), opacity=0.5, show_scalar_bar=False)
+plotter.add_mesh(mesh_r2, cmap="seismic", clim=(-1, 1), opacity=0.5, show_scalar_bar=False)
 plotter.show()
 
 # %%
@@ -64,5 +64,5 @@ print(f"log10(|Br r^2|) range: [{mesh_log.data.min():.3f}, {mesh_log.data.max():
 
 plotter = Plot3d()
 plotter.show_axes()
-plotter.add_mesh(mesh_log, cmap='rainbow', clim=(-1, 1), opacity=0.5, show_scalar_bar=False)
+plotter.add_mesh(mesh_log, cmap="rainbow", clim=(-1, 1), opacity=0.5, show_scalar_bar=False)
 plotter.show()

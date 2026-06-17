@@ -37,8 +37,7 @@ data, r, t, p = read_hdf_by_index(br_file, 1, None, None)
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_2d_slice(r, t, p, data, cmap='seismic', clim=(-30, 30),
-                     show_scalar_bar=False)
+plotter.add_2d_slice(r, t, p, data, cmap="seismic", clim=(-30, 30), show_scalar_bar=False)
 plotter.show()
 
 # %%
@@ -57,8 +56,7 @@ data, r, t, p = read_hdf_by_index(br_file, None, 71, None)
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_2d_slice(r, t, p, data * r ** 2, cmap='seismic', clim=(-1, 1),
-                     show_scalar_bar=False)
+plotter.add_2d_slice(r, t, p, data * r**2, cmap="seismic", clim=(-1, 1), show_scalar_bar=False)
 plotter.show()
 
 # %%
@@ -76,6 +74,5 @@ data, r, t, p = read_hdf_by_index(br_file, None, None, 149)
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_2d_slice(r, t, p, data * r ** 2, cmap='seismic', clim=(-1, 1),
-                     show_scalar_bar=False)
+plotter.add_2d_slice(r, t, p, data * r**2, cmap="seismic", clim=(-1, 1), show_scalar_bar=False)
 plotter.show()

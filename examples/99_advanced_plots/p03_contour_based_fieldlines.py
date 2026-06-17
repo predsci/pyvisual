@@ -75,7 +75,7 @@ neutraline = mesh[5, ...].contour(isosurfaces=[0])
 # :math:`(3, M, N)` so that unpacking with ``*`` feeds the three coordinate
 # components directly to :meth:`~pyvisual.core.mixins.StackMeshMixin.add_fieldlines`.
 
-traces = run_fwdbwd_tracing(*mag_field, launch_points=neutraline.points.T, context='fork')
+traces = run_fwdbwd_tracing(*mag_field, launch_points=neutraline.points.T, context="fork")
 r, t, p = np.moveaxis(traces.geometry, 1, 0)
 
 # %%
@@ -95,9 +95,11 @@ r, t, p = np.moveaxis(traces.geometry, 1, 0)
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(mesh[5, ...], cmap='seismic', clim=(-1e-1, 1e-1), opacity=0.5, show_scalar_bar=False)
-plotter.add_mesh(neutraline, color='white', line_width=3, render_lines_as_tubes=True)
-plotter.add_fieldlines(r, t, p, coloring='random', line_width=1, show_scalar_bar=False)
+plotter.add_mesh(
+	mesh[5, ...], cmap="seismic", clim=(-1e-1, 1e-1), opacity=0.5, show_scalar_bar=False
+)
+plotter.add_mesh(neutraline, color="white", line_width=3, render_lines_as_tubes=True)
+plotter.add_fieldlines(r, t, p, coloring="random", line_width=1, show_scalar_bar=False)
 plotter.observer_focus = 0, 0, 0
 plotter.observer_fov_view = 10
 plotter.show()

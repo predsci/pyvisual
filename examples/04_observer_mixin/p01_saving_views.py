@@ -30,7 +30,7 @@ plotter = Plot3d()
 plotter.add_sun()
 plotter.add_longlat_lines()
 plotter.show_axes()
-plotter.add_camera_update(include='spherical', font_size=8)
+plotter.add_camera_update(include="spherical", font_size=8)
 plotter.observer_position = 10, np.pi / 3, np.pi / 4
 plotter.show()
 
@@ -48,8 +48,10 @@ plotter.observer_position = 8, np.pi / 4, np.pi / 6
 
 saved_position = plotter.observer_position
 saved_orientation = plotter.observer_orientation
-print(f"Saved position    : r={saved_position.r:.2f}, "
-      f"t={saved_position.t:.3f}, p={saved_position.p:.3f}")
+print(
+	f"Saved position    : r={saved_position.r:.2f}, "
+	f"t={saved_position.t:.3f}, p={saved_position.p:.3f}"
+)
 print(f"Saved orientation : p_angle={saved_orientation.p_angle:.2f} deg")
 
 # sphinx_gallery_start_ignore

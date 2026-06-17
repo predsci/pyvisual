@@ -34,7 +34,7 @@ from pyvisual import Plot3d
 r = np.linspace(1, 5, 30)
 t = np.linspace(0, np.pi, 60)
 p = np.linspace(0, 2 * np.pi, 120)
-R, T, P = np.meshgrid(r, t, p, indexing='ij')
+R, T, P = np.meshgrid(r, t, p, indexing="ij")
 
 # Tilted dipole: pure cos(theta) plus a longitude-dependent tilt
 Br = np.cos(T) + 0.4 * np.cos(P) * np.sin(T)
@@ -42,7 +42,7 @@ Br = np.cos(T) + 0.4 * np.cos(P) * np.sin(T)
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_contour(r, t, p, Br, isovalue=0, color='white', opacity=0.8)
+plotter.add_contour(r, t, p, Br, isovalue=0, color="white", opacity=0.8)
 plotter.show()
 
 # %%
@@ -57,8 +57,9 @@ plotter.show()
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_contour(r, t, p, Br, isovalue=[-0.3, 0.0, 0.3],
-                    cmap='seismic', clim=(-0.3, 0.3), opacity=0.7)
+plotter.add_contour(
+	r, t, p, Br, isovalue=[-0.3, 0.0, 0.3], cmap="seismic", clim=(-0.3, 0.3), opacity=0.7
+)
 plotter.show()
 
 # %%
@@ -77,7 +78,6 @@ br, r, t, p = read_hdf_data(br_file)
 
 plotter = Plot3d()
 plotter.show_axes()
-plotter.add_2d_slice(r[1], t, p, br[...,1], cmap='seismic', clim=(-30, 30),
-                     show_scalar_bar=False)
-plotter.add_contour(r, t, p, br, isovalue=0, color='white', opacity=0.9)
+plotter.add_2d_slice(r[1], t, p, br[..., 1], cmap="seismic", clim=(-30, 30), show_scalar_bar=False)
+plotter.add_contour(r, t, p, br, isovalue=0, color="white", opacity=0.9)
 plotter.show()

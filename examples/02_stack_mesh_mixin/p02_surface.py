@@ -32,7 +32,7 @@ p = np.tile(np.linspace(0, 2 * np.pi, n_lines)[:, None], (1, n_pts))
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_surface(r, t, p, t, method='delaunay_3d')
+plotter.add_surface(r, t, p, t, method="delaunay_3d")
 plotter.show()
 
 # %%
@@ -52,6 +52,5 @@ r_vals = np.full_like(t_vals, 3.0)
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_surface(r_vals, t_vals, p_vals, p_vals, method='delaunay_2d',
-                    show_scalar_bar=False)
+plotter.add_surface(r_vals, t_vals, p_vals, p_vals, method="delaunay_2d", show_scalar_bar=False)
 plotter.show()

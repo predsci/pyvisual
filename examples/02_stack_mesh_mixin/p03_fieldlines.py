@@ -36,13 +36,13 @@ from psi_data import fetch_mas_data
 # :math:`r = 1.01\,R_\odot` using the Fibonacci lattice algorithm.
 
 mag_field = fetch_mas_data(domains="cor", variables=["br", "bt", "bp"])
-traces = run_forward_tracing(*mag_field, context='fork')
+traces = run_forward_tracing(*mag_field, context="fork")
 r, t, p = np.moveaxis(traces.geometry, 1, 0)
 
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_fieldlines(r, t, p, coloring='random', line_width=2, show_scalar_bar=False)
+plotter.add_fieldlines(r, t, p, coloring="random", line_width=2, show_scalar_bar=False)
 plotter.observer_focus = 0, 0, 0
 plotter.observer_fov_view = 10
 plotter.show()
@@ -69,14 +69,14 @@ plotter.show()
 # fieldline has endpoints on both boundaries, enabling unambiguous polarity
 # assessment.
 
-traces = run_fwdbwd_tracing(*mag_field, context='fork')
+traces = run_fwdbwd_tracing(*mag_field, context="fork")
 polarity = get_fieldline_polarity(1, 30, mag_field.cor_br, traces)
 r, t, p = np.moveaxis(traces.geometry, 1, 0)
 
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_fieldlines(r, t, p, polarity, coloring='polarity', line_width=2)
+plotter.add_fieldlines(r, t, p, polarity, coloring="polarity", line_width=2)
 plotter.observer_focus = 0, 0, 0
 plotter.observer_fov_view = 10
 plotter.show()

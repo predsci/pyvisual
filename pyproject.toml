@@ -273,10 +273,11 @@ ignore = [
   "D205",
   "D400",
   "RUF002",
-  # Disabled because they conflict with `ruff format`; see
-  # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
-  "COM812",  # missing-trailing-comma (handled by the formatter)
-  "ISC001",  # single-line-implicit-string-concatenation (handled by the formatter)
+  "COM812",
+  "ISC001",
+  "W191",
+  "D206",
+  "E101",
 ]
 
 
@@ -284,10 +285,10 @@ ignore = [
 convention = "numpy"
 
 [tool.ruff.lint.flake8-quotes]
-# Match the formatter's `quote-style = "single"` so the `Q` rules stop
-# flagging single-quoted strings. Docstrings stay double-quoted per PEP 257.
-inline-quotes = "single"
-multiline-quotes = "single"
+# Match the formatter's `quote-style = "double"` (the ecosystem default) so
+# the `Q` rules and the formatter agree.
+inline-quotes = "double"
+multiline-quotes = "double"
 docstring-quotes = "double"
 avoid-escape = true
 
@@ -303,7 +304,7 @@ required-imports = [
 [tool.ruff.format]
 # Black-compatible defaults, stated explicitly. `line-length` is inherited
 # from `[tool.ruff]` (100).
-quote-style = "single"
+quote-style = "double"
 indent-style = "tab"
 skip-magic-trailing-comma = false
 line-ending = "auto"

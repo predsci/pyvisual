@@ -29,7 +29,7 @@ from typing import Literal, Union, TypeAlias
 from pyvista import VectorLike
 
 PlottableType: TypeAlias = Union[
-    VectorLike[float], 'DataSet', 'MultiBlock', 'PartitionedDataSet', str, Path
+	VectorLike[float], "DataSet", "MultiBlock", "PartitionedDataSet", str, Path
 ]
 
 PathType = str | Path | PathLike[str]
@@ -39,7 +39,7 @@ Accepted wherever a file path can be passed — covers plain :class:`str`,
 :class:`pathlib.Path`, and any :class:`os.PathLike` object that yields a string.
 """
 
-FlColorType = Literal['random', 'polarity']
+FlColorType = Literal["random", "polarity"]
 """Literal type for fieldline coloring strategies.
 
 ``'random'``
@@ -49,14 +49,14 @@ FlColorType = Literal['random', 'polarity']
     five-category scheme defined in :data:`~pyvisual.core._styling.FL_STATE_ANNOTATIONS`.
 """
 
-FL_COLOR_TYPE = {'random', 'polarity'}
+FL_COLOR_TYPE = {"random", "polarity"}
 """Runtime set of valid fieldline coloring strategy strings.
 
 Mirrors :data:`FlColorType` as a plain :class:`set` for membership testing in
 validation logic.
 """
 
-SurfaceReconstructionType = Literal['delaunay_2d', 'delaunay_3d', 'reconstruct_surface']
+SurfaceReconstructionType = Literal["delaunay_2d", "delaunay_3d", "reconstruct_surface"]
 """Literal type for surface-reconstruction methods used in
 :func:`~pyvisual.core.mesh3d.build_surface_polydata`.
 
@@ -68,7 +68,7 @@ SurfaceReconstructionType = Literal['delaunay_2d', 'delaunay_3d', 'reconstruct_s
     Implicit surface reconstruction via :meth:`pyvista.PolyData.reconstruct_surface`.
 """
 
-SURFACE_RECONSTRUCTION_TYPE = {'delaunay_2d', 'delaunay_3d', 'reconstruct_surface'}
+SURFACE_RECONSTRUCTION_TYPE = {"delaunay_2d", "delaunay_3d", "reconstruct_surface"}
 """Runtime set of valid surface-reconstruction method strings.
 
 Mirrors :data:`SurfaceReconstructionType` as a plain :class:`set`.
@@ -84,7 +84,7 @@ PlotterFramesType = Literal["cartesian"]
 meshes in other frames are converted before being passed to PyVista.
 """
 
-SolarCoordinate = namedtuple('SolarCoordinate', ['radius', 'b_angle', 'longitude'])
+SolarCoordinate = namedtuple("SolarCoordinate", ["radius", "b_angle", "longitude"])
 r"""Named tuple representing a heliographic Carrington coordinate.
 
 Fields
@@ -97,7 +97,7 @@ longitude : float
     Carrington longitude in degrees.
 """
 
-SphericalCoordinate = namedtuple('SphericalCoordinate', ['r', 't', 'p'])
+SphericalCoordinate = namedtuple("SphericalCoordinate", ["r", "t", "p"])
 r"""Named tuple representing a PSI spherical coordinate :math:`(r, \theta, \phi)`.
 
 Fields
@@ -110,7 +110,7 @@ p : float
     Longitude :math:`\phi` in radians.
 """
 
-CartesianCoordinate = namedtuple('CartesianCoordinates', ['x', 'y', 'z'])
+CartesianCoordinate = namedtuple("CartesianCoordinates", ["x", "y", "z"])
 r"""Named tuple representing a Cartesian coordinate :math:`(x, y, z)`.
 
 Fields
@@ -123,7 +123,7 @@ z : float
     Cartesian z-coordinate in solar radii :math:`R_\odot`.
 """
 
-ObserverView = namedtuple('ObserverView', ['x0', 'x1', 'y0', 'y1'])
+ObserverView = namedtuple("ObserverView", ["x0", "x1", "y0", "y1"])
 """Named tuple representing line-of-sight field-of-view extents in degrees.
 
 Fields
@@ -138,7 +138,7 @@ y1 : float
     Top edge of the vertical (altitude) FOV extent in degrees.
 """
 
-ObserverOrientation = namedtuple('ObserverOrientation', ['p_angle'])
+ObserverOrientation = namedtuple("ObserverOrientation", ["p_angle"])
 """Named tuple representing the observer's position angle.
 
 Fields

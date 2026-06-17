@@ -47,8 +47,8 @@ br_file = fetch_mas_data(domains="cor", variables="br").cor_br
 # :class:`~pyvisual.core.mesh3d.SphericalMesh` reads the same file and retains
 # the native spherical coordinates.
 
-cartesian_mesh = CartesianMesh(br_file, iformat='rtp')
-spherical_mesh = SphericalMesh(br_file, iformat='rtp')
+cartesian_mesh = CartesianMesh(br_file, iformat="rtp")
+spherical_mesh = SphericalMesh(br_file, iformat="rtp")
 cartesian_mesh
 spherical_mesh
 
@@ -70,8 +70,7 @@ sub_mesh = cartesian_mesh[120:150, 55:85, 135:165]
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(sub_mesh,
-                 cmap='seismic', clim=(-1e-1, 1e-1), opacity=0.5, show_scalar_bar=False)
+plotter.add_mesh(sub_mesh, cmap="seismic", clim=(-1e-1, 1e-1), opacity=0.5, show_scalar_bar=False)
 plotter.show()
 
 # %%
@@ -88,8 +87,13 @@ plotter.show()
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(cartesian_mesh.slice_orthogonal(),
-                 cmap='seismic', clim=(-1e-1, 1e-1), opacity=0.5, show_scalar_bar=False)
+plotter.add_mesh(
+	cartesian_mesh.slice_orthogonal(),
+	cmap="seismic",
+	clim=(-1e-1, 1e-1),
+	opacity=0.5,
+	show_scalar_bar=False,
+)
 plotter.show()
 
 # %%
@@ -110,8 +114,13 @@ plotter.show()
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(spherical_mesh.slice_orthogonal(),
-                 cmap='seismic', clim=(-1e-1, 1e-1), opacity=0.5, show_scalar_bar=False)
+plotter.add_mesh(
+	spherical_mesh.slice_orthogonal(),
+	cmap="seismic",
+	clim=(-1e-1, 1e-1),
+	opacity=0.5,
+	show_scalar_bar=False,
+)
 plotter.show()
 
 # %%
@@ -131,8 +140,13 @@ plotter.show()
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(cartesian_mesh.radially_scale(exp=2).slice_along_axis(n=30, axis='x'),
-                 cmap='seismic', clim=(-1e-1, 1e-1), opacity=0.5, show_scalar_bar=False)
+plotter.add_mesh(
+	cartesian_mesh.radially_scale(exp=2).slice_along_axis(n=30, axis="x"),
+	cmap="seismic",
+	clim=(-1e-1, 1e-1),
+	opacity=0.5,
+	show_scalar_bar=False,
+)
 plotter.show()
 
 # %%
@@ -151,6 +165,11 @@ plotter.show()
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(cartesian_mesh.logspace(),
-                 cmap='seismic', clim=(-1e-1, 1e-1), opacity=0.5, show_scalar_bar=False)
+plotter.add_mesh(
+	cartesian_mesh.logspace(),
+	cmap="seismic",
+	clim=(-1e-1, 1e-1),
+	opacity=0.5,
+	show_scalar_bar=False,
+)
 plotter.show()

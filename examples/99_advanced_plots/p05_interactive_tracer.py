@@ -82,31 +82,39 @@ DELTA = np.pi / 180
 # The actor name cycles modulo :data:`BUFFER_SIZE` so PyVista replaces older
 # bundles rather than accumulating them.
 
+
 def _plotter_callback(pt):
-    plotter.subplot(0, 0)
-    plotter.buffer += 1
-    r, t, p = pt
-    plotter.add_text(f"Selected Point: r={r:.2f}, t={t:.2f}, p={p:.2f}",
-                     name="picked_point_text",
-                     color='cyan',
-                     font_size=12,
-                     position='lower_right')
+	plotter.subplot(0, 0)
+	plotter.buffer += 1
+	r, t, p = pt
+	plotter.add_text(
+		f"Selected Point: r={r:.2f}, t={t:.2f}, p={p:.2f}",
+		name="picked_point_text",
+		color="cyan",
+		font_size=12,
+		position="lower_right",
+	)
 
-    rr, tt, pp = np.meshgrid(r,
-                             np.linspace(t - DELTA, t + DELTA, NPOINTS),
-                             np.linspace(p - DELTA, p + DELTA, NPOINTS),
-                             indexing='ij')
-    lps = np.stack((rr.ravel(), tt.ravel(), pp.ravel()), axis=0)
-    fieldlines, *_ = tracer.trace_fwd(launch_points=lps)
+	rr, tt, pp = np.meshgrid(
+		r,
+		np.linspace(t - DELTA, t + DELTA, NPOINTS),
+		np.linspace(p - DELTA, p + DELTA, NPOINTS),
+		indexing="ij",
+	)
+	lps = np.stack((rr.ravel(), tt.ravel(), pp.ravel()), axis=0)
+	fieldlines, *_ = tracer.trace_fwd(launch_points=lps)
 
-    plotter.subplot(1, 0)
-    plotter.add_points(*lps, color='white', point_size=7, name="Launch Points")
-    plotter.add_fieldlines(*np.swapaxes(fieldlines, 1, 0),
-                           np.arange(lps.shape[1]),
-                           cmap='hsv',
-                           name=f'Fieldlines{plotter.buffer % BUFFER_SIZE}',
-                           show_scalar_bar=False,
-                           line_width=5)
+	plotter.subplot(1, 0)
+	plotter.add_points(*lps, color="white", point_size=7, name="Launch Points")
+	plotter.add_fieldlines(
+		*np.swapaxes(fieldlines, 1, 0),
+		np.arange(lps.shape[1]),
+		cmap="hsv",
+		name=f"Fieldlines{plotter.buffer % BUFFER_SIZE}",
+		show_scalar_bar=False,
+		line_width=5,
+	)
+
 
 # %%
 # Build and Launch the Scene
@@ -124,11 +132,9 @@ plotter = Plot3d(shape=(2, 1))
 pv.set_new_attribute(plotter, "buffer", 0)
 
 plotter.subplot(1, 0)
-plotter.add_2d_slice(1, br_t, br_p, br,
-                     clim=(-10, 10),
-                     cmap="seismic",
-                     show_scalar_bar=False,
-                     pickable=False)
+plotter.add_2d_slice(
+	1, br_t, br_p, br, clim=(-10, 10), cmap="seismic", show_scalar_bar=False, pickable=False
+)
 
 plotter.subplot(0, 0)
 longlat_map = SphericalMesh(1, br_t, br_p, data=br)
@@ -138,11 +144,7 @@ longlat_map = SphericalMesh(1, br_t, br_p, data=br)
 # (r, t, p) layout for the picks and launch points.
 longlat_map.user_dict.clear()
 
-plotter.add_mesh(longlat_map,
-                 clim=(-10, 10),
-                 cmap="seismic",
-                 show_scalar_bar=False,
-                 pickable=True)
+plotter.add_mesh(longlat_map, clim=(-10, 10), cmap="seismic", show_scalar_bar=False, pickable=True)
 plotter.add_axes()
 
 # Adjust the longitude-latitude display so that it is oriented in a way that directly maps
@@ -150,10 +152,8 @@ plotter.add_axes()
 plotter.view_yz()
 plotter.camera.up = 1, -1, 0
 
-plotter.enable_point_picking(_plotter_callback,
-                             color='cyan',
-                             font_size=12,
-                             point_size=8,
-                             render_points_as_spheres=True)
+plotter.enable_point_picking(
+	_plotter_callback, color="cyan", font_size=12, point_size=8, render_points_as_spheres=True
+)
 
 plotter.show()

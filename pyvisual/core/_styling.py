@@ -31,13 +31,9 @@ flags that depend on the geometry type (points, splines, slices):
 from types import MappingProxyType
 
 
-FL_STATE_ANNOTATIONS = MappingProxyType({
-    -1.5: "Open (Br-)",
-    -0.75: "Closed",
-    0: "Error",
-    0.75: "Disconnect",
-    1.5: "Open (Br+)"
-})
+FL_STATE_ANNOTATIONS = MappingProxyType(
+	{-1.5: "Open (Br-)", -0.75: "Closed", 0: "Error", 0.75: "Disconnect", 1.5: "Open (Br+)"}
+)
 """Scalar-bar annotations for the five magnetic fieldline polarity states.
 
 Maps the numeric scalar value written on each fieldline to a human-readable
@@ -47,41 +43,34 @@ scalar bar when rendering with ``coloring='polarity'``.
 Keys are ``float`` sentinel values; values are display strings.
 """
 
-SOLID_COLOR_KWARGS = MappingProxyType(dict(
-    cmap=None,
-    rgb=False
-))
+SOLID_COLOR_KWARGS = MappingProxyType(dict(cmap=None, rgb=False))
 """Base PyVista kwargs applied when rendering geometry without scalar data.
 
 Disables the colormap (``cmap=None``) and multi-channel RGB mode (``rgb=False``),
 so that the ``color`` kwarg (or PyVista's default) controls the mesh appearance.
 """
 
-COLORMAP_KWARGS = MappingProxyType(dict(
-    color=None,
-    rgb=False
-))
+COLORMAP_KWARGS = MappingProxyType(dict(color=None, rgb=False))
 """Base PyVista kwargs applied when rendering geometry *with* scalar data.
 
 Clears any fixed ``color`` so that the colormap drives the appearance, and
 disables RGB mode (``rgb=False``).
 """
 
-FIELDLINE_KWARGS = MappingProxyType(dict(
-    n_colors=5,
-    clim=(-2, 2)
-))
+FIELDLINE_KWARGS = MappingProxyType(dict(n_colors=5, clim=(-2, 2)))
 """Default colormap discretisation and limits for fieldline scalar data.
 
 ``n_colors=5`` matches the five polarity categories; ``clim=(-2, 2)`` spans the
 signed sentinel range used by :data:`FL_STATE_ANNOTATIONS`.
 """
 
-FL_POLARITY_COLORING_DEFAULTS = MappingProxyType(dict(
-    cmap=['blue', 'grey', 'black', 'green', 'red'],
-    annotations=dict(FL_STATE_ANNOTATIONS),
-    scalar_bar_args=dict(n_labels=0, label_font_size=11)
-))
+FL_POLARITY_COLORING_DEFAULTS = MappingProxyType(
+	dict(
+		cmap=["blue", "grey", "black", "green", "red"],
+		annotations=dict(FL_STATE_ANNOTATIONS),
+		scalar_bar_args=dict(n_labels=0, label_font_size=11),
+	)
+)
 """Full PyVista kwargs for polarity-colored fieldline rendering.
 
 Provides a five-color discrete colormap aligned to the signed polarity sentinel
@@ -90,10 +79,12 @@ values, along with annotated scalar-bar configuration.  Applied when
 :meth:`~pyvisual.core.mixins.StackMeshMixin.add_fieldlines`.
 """
 
-RANDOM_COLORING_DEFAULTS = MappingProxyType(dict(
-    cmap='hsv',
-    show_scalar_bar=False,
-))
+RANDOM_COLORING_DEFAULTS = MappingProxyType(
+	dict(
+		cmap="hsv",
+		show_scalar_bar=False,
+	)
+)
 """PyVista kwargs for randomly hue-assigned fieldline rendering.
 
 Each fieldline receives a distinct hue sampled from the circular ``'hsv'`` colormap.
@@ -102,37 +93,47 @@ meaning.  Applied when ``coloring='random'`` is passed to
 :meth:`~pyvisual.core.mixins.StackMeshMixin.add_fieldlines`.
 """
 
-PLOT1D_KWARGS = MappingProxyType(dict(
-    render_lines_as_tubes=True,
-    render_points_as_spheres=False,
-    style='surface',
-))
+PLOT1D_KWARGS = MappingProxyType(
+	dict(
+		render_lines_as_tubes=True,
+		render_points_as_spheres=False,
+		style="surface",
+	)
+)
 """Default render-style kwargs for 1-D line geometry (tube rendering)."""
 
-PLOT2D_KWARGS = MappingProxyType(dict(
-    render_lines_as_tubes=False,
-    render_points_as_spheres=False,
-    style='surface',
-))
+PLOT2D_KWARGS = MappingProxyType(
+	dict(
+		render_lines_as_tubes=False,
+		render_points_as_spheres=False,
+		style="surface",
+	)
+)
 """Default render-style kwargs for 2-D surface geometry (flat surface rendering)."""
 
-POINTS_KWARGS = MappingProxyType(dict(
-    render_lines_as_tubes=False,
-    render_points_as_spheres=True,
-    style='points',
-))
+POINTS_KWARGS = MappingProxyType(
+	dict(
+		render_lines_as_tubes=False,
+		render_points_as_spheres=True,
+		style="points",
+	)
+)
 """Default render-style kwargs for point-cloud geometry (sphere glyphs at each point)."""
 
-SPLINES_KWARGS = MappingProxyType(dict(
-    render_lines_as_tubes=True,
-    render_points_as_spheres=False,
-    style='surface',
-))
+SPLINES_KWARGS = MappingProxyType(
+	dict(
+		render_lines_as_tubes=True,
+		render_points_as_spheres=False,
+		style="surface",
+	)
+)
 """Default render-style kwargs for spline/line geometry (tube rendering)."""
 
-SLICES_KWARGS = MappingProxyType(dict(
-    render_lines_as_tubes=False,
-    render_points_as_spheres=False,
-    style='surface',
-))
+SLICES_KWARGS = MappingProxyType(
+	dict(
+		render_lines_as_tubes=False,
+		render_points_as_spheres=False,
+		style="surface",
+	)
+)
 """Default render-style kwargs for 2-D slice geometry (flat surface, no tube/sphere glyphs)."""

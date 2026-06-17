@@ -30,17 +30,17 @@ from pyvisual.core.mesh3d import CartesianMesh, SphericalMesh
 x = np.linspace(-5, 5, 15)
 y = np.linspace(-5, 5, 15)
 z = np.linspace(-5, 5, 15)
-X, Y, Z = np.meshgrid(x, y, z, indexing='ij')
-dist = np.sqrt(X ** 2 + Y ** 2 + Z ** 2)
+X, Y, Z = np.meshgrid(x, y, z, indexing="ij")
+dist = np.sqrt(X**2 + Y**2 + Z**2)
 
-mesh = CartesianMesh(X, Y, Z, data=dist, dataid='r')
+mesh = CartesianMesh(X, Y, Z, data=dist, dataid="r")
 print(f"dimensions : {mesh.dimensions}")
 print(f"data range : [{mesh.data.min():.2f}, {mesh.data.max():.2f}]")
 
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(mesh, cmap='plasma', opacity=0.3, show_scalar_bar=False)
+plotter.add_mesh(mesh, cmap="plasma", opacity=0.3, show_scalar_bar=False)
 plotter.show()
 
 # %%
@@ -61,10 +61,10 @@ plotter.show()
 r = np.linspace(1, 5, 10)
 t = np.linspace(0, np.pi, 20)
 p = np.linspace(0, 2 * np.pi, 40)
-R, T, P = np.meshgrid(r, t, p, indexing='ij')
-Br = np.cos(T) / R ** 2
+R, T, P = np.meshgrid(r, t, p, indexing="ij")
+Br = np.cos(T) / R**2
 
-sph_mesh = SphericalMesh(r, t, p, data=Br, dataid='Br')
+sph_mesh = SphericalMesh(r, t, p, data=Br, dataid="Br")
 cart_struct = sph_mesh.spherical_to_cartesian()
 cart_mesh = CartesianMesh(cart_struct)
 
@@ -74,5 +74,5 @@ print(f"CartesianMesh frame : {cart_mesh.user_dict['MESH_FRAME']}")
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_mesh(cart_mesh, cmap='seismic', opacity=0.4, show_scalar_bar=False)
+plotter.add_mesh(cart_mesh, cmap="seismic", opacity=0.4, show_scalar_bar=False)
 plotter.show()

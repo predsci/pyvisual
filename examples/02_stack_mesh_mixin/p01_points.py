@@ -25,7 +25,7 @@ from pyvisual import Plot3d
 plotter = Plot3d()
 plotter.add_sun()
 plotter.show_axes()
-plotter.add_point(1.5, np.pi / 2, np.pi / 2, color='red', point_size=15)
+plotter.add_point(1.5, np.pi / 2, np.pi / 2, color="red", point_size=15)
 plotter.show()
 
 # %%

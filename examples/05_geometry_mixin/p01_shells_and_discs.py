@@ -24,7 +24,7 @@ from pyvisual import Plot3d
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_shell(outer_radius=10, opacity=0.2, color='cyan')
+plotter.add_shell(outer_radius=10, opacity=0.2, color="cyan")
 plotter.show()
 
 # %%
@@ -38,10 +38,8 @@ plotter.show()
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_shell(2, pi / 4, 0, inner_radius=0.05, outer_radius=0.1,
-                  color='red', opacity=0.8)
-plotter.add_shell(2, 3 * pi / 4, 0, inner_radius=0.05, outer_radius=0.1,
-                  color='blue', opacity=0.8)
+plotter.add_shell(2, pi / 4, 0, inner_radius=0.05, outer_radius=0.1, color="red", opacity=0.8)
+plotter.add_shell(2, 3 * pi / 4, 0, inner_radius=0.05, outer_radius=0.1, color="blue", opacity=0.8)
 plotter.show()
 
 # %%
@@ -61,7 +59,7 @@ disc_kwargs = dict(r=2, t=pi / 2, p=0, outer_radius=0.2)
 plotter = Plot3d()
 plotter.show_axes()
 plotter.add_sun()
-plotter.add_disc(**disc_kwargs, normal=(1, 0, 0), color='blue')
-plotter.add_disc(**disc_kwargs, normal=(0, 1, 0), color='white')
-plotter.add_disc(**disc_kwargs, normal=(0, 0, 1), color='red')
+plotter.add_disc(**disc_kwargs, normal=(1, 0, 0), color="blue")
+plotter.add_disc(**disc_kwargs, normal=(0, 1, 0), color="white")
+plotter.add_disc(**disc_kwargs, normal=(0, 0, 1), color="red")
 plotter.show()
