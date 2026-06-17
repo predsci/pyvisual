@@ -20,10 +20,13 @@ control over the read step you need.  Real coronal magnetic field data
 is used throughout.
 """
 
+from __future__ import annotations
+
+from psi_data import fetch_mas_data
 from psi_io import read_hdf_by_index
+
 from pyvisual import Plot3d
 from pyvisual.core.mesh3d import SphericalMesh
-from psi_data import fetch_mas_data
 
 br_file = fetch_mas_data(domains="cor", variables="br").cor_br
 

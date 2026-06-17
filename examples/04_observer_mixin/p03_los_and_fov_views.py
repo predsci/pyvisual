@@ -17,7 +17,10 @@ to be set first, because the focal-point calculation depends on the observer
 distance.
 """
 
+from __future__ import annotations
+
 import numpy as np
+
 from pyvisual import Plot3d
 
 # %%

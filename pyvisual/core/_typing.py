@@ -20,11 +20,12 @@ Named tuples
     Observer position angle ``(p_angle,)`` in degrees.
 """
 
+from __future__ import annotations
+
 from collections import namedtuple
 from os import PathLike
 from pathlib import Path
-
-from typing import Literal, Union, TypeAlias
+from typing import Literal, TypeAlias, Union
 
 from pyvista import VectorLike
 

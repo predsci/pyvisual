@@ -12,7 +12,10 @@ the scene is rendered at each new camera position and captured as a frame in
 the output GIF.
 """
 
+from __future__ import annotations
+
 import numpy as np
+
 from pyvisual import Plot3d
 
 # %%

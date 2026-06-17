@@ -6,6 +6,8 @@ This example demonstrates how to create an instance of the Plot3d class,
 add and remove actors, and display results in an interactive visualization window.
 """
 
+from __future__ import annotations
+
 from pyvisual import Plot3d
 
 # %%

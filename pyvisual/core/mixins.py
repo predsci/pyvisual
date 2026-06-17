@@ -37,7 +37,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 from functools import wraps
-from typing import Optional, Literal
+from typing import Literal
 
 import numpy as np
 import pyvista as pv
@@ -45,41 +45,46 @@ from numpy.typing import ArrayLike
 
 from pyvisual.core._styling import (
 	COLORMAP_KWARGS,
-	SOLID_COLOR_KWARGS,
-	POINTS_KWARGS,
-	SPLINES_KWARGS,
-	SLICES_KWARGS,
-	RANDOM_COLORING_DEFAULTS,
-	FL_POLARITY_COLORING_DEFAULTS,
 	FIELDLINE_KWARGS,
+	FL_POLARITY_COLORING_DEFAULTS,
+	POINTS_KWARGS,
+	RANDOM_COLORING_DEFAULTS,
+	SLICES_KWARGS,
+	SOLID_COLOR_KWARGS,
+	SPLINES_KWARGS,
 )
 from pyvisual.core._typing import (
 	FlColorType,
-	SphericalCoordinate,
 	ObserverOrientation,
+	SphericalCoordinate,
 	SurfaceReconstructionType,
 )
 from pyvisual.core.constants import SOLAR_NORTH
 from pyvisual.core.mesh3d import (
-	build_spline_polydata,
-	build_slice_polydata,
-	build_point_polydata,
-	build_surface_polydata,
 	SphericalMesh,
+	build_point_polydata,
+	build_slice_polydata,
+	build_spline_polydata,
+	build_surface_polydata,
 )
-from pyvisual.core.parsers import parse_mesh_params, parse_stack_mesh, parse_grid_mesh, parse_data
+from pyvisual.core.parsers import (
+	parse_data,
+	parse_grid_mesh,
+	parse_mesh_params,
+	parse_stack_mesh
+)
 from pyvisual.utils.geometry import (
-	ij_meshgrid,
-	cartesian_to_spherical,
-	spherical_to_cartesian,
-	spherical_to_cartesian_vec,
-	clip_angle,
-	thompson_sphere,
-	los_rmin2angle,
 	camera_roll_wrt_solar_north,
+	cartesian_to_spherical,
+	clip_angle,
+	ij_meshgrid,
+	los_rmin2angle,
 	rotate_position_about_x,
 	rotate_position_about_y,
 	rotate_position_about_z,
+	spherical_to_cartesian,
+	spherical_to_cartesian_vec,
+	thompson_sphere,
 )
 
 
@@ -200,7 +205,8 @@ class StackMeshMixin:
 		    >>> plotter.show()
 		"""
 		if not (1 == r.size == t.size == p.size):
-			raise ValueError("Single point coordinate arrays should be size 1")
+			msg = "Single point coordinate arrays should be size 1"
+			raise ValueError(msg)
 		return self._add_stack_set(r, t, p, data, 0, dataid, slice_type="points", **kwargs)
 
 	@parse_mesh_params
@@ -325,7 +331,8 @@ class StackMeshMixin:
 		    >>> plotter.show()
 		"""
 		if not (1 == r.ndim == t.ndim == p.ndim):
-			raise ValueError("Single spline coordinate arrays should be 1D")
+			msg = "Single spline coordinate arrays should be 1D"
+			raise ValueError(msg)
 		return self._add_stack_set(r, t, p, data, 0, dataid, slice_type="splines", **kwargs)
 
 	@parse_mesh_params
@@ -535,7 +542,8 @@ class StackMeshMixin:
 		match coloring:
 			case "polarity":
 				if data is None or not 0 < len(set(data.ravel())) < 6:
-					raise ValueError("Polarity coloring requires")
+					msg = "Polarity coloring requires"
+					raise ValueError(msg)
 				data = data.astype(np.int8)
 				kwargs = FL_POLARITY_COLORING_DEFAULTS | FIELDLINE_KWARGS | kwargs
 			case "random":
@@ -591,7 +599,8 @@ class StackMeshMixin:
 			case "splines":
 				builder, opt_kwargs = build_spline_polydata, SPLINES_KWARGS
 			case _:
-				raise ValueError(f"Invalid slice_type: {slice_type}")
+				msg = f"Invalid slice_type: {slice_type}"
+				raise ValueError(msg)
 		grid = builder(r, t, p, axis, frame="spherical")
 		if data is not None:
 			grid[dataid] = parse_data(data, r.shape, axis)
@@ -802,7 +811,8 @@ class GridMeshMixin:
 		"""
 		mesh_shape = (r.size, t.size, p.size)
 		if sum(scale == 1 for scale in mesh_shape) != 2:
-			raise ValueError("1D slices requires exactly two fixed scales.")
+			msg = "1D slices requires exactly two fixed scales."
+			raise ValueError(msg)
 		try:
 			axis = next(i for i, s in enumerate(mesh_shape) if s > 1)
 		except StopIteration as e:
@@ -898,7 +908,8 @@ class GridMeshMixin:
 		"""
 		mesh_shape = (r.size, t.size, p.size)
 		if sum(scale == 1 for scale in mesh_shape) != 1:
-			raise ValueError("2D slices requires exactly one fixed scale.")
+			msg = "2D slices requires exactly one fixed scale."
+			raise ValueError(msg)
 		try:
 			axis = next(i for i, s in enumerate(mesh_shape) if s == 1)
 		except StopIteration as e:
@@ -1077,7 +1088,8 @@ class GridMeshMixin:
 			case "slices":
 				builder, opt_kwargs = build_slice_polydata, SLICES_KWARGS
 			case _:
-				raise ValueError(f"Invalid slice_type: {slice_type}")
+				msg = f"Invalid slice_type: {slice_type}"
+				raise ValueError(msg)
 		grid = builder(r, t, p, axis, frame="spherical")
 		if data is not None:
 			grid[dataid] = parse_data(data, r.shape, axis)
@@ -1272,10 +1284,9 @@ class ObserverMixin:
 				return tuple(
 					f"{field}: {arg:.2f}" for arg, field in zip(args, args._fields, strict=True)
 				)
-			elif isinstance(args, Iterable):
+			if isinstance(args, Iterable):
 				return tuple(f"{arg:.2f}" for arg in args)
-			else:
-				return f"{args:.2f}"
+			return f"{args:.2f}"
 
 		def _update_text(caller, event):
 			values = [

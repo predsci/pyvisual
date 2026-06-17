@@ -42,12 +42,13 @@ See Also
     Fieldline tracing library that integrates with **pyvisual**.
 """
 
+from __future__ import annotations
+
+from pyvisual.core.mesh3d import CartesianMesh, SphericalMesh
 from pyvisual.core.plot3d import Plot3d
-from pyvisual.core.mesh3d import SphericalMesh, CartesianMesh
 
 try:
-	from importlib.metadata import version as _pkg_version
-	from importlib.metadata import PackageNotFoundError
+	from importlib.metadata import PackageNotFoundError, version as _pkg_version
 	from pathlib import Path
 
 	__version__ = _pkg_version("psi-pyvisual")  # type: ignore[assignment]

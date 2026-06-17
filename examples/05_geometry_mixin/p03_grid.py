@@ -15,7 +15,10 @@ The higher-level convenience methods
 of :meth:`~pyvisual.core.mixins.GeometryMixin.add_grid`.
 """
 
+from __future__ import annotations
+
 from math import pi
+
 from pyvisual import Plot3d
 
 # %%

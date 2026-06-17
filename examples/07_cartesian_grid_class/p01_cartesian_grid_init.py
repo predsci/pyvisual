@@ -14,7 +14,10 @@ coordinate arrays must be 3-D meshgrids of identical shape, not independent
 1-D axis vectors.
 """
 
+from __future__ import annotations
+
 import numpy as np
+
 from pyvisual import Plot3d
 from pyvisual.core.mesh3d import CartesianMesh, SphericalMesh
 

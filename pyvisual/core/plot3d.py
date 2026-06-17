@@ -31,12 +31,19 @@ See Also
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
 import pyvista as pv
 
-from pyvisual.core.mixins import ObserverMixin, GeometryMixin, GridMeshMixin, StackMeshMixin
-from pyvisual.core.parsers import validate_mesh_type, apply_mesh_transform
+from pyvisual.core.mixins import (
+	GeometryMixin,
+	GridMeshMixin,
+	ObserverMixin,
+	StackMeshMixin,
+)
+from pyvisual.core.parsers import (
+	apply_mesh_transform,
+	validate_mesh_type,
+)
 
 
 class Plot3d(ObserverMixin, GeometryMixin, GridMeshMixin, StackMeshMixin, pv.Plotter):

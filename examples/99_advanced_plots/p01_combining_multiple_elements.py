@@ -10,12 +10,14 @@ illustrating how :class:`~pyvisual.core.mixins.GridMeshMixin` and
 single :class:`~pyvisual.core.plot3d.Plot3d` scene.
 """
 
+from __future__ import annotations
+
 import numpy as np
 from mapflpy.tracer import Tracer
-
-from pyvisual import Plot3d
 from psi_data import fetch_mas_data, fetch_mas_quantities
 from psi_io import read_hdf_data
+
+from pyvisual import Plot3d
 
 data_files = fetch_mas_data(domains="cor", variables=["br", "bt", "bp"])
 chmap_files = fetch_mas_quantities(quantities="ch_pm")

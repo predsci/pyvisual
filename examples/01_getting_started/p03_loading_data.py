@@ -18,9 +18,12 @@ HMI-driven MAS standard run for Carrington Rotation 2309
 (CR 2309), covering the coronal domain :math:`r \in [1,\,30]\,R_\odot`.
 """
 
-from psi_io import read_hdf_by_index
-from pyvisual import Plot3d
+from __future__ import annotations
+
 from psi_data import fetch_mas_data
+from psi_io import read_hdf_by_index
+
+from pyvisual import Plot3d
 
 # %%
 # Fetching a Dataset

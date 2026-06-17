@@ -12,7 +12,10 @@ active scalar.  The coordinate arrays are never modified — only the data
 changes.
 """
 
+from __future__ import annotations
+
 import numpy as np
+
 from pyvisual import Plot3d
 from pyvisual.core.mesh3d import CartesianMesh
 

@@ -14,7 +14,10 @@ Cartesian coordinates for rendering.  Multiple isovalues can be passed as an
 array.
 """
 
+from __future__ import annotations
+
 import numpy as np
+
 from pyvisual import Plot3d
 
 # %%
@@ -70,8 +73,8 @@ plotter.show()
 # steady-state Thermodynamic MAS coronal model, we can load in the data
 # using :func:`~psi_io.psi_io.read_hdf_data`.
 
-from psi_io import read_hdf_data
 from psi_data import fetch_mas_data
+from psi_io import read_hdf_data
 
 br_file = fetch_mas_data(domains="cor", variables="br").cor_br
 br, r, t, p = read_hdf_data(br_file)

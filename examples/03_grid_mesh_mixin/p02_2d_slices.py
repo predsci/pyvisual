@@ -18,9 +18,12 @@ integer index for the pinned dimension to
 remaining two axes.
 """
 
-from psi_io import read_hdf_by_index
-from pyvisual import Plot3d
+from __future__ import annotations
+
 from psi_data import fetch_mas_data
+from psi_io import read_hdf_by_index
+
+from pyvisual import Plot3d
 
 # %%
 # Radial Shell

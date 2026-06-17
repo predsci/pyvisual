@@ -50,10 +50,13 @@ See Also
     Mesh classes and polydata builder functions.
 """
 
+from __future__ import annotations
+
 import os
 import warnings
 
 import pyvista as pv
+
 from pyvisual.utils.helpers import fetch_theme
 
 # Load the global theme for PyVista

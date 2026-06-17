@@ -7,6 +7,8 @@ These :class:`~pyvista.PolyData` objects can be used as reference lines for the 
 a visual aid to indicate the orientation of the scene.
 """
 
+from __future__ import annotations
+
 from pyvisual import Plot3d
 
 # %%

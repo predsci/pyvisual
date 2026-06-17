@@ -28,8 +28,9 @@ flags that depend on the geometry type (points, splines, slices):
 - :data:`RANDOM_COLORING_DEFAULTS` — random per-fieldline hue assignment.
 """
 
-from types import MappingProxyType
+from __future__ import annotations
 
+from types import MappingProxyType
 
 FL_STATE_ANNOTATIONS = MappingProxyType(
 	{-1.5: "Open (Br-)", -0.75: "Closed", 0: "Error", 0.75: "Disconnect", 1.5: "Open (Br+)"}

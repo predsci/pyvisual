@@ -26,11 +26,14 @@ general introduction to fieldline rendering, and
 broader scene that layers slices, contours, and fieldlines.
 """
 
+from __future__ import annotations
+
 import numpy as np
 from mapflpy.scripts import run_fwdbwd_tracing
+from psi_data import fetch_mas_data
+
 from pyvisual import Plot3d
 from pyvisual.core.mesh3d import SphericalMesh
-from psi_data import fetch_mas_data
 
 # %%
 # Load Data and Extract the Polarity Inversion Line

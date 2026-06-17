@@ -14,7 +14,10 @@ most strongly to an observer's signal when that electron lies on or near this
 sphere.
 """
 
+from __future__ import annotations
+
 from math import pi
+
 from pyvisual import Plot3d
 
 # %%

@@ -10,7 +10,10 @@ rendering individual points, point clouds, single polyline paths, and bundles
 of splines from spherical coordinate arrays.
 """
 
+from __future__ import annotations
+
 import numpy as np
+
 from pyvisual import Plot3d
 
 # %%

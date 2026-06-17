@@ -20,11 +20,14 @@ spherical grids.
 with ``*`` feeds the three coordinate arrays directly into ``add_fieldlines``.
 """
 
+from __future__ import annotations
+
 import numpy as np
 from mapflpy.scripts import run_forward_tracing, run_fwdbwd_tracing
 from mapflpy.utils import get_fieldline_polarity
-from pyvisual import Plot3d
 from psi_data import fetch_mas_data
+
+from pyvisual import Plot3d
 
 # %%
 # Random Coloring

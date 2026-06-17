@@ -8,7 +8,10 @@ coordinate points using one of three reconstruction strategies:
 ``'delaunay_2d'``, ``'delaunay_3d'``, or ``'reconstruct_surface'``.
 """
 
+from __future__ import annotations
+
 import numpy as np
+
 from pyvisual import Plot3d
 
 # %%

@@ -31,12 +31,15 @@ keeps the scene from accumulating unbounded trace bundles.
       Layering slices, contours, and fieldlines in a single coronal scene.
 """
 
+from __future__ import annotations
+
+import numpy as np
 import pyvista as pv
-from pyvisual import Plot3d, SphericalMesh
+from mapflpy.tracer import Tracer
 from psi_data import fetch_mas_data
 from psi_io import np_interpolate_slice_from_hdf
-from mapflpy.tracer import Tracer
-import numpy as np
+
+from pyvisual import Plot3d, SphericalMesh
 
 # %%
 # Load Data

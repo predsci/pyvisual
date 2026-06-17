@@ -43,14 +43,20 @@ from __future__ import annotations
 
 import os
 import warnings
-from abc import ABC, abstractmethod
-from collections.abc import Iterable
-from functools import singledispatchmethod, reduce, wraps
+from abc import (
+	ABC,
+	abstractmethod,
+)
+from collections.abc import Callable, Iterable
+from functools import (
+	reduce,
+	singledispatchmethod,
+	wraps,
+)
 from itertools import pairwise
 from numbers import Number
 from pathlib import Path
-from typing import Optional, ClassVar
-from collections.abc import Callable
+from typing import ClassVar
 
 import numpy as np
 import pyvista as pv
@@ -58,21 +64,27 @@ from numpy._typing import ArrayLike
 from psi_io import read_hdf_by_index
 from scipy.interpolate import RegularGridInterpolator
 
-from pyvisual.core._typing import SurfaceReconstructionType, MeshFramesType
-from pyvisual.core.constants import FRAME_SCALES, FRAME_ALIASES
+from pyvisual.core._typing import (
+	MeshFramesType,
+	SurfaceReconstructionType,
+)
+from pyvisual.core.constants import (
+	FRAME_ALIASES,
+	FRAME_SCALES,
+)
 from pyvisual.core.parsers import (
-	parse_grid_mesh,
-	parse_data,
-	generate_transforms,
-	fetch_canonical_frame,
 	_normalize_frame,
 	apply_mesh_transform,
+	fetch_canonical_frame,
+	generate_transforms,
+	parse_data,
+	parse_grid_mesh,
 )
 from pyvisual.utils.geometry import (
-	moveaxis_to_start,
-	ij_meshgrid,
-	spherical_to_cartesian,
 	cartesian_to_spherical,
+	ij_meshgrid,
+	moveaxis_to_start,
+	spherical_to_cartesian,
 )
 from pyvisual.utils.helpers import atleast_1dnull
 

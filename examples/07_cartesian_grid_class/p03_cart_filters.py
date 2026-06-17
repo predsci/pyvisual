@@ -28,9 +28,12 @@ See also :ref:`sphx_glr_gallery_06_spherical_grid_class_p03_filters.py` for the
 spherical-mesh equivalent of this example.
 """
 
+from __future__ import annotations
+
+from psi_data import fetch_mas_data
+
 from pyvisual import Plot3d
 from pyvisual.core.mesh3d import CartesianMesh, SphericalMesh
-from psi_data import fetch_mas_data
 
 br_file = fetch_mas_data(domains="cor", variables="br").cor_br
 

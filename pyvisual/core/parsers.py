@@ -45,11 +45,9 @@ See Also
 from __future__ import annotations
 
 from collections.abc import Callable
-from functools import reduce
-from functools import wraps
+from functools import reduce, wraps
 from math import prod
 from typing import Literal
-from typing import Optional
 
 import numpy as np
 import pyvista as pv
@@ -57,10 +55,12 @@ from pyvista import algorithm_to_mesh_handler
 
 from pyvisual.core._typing import PlottableType
 from pyvisual.core.constants import FRAME_ALIASES
-from pyvisual.utils.geometry import cartesian_to_spherical
-from pyvisual.utils.geometry import ij_meshgrid
-from pyvisual.utils.geometry import moveaxis_to_start
-from pyvisual.utils.geometry import spherical_to_cartesian
+from pyvisual.utils.geometry import (
+	cartesian_to_spherical,
+	ij_meshgrid,
+	moveaxis_to_start,
+	spherical_to_cartesian,
+)
 from pyvisual.utils.helpers import atleast_1dnull
 
 _FRAME_TRANSFORM_MAPPING = {
@@ -396,10 +396,11 @@ def parse_stack_mesh(
 	"""
 	if r.shape == t.shape == p.shape:
 		return r, t, p
-	raise ValueError(
+	msg = (
 		f"All scales must be ND (with identical shapes), "
 		f"got r: shape={r.shape}, t: shape={t.shape}, p: shape={p.shape}."
 	)
+	raise ValueError(msg)
 
 
 def parse_grid_mesh(
@@ -436,7 +437,7 @@ def parse_grid_mesh(
 	"""
 	if 1 == r.ndim == t.ndim == p.ndim:
 		return ij_meshgrid(r, t, p)
-	elif 3 == r.ndim and r.shape == t.shape == p.shape:
+	if r.ndim == 3 and r.shape == t.shape == p.shape:
 		return r, t, p
 	msg = (
 		f"All scales must be 1D (with arbitrary lengths), or 3D (with identical shapes), "

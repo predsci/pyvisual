@@ -41,11 +41,11 @@ from __future__ import annotations
 from functools import partial
 from typing import Optional
 
-import numpy as np
-import astropy.time as astro_time
 import astropy.coordinates as astro_coord
-import sunpy.coordinates as sun_coord
+import astropy.time as astro_time
 import astropy.units as u
+import numpy as np
+import sunpy.coordinates as sun_coord
 from astropy.table import QTable
 from numpy.typing import ArrayLike
 
@@ -224,64 +224,64 @@ def spherical_to_cartesian(
 ) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
 	r"""Convert spherical :math:`(r, \theta, \phi)` coordinates to Cartesian :math:`(x, y, z)`.
 
-    Inverse of :func:`cartesian_to_spherical`, using the same physics/colatitude
-    convention: :math:`\theta` is colatitude from :math:`+z` and :math:`\phi`
-    is azimuth from :math:`+x` toward :math:`+y`.
+	Inverse of :func:`cartesian_to_spherical`, using the same physics/colatitude
+	convention: :math:`\theta` is colatitude from :math:`+z` and :math:`\phi`
+	is azimuth from :math:`+x` toward :math:`+y`.
 
-    Parameters
-    ----------
-    r : ArrayLike
-        Radial distance :math:`r \geq 0`. Broadcast together with ``t`` and
-        ``p`` following NumPy broadcasting rules.
-    t : ArrayLike
-        Colatitude :math:`\theta \in [0, \pi]`.
-    p : ArrayLike
-        Longitude :math:`\phi \in [0, 2\pi)`.
+	Parameters
+	----------
+	r : ArrayLike
+	    Radial distance :math:`r \geq 0`. Broadcast together with ``t`` and
+	    ``p`` following NumPy broadcasting rules.
+	t : ArrayLike
+	    Colatitude :math:`\theta \in [0, \pi]`.
+	p : ArrayLike
+	    Longitude :math:`\phi \in [0, 2\pi)`.
 
-    Returns
-    -------
-    x : np.ndarray
-        :math:`x = r \sin\theta \cos\phi`.
-    y : np.ndarray
-        :math:`y = r \sin\theta \sin\phi`.
-    z : np.ndarray
-        :math:`z = r \cos\theta`.
+	Returns
+	-------
+	x : np.ndarray
+	    :math:`x = r \sin\theta \cos\phi`.
+	y : np.ndarray
+	    :math:`y = r \sin\theta \sin\phi`.
+	z : np.ndarray
+	    :math:`z = r \cos\theta`.
 
-    Notes
-    -----
-    The full transformation is:
+	Notes
+	-----
+	The full transformation is:
 
-    .. math::
+	.. math::
 
-       \begin{pmatrix} x \\ y \\ z \end{pmatrix}
-       =
-       r \begin{pmatrix}
-           \sin\theta\cos\phi \\
+	   \begin{pmatrix} x \\ y \\ z \end{pmatrix}
+	   =
+	   r \begin{pmatrix}
+	       \sin\theta\cos\phi \\
            \sin\theta\sin\phi \\
            \cos\theta
-       \end{pmatrix}
+	   \end{pmatrix}
 
-    See Also
-    --------
-    :func:`cartesian_to_spherical` : Inverse transform.
-    :func:`spherical_to_cartesian_vec` : Equivalent rotation for vector components.
+	See Also
+	--------
+	:func:`cartesian_to_spherical` : Inverse transform.
+	:func:`spherical_to_cartesian_vec` : Equivalent rotation for vector components.
 
-    Examples
-    --------
-    A point at :math:`(r, \theta, \phi) = (1, \pi/2, \pi/2)` lies on the
-    :math:`+y` axis:
+	Examples
+	--------
+	A point at :math:`(r, \theta, \phi) = (1, \pi/2, \pi/2)` lies on the
+	:math:`+y` axis:
 
-    >>> import numpy as np
-    >>> x, y, z = spherical_to_cartesian(1.0, np.pi / 2, np.pi / 2)
-    >>> float(x), float(y), float(z)
-    (0.0, 1.0, 0.0)
+	>>> import numpy as np
+	>>> x, y, z = spherical_to_cartesian(1.0, np.pi / 2, np.pi / 2)
+	>>> float(x), float(y), float(z)
+	(0.0, 1.0, 0.0)
 
-    Solar north (:math:`\theta = 0`) always maps to the :math:`+z` axis:
+	Solar north (:math:`\theta = 0`) always maps to the :math:`+z` axis:
 
-    >>> x, y, z = spherical_to_cartesian(3.0, 0.0, 0.0)
-    >>> float(x), float(y), float(z)
-    (0.0, 0.0, 3.0)
-    """
+	>>> x, y, z = spherical_to_cartesian(3.0, 0.0, 0.0)
+	>>> float(x), float(y), float(z)
+	(0.0, 0.0, 3.0)
+	"""
 	ct = np.cos(t)
 	st = np.sin(t)
 	cp = np.cos(p)
@@ -297,84 +297,84 @@ def cartesian_to_spherical_vec(
 ) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
 	r"""Rotate vector components from the local spherical basis to the Cartesian basis.
 
-    Given a vector expressed in the local orthonormal spherical basis
-    :math:`(\hat{e}_r, \hat{e}_\theta, \hat{e}_\phi)` at angular position
-    :math:`(\theta, \phi)`, returns the equivalent components in the global
-    Cartesian basis :math:`(\hat{x}, \hat{y}, \hat{z})`.
+	Given a vector expressed in the local orthonormal spherical basis
+	:math:`(\hat{e}_r, \hat{e}_\theta, \hat{e}_\phi)` at angular position
+	:math:`(\theta, \phi)`, returns the equivalent components in the global
+	Cartesian basis :math:`(\hat{x}, \hat{y}, \hat{z})`.
 
-    The spherical basis vectors follow the PSI/physics colatitude convention:
+	The spherical basis vectors follow the PSI/physics colatitude convention:
 
-    - :math:`\hat{e}_r` — radial outward.
-    - :math:`\hat{e}_\theta` — in the direction of increasing :math:`\theta`
-      (pointing toward :math:`-z` near the north pole).
-    - :math:`\hat{e}_\phi` — in the direction of increasing :math:`\phi`
-      (prograde around :math:`+z`).
+	- :math:`\hat{e}_r` — radial outward.
+	- :math:`\hat{e}_\theta` — in the direction of increasing :math:`\theta`
+	  (pointing toward :math:`-z` near the north pole).
+	- :math:`\hat{e}_\phi` — in the direction of increasing :math:`\phi`
+	  (prograde around :math:`+z`).
 
-    Parameters
-    ----------
-    vr : ArrayLike
-        Radial component :math:`v_r` in the spherical basis. Broadcast together
-        with all other inputs following NumPy broadcasting rules.
-    vt : ArrayLike
-        Colatitudinal component :math:`v_\theta` in the spherical basis.
-    vp : ArrayLike
-        Azimuthal component :math:`v_\phi` in the spherical basis.
-    t : ArrayLike
-        Colatitude :math:`\theta` of the evaluation point(s), in :math:`[0, \pi]`.
-    p : ArrayLike
-        Longitude :math:`\phi` of the evaluation point(s), in :math:`[0, 2\pi)`.
+	Parameters
+	----------
+	vr : ArrayLike
+	    Radial component :math:`v_r` in the spherical basis. Broadcast together
+	    with all other inputs following NumPy broadcasting rules.
+	vt : ArrayLike
+	    Colatitudinal component :math:`v_\theta` in the spherical basis.
+	vp : ArrayLike
+	    Azimuthal component :math:`v_\phi` in the spherical basis.
+	t : ArrayLike
+	    Colatitude :math:`\theta` of the evaluation point(s), in :math:`[0, \pi]`.
+	p : ArrayLike
+	    Longitude :math:`\phi` of the evaluation point(s), in :math:`[0, 2\pi)`.
 
-    Returns
-    -------
-    vx : np.ndarray
-        :math:`x`-component in the Cartesian basis.
-    vy : np.ndarray
-        :math:`y`-component in the Cartesian basis.
-    vz : np.ndarray
-        :math:`z`-component in the Cartesian basis.
+	Returns
+	-------
+	vx : np.ndarray
+	    :math:`x`-component in the Cartesian basis.
+	vy : np.ndarray
+	    :math:`y`-component in the Cartesian basis.
+	vz : np.ndarray
+	    :math:`z`-component in the Cartesian basis.
 
-    Notes
-    -----
-    The rotation is the transpose (inverse) of the Jacobian of
-    :func:`spherical_to_cartesian` evaluated at :math:`(\theta, \phi)`:
+	Notes
+	-----
+	The rotation is the transpose (inverse) of the Jacobian of
+	:func:`spherical_to_cartesian` evaluated at :math:`(\theta, \phi)`:
 
-    .. math::
+	.. math::
 
-       \begin{pmatrix} v_x \\ v_y \\ v_z \end{pmatrix}
-       =
-       \begin{pmatrix}
-           \sin\theta\cos\phi & \cos\theta\cos\phi & -\sin\phi \\
+	   \begin{pmatrix} v_x \\ v_y \\ v_z \end{pmatrix}
+	   =
+	   \begin{pmatrix}
+	       \sin\theta\cos\phi & \cos\theta\cos\phi & -\sin\phi \\
            \sin\theta\sin\phi & \cos\theta\sin\phi &  \cos\phi \\
            \cos\theta          & -\sin\theta          &  0
-       \end{pmatrix}
-       \begin{pmatrix} v_r \\ v_\theta \\ v_\phi \end{pmatrix}
+	   \end{pmatrix}
+	   \begin{pmatrix} v_r \\ v_\theta \\ v_\phi \end{pmatrix}
 
-    Inputs are assumed to be orthonormal spherical-basis components, not
-    covariant or contravariant coordinate-basis components.
+	Inputs are assumed to be orthonormal spherical-basis components, not
+	covariant or contravariant coordinate-basis components.
 
-    See Also
-    --------
-    :func:`spherical_to_cartesian_vec` : Inverse rotation (Cartesian → spherical basis).
-    :func:`cartesian_to_spherical` : Scalar coordinate transform.
-    :func:`spherical_to_cartesian` : Inverse scalar coordinate transform.
+	See Also
+	--------
+	:func:`spherical_to_cartesian_vec` : Inverse rotation (Cartesian → spherical basis).
+	:func:`cartesian_to_spherical` : Scalar coordinate transform.
+	:func:`spherical_to_cartesian` : Inverse scalar coordinate transform.
 
-    Examples
-    --------
-    A purely azimuthal unit vector :math:`\hat{e}_\phi` at
-    :math:`\theta = \pi/2,\, \phi = 0` points along :math:`+y`:
+	Examples
+	--------
+	A purely azimuthal unit vector :math:`\hat{e}_\phi` at
+	:math:`\theta = \pi/2,\, \phi = 0` points along :math:`+y`:
 
-    >>> import numpy as np
-    >>> vx, vy, vz = cartesian_to_spherical_vec(0.0, 0.0, 1.0, t=np.pi / 2, p=0.0)
-    >>> float(vx), float(vy), float(vz)
-    (0.0, 1.0, 0.0)
+	>>> import numpy as np
+	>>> vx, vy, vz = cartesian_to_spherical_vec(0.0, 0.0, 1.0, t=np.pi / 2, p=0.0)
+	>>> float(vx), float(vy), float(vz)
+	(0.0, 1.0, 0.0)
 
-    A purely radial unit vector :math:`\hat{e}_r` at the same location points
-    along :math:`+x`:
+	A purely radial unit vector :math:`\hat{e}_r` at the same location points
+	along :math:`+x`:
 
-    >>> vx, vy, vz = cartesian_to_spherical_vec(1.0, 0.0, 0.0, t=np.pi / 2, p=0.0)
-    >>> float(vx), float(vy), float(vz)
-    (1.0, 0.0, 0.0)
-    """
+	>>> vx, vy, vz = cartesian_to_spherical_vec(1.0, 0.0, 0.0, t=np.pi / 2, p=0.0)
+	>>> float(vx), float(vy), float(vz)
+	(1.0, 0.0, 0.0)
+	"""
 	st = np.sin(t)
 	ct = np.cos(t)
 	sp = np.sin(p)
@@ -393,83 +393,83 @@ def spherical_to_cartesian_vec(
 ) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
 	r"""Rotate vector components from the Cartesian basis to the local spherical basis.
 
-    Given a vector expressed in the global Cartesian basis
-    :math:`(\hat{x}, \hat{y}, \hat{z})` at angular position
-    :math:`(\theta, \phi)`, returns the equivalent components in the local
-    orthonormal spherical basis
-    :math:`(\hat{e}_r, \hat{e}_\theta, \hat{e}_\phi)`.
+	Given a vector expressed in the global Cartesian basis
+	:math:`(\hat{x}, \hat{y}, \hat{z})` at angular position
+	:math:`(\theta, \phi)`, returns the equivalent components in the local
+	orthonormal spherical basis
+	:math:`(\hat{e}_r, \hat{e}_\theta, \hat{e}_\phi)`.
 
-    The spherical basis vectors follow the PSI/physics colatitude convention:
+	The spherical basis vectors follow the PSI/physics colatitude convention:
 
-    - :math:`\hat{e}_r` — radial outward.
-    - :math:`\hat{e}_\theta` — in the direction of increasing :math:`\theta`.
-    - :math:`\hat{e}_\phi` — in the direction of increasing :math:`\phi`
-      (prograde around :math:`+z`).
+	- :math:`\hat{e}_r` — radial outward.
+	- :math:`\hat{e}_\theta` — in the direction of increasing :math:`\theta`.
+	- :math:`\hat{e}_\phi` — in the direction of increasing :math:`\phi`
+	  (prograde around :math:`+z`).
 
-    Parameters
-    ----------
-    vx : ArrayLike
-        :math:`x`-component in the Cartesian basis. Broadcast together with all
-        other inputs following NumPy broadcasting rules.
-    vy : ArrayLike
-        :math:`y`-component in the Cartesian basis.
-    vz : ArrayLike
-        :math:`z`-component in the Cartesian basis.
-    t : ArrayLike
-        Colatitude :math:`\theta` of the evaluation point(s), in :math:`[0, \pi]`.
-    p : ArrayLike
-        Longitude :math:`\phi` of the evaluation point(s), in :math:`[0, 2\pi)`.
+	Parameters
+	----------
+	vx : ArrayLike
+	    :math:`x`-component in the Cartesian basis. Broadcast together with all
+	    other inputs following NumPy broadcasting rules.
+	vy : ArrayLike
+	    :math:`y`-component in the Cartesian basis.
+	vz : ArrayLike
+	    :math:`z`-component in the Cartesian basis.
+	t : ArrayLike
+	    Colatitude :math:`\theta` of the evaluation point(s), in :math:`[0, \pi]`.
+	p : ArrayLike
+	    Longitude :math:`\phi` of the evaluation point(s), in :math:`[0, 2\pi)`.
 
-    Returns
-    -------
-    vr : np.ndarray
-        Radial component :math:`v_r` in the spherical basis.
-    vt : np.ndarray
-        Colatitudinal component :math:`v_\theta` in the spherical basis.
-    vp : np.ndarray
-        Azimuthal component :math:`v_\phi` in the spherical basis.
+	Returns
+	-------
+	vr : np.ndarray
+	    Radial component :math:`v_r` in the spherical basis.
+	vt : np.ndarray
+	    Colatitudinal component :math:`v_\theta` in the spherical basis.
+	vp : np.ndarray
+	    Azimuthal component :math:`v_\phi` in the spherical basis.
 
-    Notes
-    -----
-    The rotation is the inverse (transpose) of the matrix in
-    :func:`cartesian_to_spherical_vec`:
+	Notes
+	-----
+	The rotation is the inverse (transpose) of the matrix in
+	:func:`cartesian_to_spherical_vec`:
 
-    .. math::
+	.. math::
 
-       \begin{pmatrix} v_r \\ v_\theta \\ v_\phi \end{pmatrix}
-       =
-       \begin{pmatrix}
-           \sin\theta\cos\phi & \sin\theta\sin\phi &  \cos\theta \\
+	   \begin{pmatrix} v_r \\ v_\theta \\ v_\phi \end{pmatrix}
+	   =
+	   \begin{pmatrix}
+	       \sin\theta\cos\phi & \sin\theta\sin\phi &  \cos\theta \\
            \cos\theta\cos\phi & \cos\theta\sin\phi & -\sin\theta \\
            -\sin\phi           & \cos\phi             &  0
-       \end{pmatrix}
-       \begin{pmatrix} v_x \\ v_y \\ v_z \end{pmatrix}
+	   \end{pmatrix}
+	   \begin{pmatrix} v_x \\ v_y \\ v_z \end{pmatrix}
 
-    Inputs are assumed to be orthonormal spherical-basis components, not
-    covariant or contravariant coordinate-basis components.
+	Inputs are assumed to be orthonormal spherical-basis components, not
+	covariant or contravariant coordinate-basis components.
 
-    See Also
-    --------
-    :func:`cartesian_to_spherical_vec` : Inverse rotation (spherical → Cartesian basis).
-    :func:`spherical_to_cartesian` : Inverse scalar coordinate transform.
-    :func:`cartesian_to_spherical` : Scalar coordinate transform.
+	See Also
+	--------
+	:func:`cartesian_to_spherical_vec` : Inverse rotation (spherical → Cartesian basis).
+	:func:`spherical_to_cartesian` : Inverse scalar coordinate transform.
+	:func:`cartesian_to_spherical` : Scalar coordinate transform.
 
-    Examples
-    --------
-    A :math:`+z` unit vector at the north pole (:math:`\theta = 0`) is purely radial:
+	Examples
+	--------
+	A :math:`+z` unit vector at the north pole (:math:`\theta = 0`) is purely radial:
 
-    >>> vr, vt, vp = spherical_to_cartesian_vec(0.0, 0.0, 1.0, t=0.0, p=0.0)
-    >>> float(vr), float(vt), float(vp)
-    (1.0, 0.0, 0.0)
+	>>> vr, vt, vp = spherical_to_cartesian_vec(0.0, 0.0, 1.0, t=0.0, p=0.0)
+	>>> float(vr), float(vt), float(vp)
+	(1.0, 0.0, 0.0)
 
-    A :math:`+y` unit vector at :math:`\theta = \pi/2,\, \phi = 0` is purely
-    azimuthal :math:`(\hat{e}_\phi)`:
+	A :math:`+y` unit vector at :math:`\theta = \pi/2,\, \phi = 0` is purely
+	azimuthal :math:`(\hat{e}_\phi)`:
 
-    >>> import numpy as np
-    >>> vr, vt, vp = spherical_to_cartesian_vec(0.0, 1.0, 0.0, t=np.pi / 2, p=0.0)
-    >>> float(vr), float(vt), float(vp)
-    (0.0, 0.0, 1.0)
-    """
+	>>> import numpy as np
+	>>> vr, vt, vp = spherical_to_cartesian_vec(0.0, 1.0, 0.0, t=np.pi / 2, p=0.0)
+	>>> float(vr), float(vt), float(vp)
+	(0.0, 0.0, 1.0)
+	"""
 	st = np.sin(t)
 	ct = np.cos(t)
 	sp = np.sin(p)
@@ -491,60 +491,60 @@ def rotate_position_about_x(
 ) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
 	r"""Rotate Cartesian position vectors about the :math:`+x` axis.
 
-    Applies a right-handed rotation by ``angle`` degrees about :math:`+x`
-    to the input coordinates.
+	Applies a right-handed rotation by ``angle`` degrees about :math:`+x`
+	to the input coordinates.
 
-    Parameters
-    ----------
-    x : ArrayLike
-        :math:`x`-coordinate. Unchanged by this rotation. Broadcast together
-        with ``y`` and ``z`` following NumPy broadcasting rules.
-    y : ArrayLike
-        :math:`y`-coordinate.
-    z : ArrayLike
-        :math:`z`-coordinate.
-    angle : float
-        Rotation angle in **degrees**. Positive values follow the right-hand
-        rule about :math:`+x`.
+	Parameters
+	----------
+	x : ArrayLike
+	    :math:`x`-coordinate. Unchanged by this rotation. Broadcast together
+	    with ``y`` and ``z`` following NumPy broadcasting rules.
+	y : ArrayLike
+	    :math:`y`-coordinate.
+	z : ArrayLike
+	    :math:`z`-coordinate.
+	angle : float
+	    Rotation angle in **degrees**. Positive values follow the right-hand
+	    rule about :math:`+x`.
 
-    Returns
-    -------
-    xout : np.ndarray
-        :math:`x`-coordinate after rotation (copy of ``x``).
-    yout : np.ndarray
-        :math:`y`-coordinate after rotation.
-    zout : np.ndarray
-        :math:`z`-coordinate after rotation.
+	Returns
+	-------
+	xout : np.ndarray
+	    :math:`x`-coordinate after rotation (copy of ``x``).
+	yout : np.ndarray
+	    :math:`y`-coordinate after rotation.
+	zout : np.ndarray
+	    :math:`z`-coordinate after rotation.
 
-    Notes
-    -----
-    The rotation matrix about :math:`+x` by angle :math:`\alpha` is:
+	Notes
+	-----
+	The rotation matrix about :math:`+x` by angle :math:`\alpha` is:
 
-    .. math::
+	.. math::
 
-       \begin{pmatrix} x' \\ y' \\ z' \end{pmatrix}
-       =
-       \begin{pmatrix}
-           1 & 0            &  0           \\
+	   \begin{pmatrix} x' \\ y' \\ z' \end{pmatrix}
+	   =
+	   \begin{pmatrix}
+	       1 & 0            &  0           \\
            0 & \cos\alpha & -\sin\alpha \\
            0 & \sin\alpha &  \cos\alpha
-       \end{pmatrix}
-       \begin{pmatrix} x \\ y \\ z \end{pmatrix}
+	   \end{pmatrix}
+	   \begin{pmatrix} x \\ y \\ z \end{pmatrix}
 
-    See Also
-    --------
-    :func:`rotate_position_about_y` : Rotation about the :math:`+y` axis.
-    :func:`rotate_position_about_z` : Rotation about the :math:`+z` axis.
+	See Also
+	--------
+	:func:`rotate_position_about_y` : Rotation about the :math:`+y` axis.
+	:func:`rotate_position_about_z` : Rotation about the :math:`+z` axis.
 
-    Examples
-    --------
-    Rotate :math:`(0, 1, 0)` by :math:`+90°` about :math:`+x` to point along
-    :math:`+z`:
+	Examples
+	--------
+	Rotate :math:`(0, 1, 0)` by :math:`+90°` about :math:`+x` to point along
+	:math:`+z`:
 
-    >>> x2, y2, z2 = rotate_position_about_x(0.0, 1.0, 0.0, 90.0)
-    >>> float(x2), float(y2), float(z2)
-    (0.0, 0.0, 1.0)
-    """
+	>>> x2, y2, z2 = rotate_position_about_x(0.0, 1.0, 0.0, 90.0)
+	>>> float(x2), float(y2), float(z2)
+	(0.0, 0.0, 1.0)
+	"""
 	rad = np.deg2rad(angle)
 
 	s = np.sin(rad)
@@ -565,60 +565,60 @@ def rotate_position_about_y(
 ) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
 	r"""Rotate Cartesian position vectors about the :math:`+y` axis.
 
-    Applies a right-handed rotation by ``angle`` degrees about :math:`+y`
-    to the input coordinates.
+	Applies a right-handed rotation by ``angle`` degrees about :math:`+y`
+	to the input coordinates.
 
-    Parameters
-    ----------
-    x : ArrayLike
-        :math:`x`-coordinate. Broadcast together with ``y`` and ``z`` following
-        NumPy broadcasting rules.
-    y : ArrayLike
-        :math:`y`-coordinate. Unchanged by this rotation.
-    z : ArrayLike
-        :math:`z`-coordinate.
-    angle : float
-        Rotation angle in **degrees**. Positive values follow the right-hand
-        rule about :math:`+y`.
+	Parameters
+	----------
+	x : ArrayLike
+	    :math:`x`-coordinate. Broadcast together with ``y`` and ``z`` following
+	    NumPy broadcasting rules.
+	y : ArrayLike
+	    :math:`y`-coordinate. Unchanged by this rotation.
+	z : ArrayLike
+	    :math:`z`-coordinate.
+	angle : float
+	    Rotation angle in **degrees**. Positive values follow the right-hand
+	    rule about :math:`+y`.
 
-    Returns
-    -------
-    xout : np.ndarray
-        :math:`x`-coordinate after rotation.
-    yout : np.ndarray
-        :math:`y`-coordinate after rotation (copy of ``y``).
-    zout : np.ndarray
-        :math:`z`-coordinate after rotation.
+	Returns
+	-------
+	xout : np.ndarray
+	    :math:`x`-coordinate after rotation.
+	yout : np.ndarray
+	    :math:`y`-coordinate after rotation (copy of ``y``).
+	zout : np.ndarray
+	    :math:`z`-coordinate after rotation.
 
-    Notes
-    -----
-    The rotation matrix about :math:`+y` by angle :math:`\alpha` is:
+	Notes
+	-----
+	The rotation matrix about :math:`+y` by angle :math:`\alpha` is:
 
-    .. math::
+	.. math::
 
-       \begin{pmatrix} x' \\ y' \\ z' \end{pmatrix}
-       =
-       \begin{pmatrix}
-            \cos\alpha & 0 & \sin\alpha \\
+	   \begin{pmatrix} x' \\ y' \\ z' \end{pmatrix}
+	   =
+	   \begin{pmatrix}
+	        \cos\alpha & 0 & \sin\alpha \\
             0            & 1 & 0            \\
            -\sin\alpha & 0 & \cos\alpha
-       \end{pmatrix}
-       \begin{pmatrix} x \\ y \\ z \end{pmatrix}
+	   \end{pmatrix}
+	   \begin{pmatrix} x \\ y \\ z \end{pmatrix}
 
-    See Also
-    --------
-    :func:`rotate_position_about_x` : Rotation about the :math:`+x` axis.
-    :func:`rotate_position_about_z` : Rotation about the :math:`+z` axis.
+	See Also
+	--------
+	:func:`rotate_position_about_x` : Rotation about the :math:`+x` axis.
+	:func:`rotate_position_about_z` : Rotation about the :math:`+z` axis.
 
-    Examples
-    --------
-    Rotate :math:`(1, 0, 0)` by :math:`+90°` about :math:`+y` to point along
-    :math:`-z`:
+	Examples
+	--------
+	Rotate :math:`(1, 0, 0)` by :math:`+90°` about :math:`+y` to point along
+	:math:`-z`:
 
-    >>> x2, y2, z2 = rotate_position_about_y(1.0, 0.0, 0.0, 90.0)
-    >>> float(x2), float(y2), float(z2)
-    (0.0, 0.0, -1.0)
-    """
+	>>> x2, y2, z2 = rotate_position_about_y(1.0, 0.0, 0.0, 90.0)
+	>>> float(x2), float(y2), float(z2)
+	(0.0, 0.0, -1.0)
+	"""
 	rad = np.deg2rad(angle)
 
 	s = np.sin(rad)
@@ -639,60 +639,60 @@ def rotate_position_about_z(
 ) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
 	r"""Rotate Cartesian position vectors about the :math:`+z` axis.
 
-    Applies a right-handed rotation by ``angle`` degrees about :math:`+z`
-    (solar north) to the input coordinates.
+	Applies a right-handed rotation by ``angle`` degrees about :math:`+z`
+	(solar north) to the input coordinates.
 
-    Parameters
-    ----------
-    x : ArrayLike
-        :math:`x`-coordinate. Broadcast together with ``y`` and ``z`` following
-        NumPy broadcasting rules.
-    y : ArrayLike
-        :math:`y`-coordinate.
-    z : ArrayLike
-        :math:`z`-coordinate. Unchanged by this rotation.
-    angle : float
-        Rotation angle in **degrees**. Positive values follow the right-hand
-        rule about :math:`+z`.
+	Parameters
+	----------
+	x : ArrayLike
+		:math:`x`-coordinate. Broadcast together with ``y`` and ``z`` following
+		NumPy broadcasting rules.
+	y : ArrayLike
+		:math:`y`-coordinate.
+	z : ArrayLike
+		:math:`z`-coordinate. Unchanged by this rotation.
+	angle : float
+		Rotation angle in **degrees**. Positive values follow the right-hand
+		rule about :math:`+z`.
 
-    Returns
-    -------
-    xout : np.ndarray
-        :math:`x`-coordinate after rotation.
-    yout : np.ndarray
-        :math:`y`-coordinate after rotation.
-    zout : np.ndarray
-        :math:`z`-coordinate after rotation (copy of ``z``).
+	Returns
+	-------
+	xout : np.ndarray
+		:math:`x`-coordinate after rotation.
+	yout : np.ndarray
+		:math:`y`-coordinate after rotation.
+	zout : np.ndarray
+		:math:`z`-coordinate after rotation (copy of ``z``).
 
-    Notes
-    -----
-    The rotation matrix about :math:`+z` by angle :math:`\alpha` is:
+	Notes
+	-----
+	The rotation matrix about :math:`+z` by angle :math:`\alpha` is:
 
-    .. math::
+	.. math::
 
-       \begin{pmatrix} x' \\ y' \\ z' \end{pmatrix}
-       =
-       \begin{pmatrix}
-           \cos\alpha & -\sin\alpha & 0 \\
-           \sin\alpha &  \cos\alpha & 0 \\
-           0            &  0            & 1
-       \end{pmatrix}
-       \begin{pmatrix} x \\ y \\ z \end{pmatrix}
+	   \begin{pmatrix} x' \\ y' \\ z' \end{pmatrix}
+	   =
+	   \begin{pmatrix}
+		   \cos\alpha & -\sin\alpha & 0 \\
+		   \sin\alpha &  \cos\alpha & 0 \\
+		   0            &  0            & 1
+	   \end{pmatrix}
+	   \begin{pmatrix} x \\ y \\ z \end{pmatrix}
 
-    See Also
-    --------
-    :func:`rotate_position_about_x` : Rotation about the :math:`+x` axis.
-    :func:`rotate_position_about_y` : Rotation about the :math:`+y` axis.
+	See Also
+	--------
+	:func:`rotate_position_about_x` : Rotation about the :math:`+x` axis.
+	:func:`rotate_position_about_y` : Rotation about the :math:`+y` axis.
 
-    Examples
-    --------
-    Rotate :math:`(1, 0, 0)` by :math:`+90°` about :math:`+z` to point along
-    :math:`+y`:
+	Examples
+	--------
+	Rotate :math:`(1, 0, 0)` by :math:`+90°` about :math:`+z` to point along
+	:math:`+y`:
 
-    >>> x2, y2, z2 = rotate_position_about_z(1.0, 0.0, 0.0, 90.0)
-    >>> float(x2), float(y2), float(z2)
-    (0.0, 1.0, 0.0)
-    """
+	>>> x2, y2, z2 = rotate_position_about_z(1.0, 0.0, 0.0, 90.0)
+	>>> float(x2), float(y2), float(z2)
+	(0.0, 1.0, 0.0)
+	"""
 	rad = np.deg2rad(angle)
 
 	s = np.sin(rad)
@@ -989,53 +989,53 @@ def los_rmin2angle(rmin_rs: ArrayLike, d_obs_rs: float) -> np.ndarray | float:
 def los_angle2rmin(angle_deg: ArrayLike, d_obs_rs: float) -> np.ndarray | float:
 	r"""Convert a helioprojective angle to a LOS impact parameter :math:`r_{min}`.
 
-    The inverse of :func:`los_rmin2angle`.  Given the helioprojective
-    elongation angle :math:`\alpha` (the angle between Sun-center and the
-    point of closest approach as seen from the observer), returns the
-    corresponding impact parameter :math:`r_{min}` in :math:`R_\odot`.
+	The inverse of :func:`los_rmin2angle`.  Given the helioprojective
+	elongation angle :math:`\alpha` (the angle between Sun-center and the
+	point of closest approach as seen from the observer), returns the
+	corresponding impact parameter :math:`r_{min}` in :math:`R_\odot`.
 
-    Parameters
-    ----------
-    angle_deg : ArrayLike
-        Helioprojective elongation angle(s) in degrees.  Negative values are
-        supported and propagate their sign to ``rmin_rs`` (useful for 1-D
-        coordinate sweeps).
-    d_obs_rs : float
-        Observer distance from Sun-center in :math:`R_\odot`.
+	Parameters
+	----------
+	angle_deg : ArrayLike
+	    Helioprojective elongation angle(s) in degrees.  Negative values are
+	    supported and propagate their sign to ``rmin_rs`` (useful for 1-D
+	    coordinate sweeps).
+	d_obs_rs : float
+	    Observer distance from Sun-center in :math:`R_\odot`.
 
-    Returns
-    -------
-    rmin_rs : np.ndarray | float
-        Impact parameter(s) in :math:`R_\odot`.  Returns a scalar when
-        ``angle_deg`` is scalar, otherwise an :class:`numpy.ndarray`.
+	Returns
+	-------
+	rmin_rs : np.ndarray | float
+	    Impact parameter(s) in :math:`R_\odot`.  Returns a scalar when
+	    ``angle_deg`` is scalar, otherwise an :class:`numpy.ndarray`.
 
-    Notes
-    -----
-    The forward relation is:
+	Notes
+	-----
+	The forward relation is:
 
-    .. math::
+	.. math::
 
-       r_{min} =
-       \begin{cases}
-           d_{obs} \sin\alpha, & |\alpha| \leq 90° \\
+	   r_{min} =
+	   \begin{cases}
+	       d_{obs} \sin\alpha, & |\alpha| \leq 90° \\
            d_{obs}(2 - \sin\alpha), & |\alpha| > 90°
-       \end{cases}
+	   \end{cases}
 
-    ensuring a smooth, monotone mapping from :math:`0°` to :math:`180°`.
+	ensuring a smooth, monotone mapping from :math:`0°` to :math:`180°`.
 
-    See Also
-    --------
-    :func:`los_rmin2angle` : Inverse — impact parameter to angle.
-    :func:`thompson_sphere` : Uses the same LOS geometry.
+	See Also
+	--------
+	:func:`los_rmin2angle` : Inverse — impact parameter to angle.
+	:func:`thompson_sphere` : Uses the same LOS geometry.
 
-    Examples
-    --------
-    At :math:`\alpha = 90°` the LOS grazes the plane of sky; the impact
-    parameter equals the observer distance:
+	Examples
+	--------
+	At :math:`\alpha = 90°` the LOS grazes the plane of sky; the impact
+	parameter equals the observer distance:
 
-    >>> float(los_angle2rmin(90.0, 215.0))
-    215.0
-    """
+	>>> float(los_angle2rmin(90.0, 215.0))
+	215.0
+	"""
 	# clip the angle to only be within -180 and 180 because of periodicity, then take the abs value
 	angle_deg_clipped = np.abs(clip_angle(angle_deg, max_value=180.0))
 
@@ -1238,9 +1238,7 @@ def query_horizons_ephemeris(
 		columns = [[columns[0]], [columns[1]], [columns[2]], [columns[3]]]
 
 	# now build an astropy table (use q table so values are Quantities with units when accessed)
-	table = QTable(columns, names=names, meta=meta)
-
-	return table
+	return QTable(columns, names=names, meta=meta)
 
 
 def fibonacci_lattice(

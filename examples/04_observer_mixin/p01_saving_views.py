@@ -14,7 +14,10 @@ the line of sight, in degrees).  Combined with
 describes the camera state in a serialisable form.
 """
 
+from __future__ import annotations
+
 import numpy as np
+
 from pyvisual import Plot3d
 
 # %%

@@ -208,9 +208,12 @@ extend-exclude = [
 [tool.ruff.lint]
 explicit-preview-rules = true
 preview = true
+# Reclassify the flake8-errmsg fixes as safe so a plain `ruff check --fix`
+# extracts exception messages into a `msg` variable (per CLAUDE.md) while
+# `unsafe-fixes` stays disabled for everything else.
+extend-safe-fixes = ["EM101", "EM102", "EM103"]
 extend-select = [
   "A",     # flake8-builtins
-  "AIR",   # Airflow
   "ANN",   # flake8-annotations
   "ARG",   # flake8-unused-arguments
   "ASYNC", # flake8-async
@@ -230,7 +233,6 @@ extend-select = [
   "EXE",   # flake8-executable
   "F",     # Pyflakes
   "FA",    # flake8-future-annotations
-  "FBT",   # flake8-boolean-trap
   "FIX",   # flake8-fixme
   "FLY",   # flynt
   "FURB",  # refurb
@@ -267,17 +269,22 @@ extend-select = [
   "YTT",   # flake8-2020
 ]
 ignore = [
-  "B905",
-  "C408",
-  "NPY002",
-  "D205",
-  "D400",
-  "RUF002",
+  "ANN002",
+  "ANN003",
   "COM812",
-  "ISC001",
-  "W191",
   "D206",
+  "D400",
   "E101",
+  "ERA001",
+  "FBT002",
+  "NPY002",
+  "PLR2004",
+  "PLR0912",
+  "PLR0913",
+  "RUF001",
+  "RUF002",
+  "RUF003",
+  "W191",
 ]
 
 
@@ -295,8 +302,10 @@ avoid-escape = true
 [tool.ruff.lint.isort]
 known-first-party = ["pyvisual"]
 combine-as-imports = true
-force-single-line = true
-force-sort-within-sections = true
+# `force-single-line` and `force-sort-within-sections` are left at their
+# defaults (false) so imports use parenthesized multi-line blocks (one name
+# per line, preserved by the magic trailing comma) with plain `import x`
+# statements grouped before `from x import y`.
 required-imports = [
   "from __future__ import annotations",
 ]

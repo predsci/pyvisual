@@ -50,11 +50,14 @@ The downloaded files are consumed in
 
 # sphinx_gallery_thumbnail_path = '_static/psi_logo.png'
 
+from __future__ import annotations
+
 import os
-from pprint import pprint
-from pathlib import Path
-import requests
 from io import BytesIO
+from pathlib import Path
+from pprint import pprint
+
+import requests
 from astropy.table import Table
 
 # %%
@@ -121,7 +124,8 @@ pprint(runs)
 try:
 	run = runs[0]
 except IndexError:
-	raise IndexError("No results found in MAS Run DB for the specified parameters.")
+	msg = "No results found in MAS Run DB for the specified parameters."
+	raise IndexError(msg)
 
 cor_id = run["id"]
 

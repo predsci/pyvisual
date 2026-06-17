@@ -40,18 +40,21 @@ Magnetic connectivity is computed in two ways:
       :meth:`~pyvisual.core.mixins.StackMeshMixin.add_fieldlines`.
 """
 
+from __future__ import annotations
+
 import os
 from contextlib import ExitStack
 from math import pi
 from pathlib import Path
 from zipfile import ZipFile
-from mapflpy.tracer import TracerMP
-from mapflpy.scripts import _inter_domain_tracing
-from mapflpy.utils import combine_and_pad_fieldlines
+
 import astropy.units as u
-from sunpy.sun.constants import sidereal_rotation_rate
-from astropy.table import QTable
 import numpy as np
+from astropy.table import QTable
+from mapflpy.scripts import _inter_domain_tracing
+from mapflpy.tracer import TracerMP
+from mapflpy.utils import combine_and_pad_fieldlines
+from sunpy.sun.constants import sidereal_rotation_rate
 
 from pyvisual import Plot3d, SphericalMesh
 

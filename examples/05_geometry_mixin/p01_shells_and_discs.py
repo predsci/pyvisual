@@ -8,7 +8,10 @@ for adding spherical shells and planar discs to the scene as reference
 geometry.
 """
 
+from __future__ import annotations
+
 from math import pi
+
 from pyvisual import Plot3d
 
 # %%

@@ -27,13 +27,16 @@ helioprojective angular coordinates using
 
 # sphinx_gallery_thumbnail_path = '_static/assets/p07_faux_volume_render.png'
 
+from __future__ import annotations
+
 import os
 from pathlib import Path
 
 import numpy as np
+from psi_data import fetch_mas_data
+
 from pyvisual import Plot3d
 from pyvisual.core.mesh3d import SphericalMesh
-from psi_data import fetch_mas_data
 from pyvisual.utils.geometry import spacecraft_trajectory
 
 # %%
