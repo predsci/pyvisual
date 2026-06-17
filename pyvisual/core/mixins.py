@@ -146,7 +146,7 @@ class StackMeshMixin:
                    r: ArrayLike,
                    t: ArrayLike,
                    p: ArrayLike,
-                   data: Optional[ArrayLike] = None,
+                   data: ArrayLike | None = None,
                    /,
                    dataid: str = 'Data',
                    **kwargs) -> pv.Actor:
@@ -207,7 +207,7 @@ class StackMeshMixin:
                     r: ArrayLike,
                     t: ArrayLike,
                     p: ArrayLike,
-                    data: Optional[ArrayLike] = None,
+                    data: ArrayLike | None = None,
                     /,
                     axis: int = 0,
                     dataid: str = 'Data',
@@ -266,7 +266,7 @@ class StackMeshMixin:
                    r: ArrayLike,
                    t: ArrayLike,
                    p: ArrayLike,
-                   data: Optional[ArrayLike] = None,
+                   data: ArrayLike | None = None,
                    /,
                    dataid: str = 'Data',
                    **kwargs) -> pv.Actor:
@@ -334,7 +334,7 @@ class StackMeshMixin:
                     r: ArrayLike,
                     t: ArrayLike,
                     p: ArrayLike,
-                    data: Optional[ArrayLike] = None,
+                    data: ArrayLike | None = None,
                     /,
                     axis: int = 0,
                     dataid: str = 'Data',
@@ -396,11 +396,11 @@ class StackMeshMixin:
                     r: ArrayLike,
                     t: ArrayLike,
                     p: ArrayLike,
-                    data: Optional[ArrayLike] = None,
+                    data: ArrayLike | None = None,
                     /,
                     axis: int = 0,
                     dataid: str = 'Data',
-                    coloring: Optional[FlColorType] = None,
+                    coloring: FlColorType | None = None,
                     **kwargs) -> pv.Actor:
         r"""Add a bundle of magnetic fieldlines rendered as splines.
 
@@ -551,7 +551,7 @@ class StackMeshMixin:
                        r: ArrayLike,
                        t: ArrayLike,
                        p: ArrayLike,
-                       data: Optional[ArrayLike],
+                       data: ArrayLike | None,
                        /,
                        axis: int,
                        dataid: str,
@@ -605,12 +605,12 @@ class StackMeshMixin:
                     r: ArrayLike,
                     t: ArrayLike,
                     p: ArrayLike,
-                    data: Optional[ArrayLike] = None,
+                    data: ArrayLike | None = None,
                     /,
                     axis: int = 0,
                     dataid: str = 'Data',
                     method: SurfaceReconstructionType = 'delaunay_2d',
-                    surface_kwargs: Optional[dict] = None,
+                    surface_kwargs: dict | None = None,
                     **kwargs) -> pv.Actor:
         r"""Add a reconstructed surface through stacked spherical coordinate arrays.
 
@@ -717,7 +717,7 @@ class GridMeshMixin:
                      r: ArrayLike,
                      t: ArrayLike,
                      p: ArrayLike,
-                     data: Optional[ArrayLike] = None,
+                     data: ArrayLike | None = None,
                      /,
                      dataid: str = 'Data',
                      **kwargs) -> pv.Actor:
@@ -815,7 +815,7 @@ class GridMeshMixin:
                      r: ArrayLike,
                      t: ArrayLike,
                      p: ArrayLike,
-                     data: Optional[ArrayLike] = None,
+                     data: ArrayLike | None = None,
                      /,
                      dataid: str = 'Data',
                      **kwargs) -> pv.Actor:
@@ -912,7 +912,7 @@ class GridMeshMixin:
                      r: ArrayLike,
                      t: ArrayLike,
                      p: ArrayLike,
-                     data: Optional[ArrayLike] = None,
+                     data: ArrayLike | None = None,
                      /,
                      axis: int = 0,
                      dataid: str = 'Data',
@@ -1033,7 +1033,7 @@ class GridMeshMixin:
                       r: np.ndarray,
                       t: np.ndarray,
                       p: np.ndarray,
-                      data: Optional[np.ndarray],
+                      data: np.ndarray | None,
                       /,
                       axis: int,
                       dataid: str,
@@ -1093,7 +1093,7 @@ class GridMeshMixin:
                     data: ArrayLike,
                     /,
                     dataid: str = 'Data',
-                    isovalue: Optional[ArrayLike] = None,
+                    isovalue: ArrayLike | None = None,
                     **kwargs) -> pv.Actor:
         """Add an isosurface contour from a 3-D spherical scalar field.
 
@@ -1194,7 +1194,7 @@ class ObserverMixin:
         self.disable_terrain_style()
 
     def add_camera_update(self, *,
-                          include: Optional[set[str] | str] = None,
+                          include: set[str] | str | None = None,
                           **kwargs) -> None:
         """Add a live camera-state text overlay to the upper left corner of the plot.
 
@@ -1539,7 +1539,7 @@ class ObserverMixin:
         self.camera.focal_point = fp
 
     @property
-    def observer_fov_view(self) -> Optional[float]:
+    def observer_fov_view(self) -> float | None:
         r"""Get or set the field-of-view by minimum line-of-sight impact radius.
 
         This is a higher-level alternative to :attr:`observer_los_view` that

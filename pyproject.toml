@@ -267,14 +267,29 @@ extend-select = [
   "YTT",   # flake8-2020
 ]
 ignore = [
-  "B905",    #`zip()` without an explicit `strict=` parameter
-  "C408",    # Unnecessary `dict()` call (rewrite as a literal)
-  "NPY002", # Replace legacy `np.random.rand` call with `np.random.Generator`
+  "B905",
+  "C408",
+  "NPY002",
+  "D205",
+  "D400",
+  "RUF002",
+  # Disabled because they conflict with `ruff format`; see
+  # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+  "COM812",  # missing-trailing-comma (handled by the formatter)
+  "ISC001",  # single-line-implicit-string-concatenation (handled by the formatter)
 ]
 
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
+
+[tool.ruff.lint.flake8-quotes]
+# Match the formatter's `quote-style = "single"` so the `Q` rules stop
+# flagging single-quoted strings. Docstrings stay double-quoted per PEP 257.
+inline-quotes = "single"
+multiline-quotes = "single"
+docstring-quotes = "double"
+avoid-escape = true
 
 [tool.ruff.lint.isort]
 known-first-party = ["pyvisual"]
@@ -284,6 +299,17 @@ force-sort-within-sections = true
 required-imports = [
   "from __future__ import annotations",
 ]
+
+[tool.ruff.format]
+# Black-compatible defaults, stated explicitly. `line-length` is inherited
+# from `[tool.ruff]` (100).
+quote-style = "single"
+indent-style = "tab"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+# Keep code blocks inside docstrings (``>>>`` doctests, ``.. pyvista-plot::``)
+# untouched for now; flip to ``true`` to also format those snippets.
+docstring-code-format = false
 
 # Documentation (sphinx) configuration
 # ------------------------------------

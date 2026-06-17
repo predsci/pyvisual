@@ -1232,7 +1232,7 @@ def fibonacci_lattice(
     n: int = 100,
     radius: float = 1.0,
     randomize: bool = False,
-    seed: Optional[int] = None,
+    seed: int | None = None,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     r"""Generate an approximately uniform set of points on a sphere via a Fibonacci lattice.
 

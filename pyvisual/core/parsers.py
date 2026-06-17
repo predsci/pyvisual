@@ -44,9 +44,12 @@ See Also
 
 from __future__ import annotations
 
-from functools import wraps, reduce
+from collections.abc import Callable
+from functools import reduce
+from functools import wraps
 from math import prod
-from typing import Callable, Optional, Literal
+from typing import Literal
+from typing import Optional
 
 import numpy as np
 import pyvista as pv
@@ -54,13 +57,11 @@ from pyvista import algorithm_to_mesh_handler
 
 from pyvisual.core._typing import PlottableType
 from pyvisual.core.constants import FRAME_ALIASES
+from pyvisual.utils.geometry import cartesian_to_spherical
+from pyvisual.utils.geometry import ij_meshgrid
+from pyvisual.utils.geometry import moveaxis_to_start
+from pyvisual.utils.geometry import spherical_to_cartesian
 from pyvisual.utils.helpers import atleast_1dnull
-from pyvisual.utils.geometry import (
-    spherical_to_cartesian,
-    ij_meshgrid,
-    moveaxis_to_start,
-    cartesian_to_spherical)
-
 
 _FRAME_TRANSFORM_MAPPING = {
     ("spherical", "cartesian"): spherical_to_cartesian,
@@ -134,8 +135,8 @@ def _align_shape(values, mesh_shape):
 
 
 def _reordered_ravel(arr: np.ndarray,
-                     axis: Optional[int],
-                     order: Optional[Literal["K", "A", "C", "F"]]) -> np.ndarray:
+                     axis: int | None,
+                     order: Literal["K", "A", "C", "F"] | None) -> np.ndarray:
     """Flatten ``arr``, optionally moving ``axis`` to the leading position first.
 
     Parameters
@@ -446,8 +447,8 @@ def parse_grid_mesh(r: np.ndarray,
 
 def parse_data(data: np.ndarray,
                mesh_shape: tuple[int, ...],
-               axis: Optional[int] = None,
-               order: Optional[Literal["K", "A", "C", "F"]] = 'C') -> np.ndarray:
+               axis: int | None = None,
+               order: Literal["K", "A", "C", "F"] | None = 'C') -> np.ndarray:
     """Reshape and flatten a scalar data array to match a target mesh shape.
 
     Handles five cases in order:

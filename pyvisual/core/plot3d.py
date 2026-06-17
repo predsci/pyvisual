@@ -77,7 +77,7 @@ class Plot3d(ObserverMixin, GeometryMixin, GridMeshMixin, StackMeshMixin, pv.Plo
 
     def __init__(self, *args, **kwargs):
         """
-        Initialise :class:`Plot3d` and the internal camera-state observer handle.
+        Initialize :class:`Plot3d` and the internal camera-state observer handle.
 
         All positional and keyword arguments are forwarded verbatim to
         :class:`pyvista.Plotter`.
@@ -122,7 +122,7 @@ class Plot3d(ObserverMixin, GeometryMixin, GridMeshMixin, StackMeshMixin, pv.Plo
     def add_composite(self,
                       dataset,
                       *args,
-                      frame: Optional[str] = None,
+                      frame: str | None = None,
                       **kwargs) -> tuple[pv.Actor, pv.CompositePolyDataMapper]:
         """Add a composite (multi-block) dataset to the scene, converting coordinates if needed.
 
@@ -164,7 +164,7 @@ class Plot3d(ObserverMixin, GeometryMixin, GridMeshMixin, StackMeshMixin, pv.Plo
     def add_mesh(self,
                  mesh,
                  *args,
-                 frame: Optional[str] = None,
+                 frame: str | None = None,
                  **kwargs) -> pv.Actor:
         """Add a mesh to the scene, converting coordinates from ``frame`` if needed.
 

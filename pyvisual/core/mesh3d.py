@@ -49,7 +49,8 @@ from functools import singledispatchmethod, reduce, wraps
 from itertools import pairwise
 from numbers import Number
 from pathlib import Path
-from typing import Optional, ClassVar, Callable
+from typing import Optional, ClassVar
+from collections.abc import Callable
 
 import numpy as np
 import pyvista as pv
@@ -85,7 +86,7 @@ def _update_mesh_frame(func: Callable):
         The wrapped function with the same signature as ``func``.
     """
     @wraps(func)
-    def wrapper(self, *args, frame: Optional[MeshFramesType] = None, **kwargs):
+    def wrapper(self, *args, frame: MeshFramesType | None = None, **kwargs):
         result = func(self, *args, frame=frame, **kwargs)
         if frame is not None:
             result.user_dict.update(MESH_FRAME=fetch_canonical_frame(frame))
@@ -124,7 +125,7 @@ def build_point_polydata(d1: np.ndarray,
                          d2: np.ndarray,
                          d3: np.ndarray,
                          axis: int,
-                         frame: Optional[MeshFramesType] = None) -> pv.PolyData:
+                         frame: MeshFramesType | None = None) -> pv.PolyData:
     """Build an unconnected :class:`pyvista.PolyData` point cloud from coordinate arrays.
 
     Each element of ``d1``, ``d2``, ``d3`` along ``axis`` defines one point.
@@ -160,7 +161,7 @@ def build_spline_polydata(d1: np.ndarray,
                           d2: np.ndarray,
                           d3: np.ndarray,
                           axis: int,
-                          frame: Optional[MeshFramesType] = None) -> pv.PolyData:
+                          frame: MeshFramesType | None = None) -> pv.PolyData:
     """Build a line-connected :class:`pyvista.PolyData` of splines from coordinate arrays.
 
     After moving ``axis`` to the leading dimension, the arrays are reshaped to
@@ -201,7 +202,7 @@ def build_slice_polydata(d1: np.ndarray,
                          d2: np.ndarray,
                          d3: np.ndarray,
                          axis: int,
-                         frame: Optional[MeshFramesType] = None) -> pv.PolyData:
+                         frame: MeshFramesType | None = None) -> pv.PolyData:
     """Build a quad-faced :class:`pyvista.PolyData` surface patch from coordinate arrays.
 
     The coordinate arrays are moved so that ``axis`` is the leading dimension,
@@ -259,7 +260,7 @@ def build_surface_polydata(d1: np.ndarray,
                            d3: np.ndarray,
                            axis: int,
                            method: SurfaceReconstructionType = 'reconstruct_surface',
-                           frame: Optional[MeshFramesType] = None,
+                           frame: MeshFramesType | None = None,
                            **kwargs) -> pv.PolyData:
     """Build a surface mesh from scattered coordinate arrays using a reconstruction method.
 
@@ -315,7 +316,7 @@ def build_thompson_sphere(d1: float,
                           d3: float,
                           theta_resolution: int = 180,
                           phi_resolution: int = 360,
-                          frame: Optional[MeshFramesType] = None) -> pv.PolyData:
+                          frame: MeshFramesType | None = None) -> pv.PolyData:
     r"""Build a Thomson sphere centered halfway between the origin and an observer position.
 
     The Thomson sphere for a given observer has:
@@ -384,7 +385,7 @@ class _BaseFrameFilters(ABC):
         ...
 
     @abstractmethod
-    def radially_scale(self, *args, exp: Optional[Number] = None):
+    def radially_scale(self, *args, exp: Number | None = None):
         r"""Multiply the active scalars by a power of the radial coordinate.
 
         When ``args`` are provided they are interpreted as ``(xp, fp)`` lookup
@@ -409,7 +410,7 @@ class _BaseFrameFilters(ABC):
         ...
 
     @abstractmethod
-    def radially_unscale(self, *args, exp: Optional[Number] = None):
+    def radially_unscale(self, *args, exp: Number | None = None):
         """Divide the active scalars by a power of the radial coordinate.
 
         Inverse operation of :meth:`radially_scale`.
@@ -429,7 +430,7 @@ class _BaseFrameFilters(ABC):
         ...
 
     @abstractmethod
-    def logspace(self, base: Optional[Number] = None, offset: float = 1):
+    def logspace(self, base: Number | None = None, offset: float = 1):
         r"""Remap mesh point positions from linear to logarithmic radial spacing.
 
         Replaces each radial coordinate :math:`r` with
@@ -452,7 +453,7 @@ class _BaseFrameFilters(ABC):
         ...
 
     @abstractmethod
-    def expspace(self, base: Optional[Number] = None, offset: float = 1):
+    def expspace(self, base: Number | None = None, offset: float = 1):
         r"""Remap mesh point positions from linear to exponential radial spacing.
 
         Inverse of :meth:`logspace`.  Replaces each radial coordinate :math:`r`
@@ -516,7 +517,7 @@ class CartesianMeshFilters(_BaseFrameFilters):
         return mesh.sample(self)
 
     @_update_user_dict
-    def radially_scale(self, *args, exp: Optional[Number] = None):
+    def radially_scale(self, *args, exp: Number | None = None):
         mesh = self.copy()
         radius = np.linalg.norm(mesh.points, axis=1).reshape(mesh.dimensions, order='F')
         r = np.interp(radius, *args) * radius if args else radius
@@ -524,7 +525,7 @@ class CartesianMeshFilters(_BaseFrameFilters):
         return mesh
 
     @_update_user_dict
-    def radially_unscale(self, *args, exp: Optional[Number] = None):
+    def radially_unscale(self, *args, exp: Number | None = None):
         mesh = self.copy()
         radius = np.linalg.norm(mesh.points, axis=1).reshape(mesh.dimensions, order='F')
         r = np.interp(radius, *args) * radius if args else radius
@@ -532,7 +533,7 @@ class CartesianMeshFilters(_BaseFrameFilters):
         return mesh
 
     @_update_user_dict
-    def logspace(self, base: Optional[Number] = None, offset: float = 1):
+    def logspace(self, base: Number | None = None, offset: float = 1):
         mesh = self.copy()
         r = np.linalg.norm(mesh.points, axis=1, keepdims=True)
         r_new = np.log(r) + offset if base is None else np.log(r) / np.log(base) + offset
@@ -540,7 +541,7 @@ class CartesianMeshFilters(_BaseFrameFilters):
         return mesh
 
     @_update_user_dict
-    def expspace(self, base: Optional[Number] = None, offset: float = 1):
+    def expspace(self, base: Number | None = None, offset: float = 1):
         mesh = self.copy()
         r = np.linalg.norm(mesh.points, axis=1, keepdims=True)
         r_new = np.exp(r - offset) if base is None else base ** (r - offset)
@@ -594,7 +595,7 @@ class SphericalMeshFilters(_BaseFrameFilters):
         return mesh.sample(self)
 
     @_update_user_dict
-    def radially_scale(self, *args, exp: Optional[Number] = None):
+    def radially_scale(self, *args, exp: Number | None = None):
         mesh = self.copy()
         r = np.interp(mesh.r, *args) * mesh.r if args else mesh.r
         r = np.expand_dims(r, (1, 2))
@@ -602,7 +603,7 @@ class SphericalMeshFilters(_BaseFrameFilters):
         return mesh
 
     @_update_user_dict
-    def radially_unscale(self, *args, exp: Optional[Number] = None):
+    def radially_unscale(self, *args, exp: Number | None = None):
         mesh = self.copy()
         r = np.interp(mesh.r, *args) * mesh.r if args else mesh.r
         r = np.expand_dims(r, (1, 2))
@@ -610,7 +611,7 @@ class SphericalMeshFilters(_BaseFrameFilters):
         return mesh
 
     @_update_user_dict
-    def logspace(self, base: Optional[Number] = None, offset: float = 1):
+    def logspace(self, base: Number | None = None, offset: float = 1):
         mesh = self.copy()
         if base is None:
             mesh.r = np.log(mesh.r) + offset
@@ -619,7 +620,7 @@ class SphericalMeshFilters(_BaseFrameFilters):
         return mesh
 
     @_update_user_dict
-    def expspace(self, base: Optional[Number] = None, offset: float = 1):
+    def expspace(self, base: Number | None = None, offset: float = 1):
         mesh = self.copy()
         if base is None:
             mesh.r = np.exp(mesh.r - offset)
@@ -692,9 +693,9 @@ class _BaseFrameMesh(ABC):
 
     def __init__(self,
                  *args,
-                 data: Optional[ArrayLike] = None,
-                 dataid: Optional[str] = None,
-                 iformat: Optional[str] = None,
+                 data: ArrayLike | None = None,
+                 dataid: str | None = None,
+                 iformat: str | None = None,
                  **kwargs):
         """Initialise the mesh from a file path, raw coordinate arrays, or an existing dataset.
 
@@ -987,7 +988,7 @@ class _BaseFrameMesh(ABC):
         self._set_arrays(sorder, data, *scales)
 
     @abstractmethod
-    def _parse_iformat(self, iformat: Optional[str]) -> tuple[str, str]:
+    def _parse_iformat(self, iformat: str | None) -> tuple[str, str]:
         """Parse ``iformat`` into a detected format string and the canonical axis order.
 
         Parameters
@@ -1140,7 +1141,7 @@ class CartesianMesh(_BaseFrameMesh, pv.StructuredGrid, CartesianMeshFilters):
 
     MESH_FRAME = 'cartesian'
 
-    def _parse_iformat(self, iformat: Optional[str]) -> tuple[str, str]:
+    def _parse_iformat(self, iformat: str | None) -> tuple[str, str]:
         msg = ""
         if not iformat:
             msg = "No format string provided. Assuming 'xyz' order for scales. "
@@ -1265,7 +1266,7 @@ class SphericalMesh(_BaseFrameMesh, pv.RectilinearGrid, SphericalMeshFilters):
 
     MESH_FRAME = 'spherical'
 
-    def _parse_iformat(self, iformat: Optional[str]) -> tuple[str, str]:
+    def _parse_iformat(self, iformat: str | None) -> tuple[str, str]:
         sorder = FRAME_SCALES[self.MESH_FRAME]
         sformat = _normalize_frame(iformat or sorder)
         if set(sformat) - set(sorder):
