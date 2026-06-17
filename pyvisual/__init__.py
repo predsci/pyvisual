@@ -44,15 +44,15 @@ See Also
 
 from __future__ import annotations
 
-from pyvisual.core.mesh3d import CartesianMesh, SphericalMesh
-from pyvisual.core.plot3d import Plot3d
+from pyvisual.core.mesh3d import CartesianMesh as CartesianMesh, SphericalMesh as SphericalMesh
+from pyvisual.core.plot3d import Plot3d as Plot3d
 
 try:
 	from importlib.metadata import PackageNotFoundError, version as _pkg_version
 	from pathlib import Path
 
 	__version__ = _pkg_version("psi-pyvisual")  # type: ignore[assignment]
-except PackageNotFoundError as e:  # dev/editable without metadata
+except PackageNotFoundError:  # dev/editable without metadata
 	try:
 		import tomllib  # Python 3.11+
 	except ModuleNotFoundError:  # pragma: no cover

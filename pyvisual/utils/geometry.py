@@ -39,7 +39,6 @@ Contents
 from __future__ import annotations
 
 from functools import partial
-from typing import Optional
 
 import astropy.coordinates as astro_coord
 import astropy.time as astro_time

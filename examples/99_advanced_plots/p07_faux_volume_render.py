@@ -116,8 +116,8 @@ if not os.environ.get("SPHINX_GALLERY_BUILD"):
 	# the script directly.
 
 	output_dir = Path(os.environ.get("STATIC_ASSETS", "")).resolve()
-	movie_name = f"p07_faux_volume_render.mp4"
-	screenshot_name = f"p07_faux_volume_render.png"
+	movie_name = "p07_faux_volume_render.mp4"
+	screenshot_name = "p07_faux_volume_render.png"
 
 	plotter = Plot3d()
 	plotter.add_axes()

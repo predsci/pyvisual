@@ -21,7 +21,7 @@ import pyvista as pv
 from psi_data import fetch_mas_data
 
 from pyvisual import Plot3d
-from pyvisual.core.mesh3d import SphericalMesh, build_point_polydata, build_spline_polydata
+from pyvisual.core.mesh3d import SphericalMesh, build_spline_polydata
 from pyvisual.utils.geometry import spacecraft_trajectory, spherical_to_cartesian
 
 br_file = fetch_mas_data(domains="cor", variables="br").cor_br

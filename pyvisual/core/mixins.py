@@ -71,7 +71,7 @@ from pyvisual.core.parsers import (
 	parse_data,
 	parse_grid_mesh,
 	parse_mesh_params,
-	parse_stack_mesh
+	parse_stack_mesh,
 )
 from pyvisual.utils.geometry import (
 	camera_roll_wrt_solar_north,

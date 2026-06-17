@@ -175,9 +175,8 @@ cor_files_response = requests.get(
 cor_files_response.raise_for_status()
 
 print("Saving coronal magnetic field files...")
-with open(COR_OUTPUT_DIR / "cor_mag_field.zip", "wb") as f:
-	for chunk in cor_files_response.iter_content(chunk_size=8192):
-		f.write(chunk)
+with Path(COR_OUTPUT_DIR / "cor_mag_field.zip").open("wb") as f:
+	f.writelines(cor_files_response.iter_content(chunk_size=8192))
 
 hel_files_params = {"cor_id": str(cor_id), "domain": "hel", "state": "0", "variable": "br,bt,bp"}
 
@@ -188,9 +187,8 @@ hel_files_response = requests.get(
 hel_files_response.raise_for_status()
 
 print("Saving heliospheric magnetic field files...")
-with open(HEL_OUTPUT_DIR / "hel_mag_field.zip", "wb") as f:
-	for chunk in hel_files_response.iter_content(chunk_size=8192):
-		f.write(chunk)
+with Path(HEL_OUTPUT_DIR / "hel_mag_field.zip").open("wb") as f:
+	f.writelines(hel_files_response.iter_content(chunk_size=8192))
 
 # %%
 # Download the Spacecraft Mapping

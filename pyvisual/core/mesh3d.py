@@ -943,9 +943,8 @@ class _BaseFrameMesh(ABC):
 	def _(self, uinput: pv.DataSet, *args, iformat, **kwargs):
 		"""Handle PyVista dataset input by forwarding to :meth:`_dispatch_pyvista`."""
 		deep = kwargs.pop("deep", False)
-		if args or kwargs:
-			if not os.environ.get("SPHINX_GALLERY_BUILD"):
-				warnings.warn("Additional arguments are ignored when input is a PyVista DataSet.")
+		if (args or kwargs) and not os.environ.get("SPHINX_GALLERY_BUILD"):
+			warnings.warn("Additional arguments are ignored when input is a PyVista DataSet.")
 		return self._dispatch_pyvista(uinput, iformat, deep)
 
 	def _parse_input(self, iformat, data, *scales, **kwargs):
