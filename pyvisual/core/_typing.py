@@ -28,14 +28,18 @@ from typing import (
 	Literal,
 	NamedTuple,
 	TypeAlias,
-	Union,
 )
 
-from pyvista import VectorLike
+from pyvista import (
+	DataSet,
+	MultiBlock,
+	PartitionedDataSet,
+	VectorLike,
+)
 
-PlottableType: TypeAlias = Union[
-	VectorLike[float], "DataSet", "MultiBlock", "PartitionedDataSet", str, Path
-]
+PlottableType: TypeAlias = (
+	VectorLike[float] | DataSet | MultiBlock | PartitionedDataSet | str | Path
+)
 
 PathType = str | Path | PathLike[str]
 """Type alias for filesystem path arguments.
@@ -93,8 +97,8 @@ meshes in other frames are converted before being passed to PyVista.
 class SolarCoordinate(NamedTuple):
 	r"""Named tuple representing a heliographic Carrington coordinate.
 
-	Fields
-	------
+	Attributes
+	----------
 	radius : float
 	    Heliocentric distance in solar radii :math:`R_\odot`.
 	b_angle : float
@@ -111,8 +115,8 @@ class SolarCoordinate(NamedTuple):
 class SphericalCoordinate(NamedTuple):
 	r"""Named tuple representing a PSI spherical coordinate :math:`(r, \theta, \phi)`.
 
-	Fields
-	------
+	Attributes
+	----------
 	r : float
 	    Radial distance in solar radii :math:`R_\odot`.
 	t : float
@@ -129,8 +133,8 @@ class SphericalCoordinate(NamedTuple):
 class CartesianCoordinate(NamedTuple):
 	r"""Named tuple representing a Cartesian coordinate :math:`(x, y, z)`.
 
-	Fields
-	------
+	Attributes
+	----------
 	x : float
 	    Cartesian x-coordinate in solar radii :math:`R_\odot`.
 	y : float
@@ -147,8 +151,8 @@ class CartesianCoordinate(NamedTuple):
 class ObserverView(NamedTuple):
 	"""Named tuple representing line-of-sight field-of-view extents in degrees.
 
-	Fields
-	------
+	Attributes
+	----------
 	x0 : float
 	    Left edge of the horizontal (elongation) FOV extent in degrees.
 	x1 : float
@@ -168,8 +172,8 @@ class ObserverView(NamedTuple):
 class ObserverOrientation(NamedTuple):
 	"""Named tuple representing the observer's position angle.
 
-	Fields
-	------
+	Attributes
+	----------
 	p_angle : float
 	    Roll of the camera about the line-of-sight axis, measured from solar north,
 	    in degrees.  A value of ``0`` means solar north points straight up in the image

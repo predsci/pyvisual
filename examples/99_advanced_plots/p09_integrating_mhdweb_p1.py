@@ -179,7 +179,7 @@ cor_files_response = requests.get(
 	f"{BASE_URL}/mas-run-db/" + "/".join(cor_files_params.values()),
 	headers=AUTH,
 	stream=True,
-	timeout=(3, 10),
+	timeout=(3, 60),
 )
 cor_files_response.raise_for_status()
 
@@ -194,7 +194,7 @@ hel_files_response = requests.get(
 	f"{BASE_URL}/mas-run-db/" + "/".join(hel_files_params.values()),
 	headers=AUTH,
 	stream=True,
-	timeout=(3, 10),
+	timeout=(3, 60),
 )
 hel_files_response.raise_for_status()
 
@@ -232,7 +232,7 @@ response = requests.get(
 	f"{BASE_URL}/spacecraft-mapping/{cor_id}/{sc_id}",
 	headers=AUTH,
 	stream=True,
-	timeout=(3, 10)
+	timeout=(3, 30)
 )
 response.raise_for_status()
 

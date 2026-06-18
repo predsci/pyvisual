@@ -1,4 +1,4 @@
-.. |psi| image:: https://predsci.com/doc/assets/static/psi_logo.png
+.. |psi| image:: https://predsci.com/doc/psi_logo.png
    :target: https://predsci.com
    :alt: Predictive Science Inc.
    :width: 20px

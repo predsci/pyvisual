@@ -268,42 +268,34 @@ intersphinx_cache_limit = 30
 intersphinx_mapping = {
     "python": (
         "https://docs.python.org/3/",
-        # (INV / "python-objects.inv").as_posix(),
         None
     ),
     "pyvista": (
         "https://docs.pyvista.org/",
-        # (INV / "python-objects.inv").as_posix(),
         None
     ),
     "numpy": (
         "https://numpy.org/doc/stable/",
-        # (INV / "numpy-objects.inv").as_posix(),
         None
     ),
     "scipy": (
-        "https://docs.scipy.org/doc/scipy/reference/",
-        # (INV / "scipy-objects.inv").as_posix(),
+        "https://docs.scipy.org/doc/scipy/",
         None
     ),
     "matplotlib": (
         "https://matplotlib.org/stable/",
-        # (INV / "matplotlib-objects.inv").as_posix(),
         None
     ),
     "h5py": (
         "https://docs.h5py.org/en/stable/",
-        # (INV / "h5py-objects.inv").as_posix(),
         None
     ),
     "sunpy": (
         "https://docs.sunpy.org/en/stable/",
-        # (INV / "sunpy-objects.inv").as_posix(),
         None
     ),
     "astropy": (
         "https://docs.astropy.org/en/stable/",
-        # (INV / "astropy-objects.inv").as_posix(),
         None
     ),
     "mapflpy": (

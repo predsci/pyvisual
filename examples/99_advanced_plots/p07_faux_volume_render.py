@@ -1,6 +1,6 @@
 # noqa: INP001
 """
-Faux Volume Rendering.
+Faux Volume Rendering
 =====================
 
 This example demonstrates a technique for simulating volumetric rendering of
