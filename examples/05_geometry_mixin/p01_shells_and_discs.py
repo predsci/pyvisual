@@ -1,3 +1,4 @@
+# noqa: INP001
 """
 Shells and Discs
 ================
@@ -57,7 +58,7 @@ plotter.show()
 # radial :math:`\hat{r}` (blue), colatitudinal :math:`\hat{\theta}` (white),
 # and longitudinal :math:`\hat{\phi}` (red).
 
-disc_kwargs = dict(r=2, t=pi / 2, p=0, outer_radius=0.2)
+disc_kwargs = {"r": 2, "t": pi / 2, "p": 0, "outer_radius": 0.2}
 
 plotter = Plot3d()
 plotter.show_axes()

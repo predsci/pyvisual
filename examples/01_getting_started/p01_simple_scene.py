@@ -1,3 +1,4 @@
+# noqa: INP001
 """
 Instantiating a Plot3d Object
 =============================
@@ -12,11 +13,11 @@ from pyvisual import Plot3d
 
 # %%
 # .. note::
-#    As stated throughout the **pyvisual** documentation site, it is *highly* recommended to explore the
-#    `PyVista <https://docs.pyvista.org/>`_ documentation to learn about the extensive capabilities
-#    provided by the PyVista and VTK libraries. **pyvisual** is but a thin wrapper around a small
-#    subset of these capabilities, and thus, learning about the underlying libraries will allow you to
-#    make the most of **pyvisual**.
+#    As stated throughout the **pyvisual** documentation site, it is *highly* recommended to
+#    explore the `PyVista <https://docs.pyvista.org/>`_ documentation to learn about the
+#    extensive capabilities provided by the PyVista and VTK libraries. **pyvisual** is but a
+#    thin wrapper around a small subset of these capabilities, and thus, learning about the
+#    underlying libraries will allow you to make the most of **pyvisual**.
 
 # %%
 # The Plot3d class inherits from :class:`~pyvista.Plotter` and, therefore, can be instantiated
@@ -42,9 +43,9 @@ sun_actor = plotter.add_sun()
 plotter.show()
 
 # %%
-# By capturing the returned result of the :meth:`~pyvisual.core.plot3d.Plot3d.add_sun` method, we can
-# manipulate the sun actor after it has been added to the scene. For example, we can remove it
-# from the scene and then add it back again.
+# By capturing the returned result of the :meth:`~pyvisual.core.plot3d.Plot3d.add_sun` method,
+# we can manipulate the sun actor after it has been added to the scene. For example, we can
+# remove it from the scene and then add it back again.
 
 # sphinx_gallery_start_ignore
 # NOTE: The following code block can be removed when run outside the sphinx gallery pipeline.

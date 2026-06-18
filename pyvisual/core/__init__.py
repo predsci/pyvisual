@@ -63,9 +63,8 @@ from pyvisual.utils.helpers import fetch_theme
 try:
 	theme = fetch_theme()
 	pv.global_theme.load_theme(str(theme))
-except Exception as e:
+except FileNotFoundError as e:
 	if not os.environ.get("SPHINX_GALLERY_BUILD"):
-		warnings.warn(
-			"Failed to load PyVisual theme. Using default PyVista theme. Error: " + str(e)
-		)
+		warnings.warn(f"Failed to load PyVisual theme. Using default PyVista theme. Error: {e}",
+			stacklevel=2)
 	pv.global_theme.load_theme(pv.themes.DarkTheme())

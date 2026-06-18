@@ -1,3 +1,4 @@
+# noqa: INP001
 """
 Isosurface Contours
 ===================
@@ -73,8 +74,8 @@ plotter.show()
 # steady-state Thermodynamic MAS coronal model, we can load in the data
 # using :func:`~psi_io.psi_io.read_hdf_data`.
 
-from psi_data import fetch_mas_data
-from psi_io import read_hdf_data
+from psi_data import fetch_mas_data  # noqa: E402
+from psi_io import read_hdf_data  # noqa: E402
 
 br_file = fetch_mas_data(domains="cor", variables="br").cor_br
 br, r, t, p = read_hdf_data(br_file)

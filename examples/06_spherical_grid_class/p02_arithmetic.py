@@ -1,3 +1,4 @@
+# noqa: INP001
 """
 Arithmetic and NumPy Ufunc Support
 ====================================
@@ -27,11 +28,11 @@ br_file = fetch_mas_data(domains="cor", variables="br").cor_br
 # ------------
 #
 # We initialize a :class:`~pyvisual.core.mesh3d.SphericalMesh` from the HDF file path, which
-# triggers the file-path dispatch path (see :ref:`sphx_glr_gallery_06_spherical_grid_class_p01_spherical_grid_init.py`
-# for details on the three construction paths.
+# triggers the file-path dispatch path (see
+# :ref:`sphx_glr_gallery_06_spherical_grid_class_p01_spherical_grid_init.py` for details on
+# the three construction paths.
 mesh = SphericalMesh(br_file)
-mesh
-
+mesh        # noqa: B018
 # %%
 # Radial Flux Scaling
 # -------------------
@@ -41,8 +42,8 @@ mesh
 # arrays are unchanged; only the active scalar is updated.
 
 mesh_r2 = mesh * mesh.r[:, None, None] ** 2
-print(f"Br     range: [{mesh.data.min():.4f}, {mesh.data.max():.4f}]")
-print(f"Br r^2 range: [{mesh_r2.data.min():.4f}, {mesh_r2.data.max():.4f}]")
+print(f"Br     range: [{mesh.data.min():.4f}, {mesh.data.max():.4f}]")      # noqa: T201
+print(f"Br r^2 range: [{mesh_r2.data.min():.4f}, {mesh_r2.data.max():.4f}]")        # noqa: T201
 
 plotter = Plot3d()
 plotter.show_axes()
@@ -63,7 +64,7 @@ plotter.show()
 # mesh type.
 
 mesh_log = np.log10(abs(mesh_r2))
-print(f"log10(|Br r^2|) range: [{mesh_log.data.min():.3f}, {mesh_log.data.max():.3f}]")
+print(f"log10(|Br r^2|) range: [{mesh_log.data.min():.3f}, {mesh_log.data.max():.3f}]")     # noqa: T201
 
 plotter = Plot3d()
 plotter.show_axes()

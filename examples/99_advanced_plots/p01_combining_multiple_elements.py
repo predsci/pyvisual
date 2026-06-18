@@ -1,3 +1,4 @@
+# noqa: INP001
 """
 Combining Slices, Contours, and Fieldlines
 ==========================================

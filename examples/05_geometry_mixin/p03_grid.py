@@ -1,3 +1,4 @@
+# noqa: INP001
 """
 Structured Spline Grids
 =======================

@@ -1,3 +1,4 @@
+# noqa: INP001
 r"""
 MHDweb Integration Part II
 ==========================
@@ -70,13 +71,13 @@ OUTPUT_DIR = Path(os.environ.get("STATIC_ASSETS", "")).resolve()
 COR_OUTPUT_DIR = OUTPUT_DIR / "cor_mag_field"
 HEL_OUTPUT_DIR = OUTPUT_DIR / "hel_mag_field"
 
-print("Extracting coronal magnetic field files...")
+print("Extracting coronal magnetic field files...")		# noqa: T201
 with ZipFile(COR_OUTPUT_DIR / "cor_mag_field.zip") as cor_zip:
-	print(f"cor_mag_field.zip namelist: {cor_zip.namelist()}")
+	print(f"cor_mag_field.zip namelist: {cor_zip.namelist()}")		# noqa: T201
 	cor_zip.extractall(path=COR_OUTPUT_DIR)
-print("Extracting heliospheric magnetic field files...")
+print("Extracting heliospheric magnetic field files...")		# noqa: T201
 with ZipFile(HEL_OUTPUT_DIR / "hel_mag_field.zip") as hel_zip:
-	print(f"hel_mag_field.zip namelist: {hel_zip.namelist()}")
+	print(f"hel_mag_field.zip namelist: {hel_zip.namelist()}")		# noqa: T201
 	hel_zip.extractall(path=OUTPUT_DIR / "hel_mag_field")
 
 cor_br_mesh = SphericalMesh(COR_OUTPUT_DIR / "br002.h5")
@@ -176,7 +177,7 @@ with ExitStack() as cstack:
 	)
 	inter_domain_traces = combine_and_pad_fieldlines(inter_domain_traces)
 
-common_kwargs = dict(cmap="seismic", clim=10, show_scalar_bar=False)
+common_kwargs = {"cmap": "seismic", "clim": 10, "show_scalar_bar": False}
 
 # %%
 # Two-Domain :math:`B_r` Overview
@@ -231,7 +232,7 @@ plotter.observer_position = 400, pi / 4, 0
 plotter.observer_fov_view = 200
 plotter.open_gif(OUTPUT_DIR / "spacecraft_mapping_heliosphere.gif", fps=40)
 for i, (scmap_trace, interdomain_trace) in enumerate(
-	zip(spacecraft_mapping_traces.T, inter_domain_traces.T)
+	zip(spacecraft_mapping_traces.T, inter_domain_traces.T, strict=True)
 ):
 	plotter.add_spline(*scmap_trace, name=f"scmap_trace_{i % 5}", color="white", line_width=3)
 	plotter.add_spline(
@@ -256,7 +257,7 @@ plotter.add_points(*spacecraft_positions, np.arange(len(spacecraft_mapping)), po
 plotter.add_mesh(cor_br_mesh[1, ...], **common_kwargs)
 plotter.open_gif(OUTPUT_DIR / "spacecraft_mapping_corona.gif", fps=40)
 for i, (scmap_trace, interdomain_trace) in enumerate(
-	zip(spacecraft_mapping_traces.T, inter_domain_traces.T)
+	zip(spacecraft_mapping_traces.T, inter_domain_traces.T, strict=True)
 ):
 	plotter.observer_position = 15, 3 * pi / 8, spacecraft_positions[2, i] + pi / 6
 	plotter.observer_fov_view = 4

@@ -1,3 +1,4 @@
+# noqa: INP001
 r"""
 2-D Surface Slices
 ==================

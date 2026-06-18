@@ -1,3 +1,4 @@
+# noqa: INP001
 """
 Constructing a CartesianMesh
 ============================
@@ -37,8 +38,8 @@ X, Y, Z = np.meshgrid(x, y, z, indexing="ij")
 dist = np.sqrt(X**2 + Y**2 + Z**2)
 
 mesh = CartesianMesh(X, Y, Z, data=dist, dataid="r")
-print(f"dimensions : {mesh.dimensions}")
-print(f"data range : [{mesh.data.min():.2f}, {mesh.data.max():.2f}]")
+print(f"dimensions : {mesh.dimensions}")        # noqa: T201
+print(f"data range : [{mesh.data.min():.2f}, {mesh.data.max():.2f}]")       # noqa: T201
 
 plotter = Plot3d()
 plotter.show_axes()
@@ -71,8 +72,8 @@ sph_mesh = SphericalMesh(r, t, p, data=Br, dataid="Br")
 cart_struct = sph_mesh.spherical_to_cartesian()
 cart_mesh = CartesianMesh(cart_struct)
 
-print(f"SphericalMesh frame : {sph_mesh.user_dict['MESH_FRAME']}")
-print(f"CartesianMesh frame : {cart_mesh.user_dict['MESH_FRAME']}")
+print(f"SphericalMesh frame : {sph_mesh.user_dict['MESH_FRAME']}")      # noqa: T201
+print(f"CartesianMesh frame : {cart_mesh.user_dict['MESH_FRAME']}")     # noqa: T201
 
 plotter = Plot3d()
 plotter.show_axes()

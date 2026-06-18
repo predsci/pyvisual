@@ -884,13 +884,7 @@ def thompson_sphere(
 	# - use np.iscalar to allow for array or scalar elongation angles
 	elong = clip_angle(elong, max_value=180.0)
 	check = np.abs(elong) > 90.0
-	if np.any(check):
-		if np.isscalar(elong):
-			mask = 1.0
-		else:
-			mask = np.where(check, 1.0, 0.0)
-	else:
-		mask = 0.0
+	mask = (1.0 if np.isscalar(elong) else np.where(check, 1.0, 0.0)) if np.any(check) else 0.0
 
 	# initialize coordinates for rotation
 	x = v_r_min_x - 2 * (v_r_min_x - v_obs_x) * mask
@@ -1053,9 +1047,13 @@ def los_angle2rmin(angle_deg: ArrayLike, d_obs_rs: float) -> np.ndarray | float:
 	return rmin_rs
 
 
-def query_horizons_ephemeris(
-	body, time="now", frame="carrington", observer="self", coord_system="lonlat", **kwargs
-):
+def query_horizons_ephemeris(body,
+							 time="now",
+							 frame="carrington",
+							 observer="self",
+							 coord_system="lonlat",
+							 **kwargs
+							 ):
 	r"""Query the position of a spacecraft or planet from JPL Horizons.
 
 	Returns an :class:`astropy.table.QTable` containing timestamps and spatial
@@ -1218,7 +1216,8 @@ def query_horizons_ephemeris(
 				positions.lat.to(u.arcsec),
 			]
 		case _:
-			msg = f"Unknown coordinate system: {coord_system}. Must be one of 'lonlat', 'rtp', 'xyz', or 'hpc'."
+			msg = (f"Unknown coordinate system: {coord_system}. "
+				   f"Must be one of 'lonlat', 'rtp', 'xyz', or 'hpc'.")
 			raise ValueError(msg)
 
 	# metadata for the query
@@ -1229,7 +1228,7 @@ def query_horizons_ephemeris(
 		"frame_name": frame.name,
 	}
 	# include the observer choice as metadata if its a carrington frame
-	if frame.name == "heliographic_carrington" or frame.name == "helioprojective":
+	if frame.name in {"heliographic_carrington", "helioprojective"}:
 		meta["observer"] = observer
 
 	# account for the case when only one scalar time was asked for

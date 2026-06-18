@@ -53,10 +53,10 @@ class Plot3d(ObserverMixin, GeometryMixin, GridMeshMixin, StackMeshMixin, pv.Plo
 	This class is designed to be a thin wrapper around PyVista's :class:`~pyvista.Plotter` class.
 	Its principal concern is to facilitate the visualization of datasets defined on a spherical
 	coordinate system; more specifically, **pyvisual** is aimed at visualizing solar modeling
-	data in an efficient, interactive way. This package is developed and maintained by `Predictive Science Inc.
-	<https://www.predsci.com/>`_ and therefore is specifically tuned to work with the PSI data
-	ecosystem. For additional information regarding the conventions and packages that comprise
-	this ecosystem, visit the :ref:`overview` section.
+	data in an efficient, interactive way. This package is developed and maintained by
+	`Predictive Science Inc. <https://www.predsci.com/>`_ and therefore is specifically tuned to
+	work with the PSI data ecosystem. For additional information regarding the conventions and
+	packages that comprise this ecosystem, visit the :ref:`overview` section.
 
 	.. attention::
 	   As is noted above, **pyvisual** is a thin wrapper for the :class:`pyvista.Plotter` class.

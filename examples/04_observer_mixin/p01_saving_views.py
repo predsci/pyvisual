@@ -1,3 +1,4 @@
+# noqa: INP001
 r"""
 Saving and Restoring Camera Views
 ==================================
@@ -51,11 +52,9 @@ plotter.observer_position = 8, np.pi / 4, np.pi / 6
 
 saved_position = plotter.observer_position
 saved_orientation = plotter.observer_orientation
-print(
-	f"Saved position    : r={saved_position.r:.2f}, "
-	f"t={saved_position.t:.3f}, p={saved_position.p:.3f}"
-)
-print(f"Saved orientation : p_angle={saved_orientation.p_angle:.2f} deg")
+print(f"Saved position    : r={saved_position.r:.2f}, "		# noqa: T201
+	  f"t={saved_position.t:.3f}, p={saved_position.p:.3f}")
+print(f"Saved orientation : p_angle={saved_orientation.p_angle:.2f} deg")		# noqa: T201
 
 # sphinx_gallery_start_ignore
 # The following block re-instantiates the plotter to avoid the sphinx-gallery

@@ -1,3 +1,4 @@
+# noqa: INP001
 r"""
 Plotting Magnetic Fieldlines
 =============================

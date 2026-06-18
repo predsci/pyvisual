@@ -1,3 +1,4 @@
+# noqa: INP001
 """
 Arithmetic and NumPy Ufunc Support
 ==================================
@@ -35,7 +36,7 @@ X, Y, Z = np.meshgrid(x, y, z, indexing="ij")
 dist = np.sqrt(X**2 + Y**2 + Z**2)
 
 mesh = CartesianMesh(X, Y, Z, data=dist, dataid="r")
-print(f"data range : [{mesh.data.min():.2f}, {mesh.data.max():.2f}]")
+print(f"data range : [{mesh.data.min():.2f}, {mesh.data.max():.2f}]")       # noqa: T201
 
 # %%
 # Scalar Arithmetic
@@ -49,7 +50,7 @@ print(f"data range : [{mesh.data.min():.2f}, {mesh.data.max():.2f}]")
 
 mesh_shifted = mesh - mesh.data.min()
 mesh_norm = mesh_shifted / mesh_shifted.data.max()
-print(f"normalised range : [{mesh_norm.data.min():.2f}, {mesh_norm.data.max():.2f}]")
+print(f"normalised range : [{mesh_norm.data.min():.2f}, {mesh_norm.data.max():.2f}]")       # noqa: T201
 
 plotter = Plot3d()
 plotter.show_axes()
@@ -69,7 +70,7 @@ plotter.show()
 # (here, the grid corner where :math:`r = 0`) are masked by the log.
 
 mesh_log = np.log10(mesh_norm + 1e-6)
-print(f"log10 range : [{mesh_log.data.min():.2f}, {mesh_log.data.max():.2f}]")
+print(f"log10 range : [{mesh_log.data.min():.2f}, {mesh_log.data.max():.2f}]")      # noqa: T201
 
 plotter = Plot3d()
 plotter.show_axes()

@@ -1,3 +1,4 @@
+# noqa: INP001
 """
 MHDweb Integration Part I
 =========================
@@ -77,7 +78,7 @@ COR_OUTPUT_DIR = OUTPUT_DIR / "cor_mag_field"
 HEL_OUTPUT_DIR = OUTPUT_DIR / "hel_mag_field"
 BASE_URL = "https://www.predsci.com/mhdweb2_bu/v2/api"
 API_KEY = os.environ.get("API_KEY")
-AUTH = dict(Authorization=f"Api-Key {API_KEY}")
+AUTH = {"Authorization": f"Api-Key {API_KEY}"}
 
 if not COR_OUTPUT_DIR.exists():
 	COR_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -114,18 +115,21 @@ db_query_params = {
 }
 
 db_response = requests.get(
-	f"{BASE_URL}/mas-run-db", headers=dict(Accept="application/json") | AUTH, params=db_query_params
+	f"{BASE_URL}/mas-run-db",
+	headers={"Accept": "application/json"} | AUTH,
+	params=db_query_params,
+	timeout=(3, 10),
 )
 db_response.raise_for_status()
 
 runs = db_response.json()
-pprint(runs)
+pprint(runs)		# noqa: T203
 
 try:
 	run = runs[0]
-except IndexError:
+except IndexError as e:
 	msg = "No results found in MAS Run DB for the specified parameters."
-	raise IndexError(msg)
+	raise IndexError(msg) from e
 
 cor_id = run["id"]
 
@@ -139,18 +143,20 @@ cor_id = run["id"]
 # each corresponding to one simulation snapshot.
 
 dbmeta_response = requests.get(
-	f"{BASE_URL}/mas-run-db/{cor_id}", headers=dict(Accept="application/json") | AUTH
+	f"{BASE_URL}/mas-run-db/{cor_id}",
+	headers={"Accept": "application/json"} | AUTH,
+	timeout=(3, 10),
 )
 dbmeta_response.raise_for_status()
 
 run_meta = dbmeta_response.json()
-pprint(run_meta["cor"])
+pprint(run_meta["cor"])		# noqa: T203
 len(run_meta["cor"]["states"])
 
-pprint(run_meta["hel"])
+pprint(run_meta["hel"])		# noqa: T203
 len(run_meta["hel"]["states"])
 
-print(len(run_meta["omas"]))
+print(len(run_meta["omas"]))		# noqa: T201
 
 # %%
 # Download Magnetic Field Files
@@ -168,25 +174,31 @@ print(len(run_meta["omas"]))
 
 cor_files_params = {"cor_id": str(cor_id), "domain": "cor", "state": "0", "variable": "br,bt,bp"}
 
-print("Fetching coronal magnetic field files...")
+print("Fetching coronal magnetic field files...")		# noqa: T201
 cor_files_response = requests.get(
-	f"{BASE_URL}/mas-run-db/" + "/".join(cor_files_params.values()), headers=AUTH, stream=True
+	f"{BASE_URL}/mas-run-db/" + "/".join(cor_files_params.values()),
+	headers=AUTH,
+	stream=True,
+	timeout=(3, 10),
 )
 cor_files_response.raise_for_status()
 
-print("Saving coronal magnetic field files...")
+print("Saving coronal magnetic field files...")		# noqa: T201
 with Path(COR_OUTPUT_DIR / "cor_mag_field.zip").open("wb") as f:
 	f.writelines(cor_files_response.iter_content(chunk_size=8192))
 
 hel_files_params = {"cor_id": str(cor_id), "domain": "hel", "state": "0", "variable": "br,bt,bp"}
 
-print("Fetching heliospheric magnetic field files...")
+print("Fetching heliospheric magnetic field files...")		# noqa: T201
 hel_files_response = requests.get(
-	f"{BASE_URL}/mas-run-db/" + "/".join(hel_files_params.values()), headers=AUTH, stream=True
+	f"{BASE_URL}/mas-run-db/" + "/".join(hel_files_params.values()),
+	headers=AUTH,
+	stream=True,
+	timeout=(3, 10),
 )
 hel_files_response.raise_for_status()
 
-print("Saving heliospheric magnetic field files...")
+print("Saving heliospheric magnetic field files...")		# noqa: T201
 with Path(HEL_OUTPUT_DIR / "hel_mag_field.zip").open("wb") as f:
 	f.writelines(hel_files_response.iter_content(chunk_size=8192))
 
@@ -217,12 +229,15 @@ with Path(HEL_OUTPUT_DIR / "hel_mag_field.zip").open("wb") as f:
 sc_id = "solo"
 
 response = requests.get(
-	f"{BASE_URL}/spacecraft-mapping/{cor_id}/{sc_id}", headers=AUTH, stream=True
+	f"{BASE_URL}/spacecraft-mapping/{cor_id}/{sc_id}",
+	headers=AUTH,
+	stream=True,
+	timeout=(3, 10)
 )
 response.raise_for_status()
 
 spacecraft_mapping = Table.read(BytesIO(response.content), format="ascii.ecsv")
-print(spacecraft_mapping.info(out=None))
+print(spacecraft_mapping.info(out=None))		# noqa: T201
 
 spacecraft_mapping.write(
 	OUTPUT_DIR / "spacecraft_mapping.ecsv", format="ascii.ecsv", overwrite=True

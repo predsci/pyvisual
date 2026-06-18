@@ -1,3 +1,4 @@
+# noqa: INP001
 r"""
 CartesianMesh Filter Methods
 ============================
@@ -52,8 +53,8 @@ br_file = fetch_mas_data(domains="cor", variables="br").cor_br
 
 cartesian_mesh = CartesianMesh(br_file, iformat="rtp")
 spherical_mesh = SphericalMesh(br_file, iformat="rtp")
-cartesian_mesh
-spherical_mesh
+cartesian_mesh		# noqa: B018
+spherical_mesh		# noqa: B018
 
 # %%
 # Index-based Sub-region Extraction

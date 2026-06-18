@@ -124,10 +124,8 @@ def _align_shape(values, mesh_shape):
 	values = values.transpose(order)
 	sorted_axes = sorted(mesh_axes)
 
-	new_shape = []
 	val_iter = iter(values.shape)
-	for i in range(len(mesh_shape)):
-		new_shape.append(next(val_iter) if i in sorted_axes else 1)
+	new_shape = [next(val_iter) if i in sorted_axes else 1 for i in range(len(mesh_shape))]
 	values = values.reshape(new_shape)
 
 	return np.broadcast_to(values, mesh_shape)

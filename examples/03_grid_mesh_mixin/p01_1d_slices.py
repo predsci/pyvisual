@@ -1,3 +1,4 @@
+# noqa: INP001
 r"""
 1-D Line Slices
 ===============

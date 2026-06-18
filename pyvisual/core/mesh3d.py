@@ -149,9 +149,12 @@ def _update_user_dict(func: Callable):
 
 
 @_update_mesh_frame
-def build_point_polydata(
-	d1: np.ndarray, d2: np.ndarray, d3: np.ndarray, axis: int, frame: MeshFramesType | None = None
-) -> pv.PolyData:
+def build_point_polydata(d1: np.ndarray,
+						 d2: np.ndarray,
+						 d3: np.ndarray,
+						 axis: int,
+						 frame: MeshFramesType | None = None,		# noqa: ARG001
+						 ) -> pv.PolyData:
 	"""Build an unconnected :class:`pyvista.PolyData` point cloud from coordinate arrays.
 
 	Each element of ``d1``, ``d2``, ``d3`` along ``axis`` defines one point.
@@ -183,9 +186,12 @@ def build_point_polydata(
 
 
 @_update_mesh_frame
-def build_spline_polydata(
-	d1: np.ndarray, d2: np.ndarray, d3: np.ndarray, axis: int, frame: MeshFramesType | None = None
-) -> pv.PolyData:
+def build_spline_polydata(d1: np.ndarray,
+						  d2: np.ndarray,
+						  d3: np.ndarray,
+						  axis: int,
+						  frame: MeshFramesType | None = None,		# noqa: ARG001
+						  ) -> pv.PolyData:
 	"""Build a line-connected :class:`pyvista.PolyData` of splines from coordinate arrays.
 
 	After moving ``axis`` to the leading dimension, the arrays are reshaped to
@@ -222,9 +228,11 @@ def build_spline_polydata(
 
 
 @_update_mesh_frame
-def build_slice_polydata(
-	d1: np.ndarray, d2: np.ndarray, d3: np.ndarray, axis: int, frame: MeshFramesType | None = None
-) -> pv.PolyData:
+def build_slice_polydata(d1: np.ndarray,
+						 d2: np.ndarray,
+						 d3: np.ndarray, axis: int,
+						 frame: MeshFramesType | None = None,		# noqa: ARG001
+						 ) -> pv.PolyData:
 	"""Build a quad-faced :class:`pyvista.PolyData` surface patch from coordinate arrays.
 
 	The coordinate arrays are moved so that ``axis`` is the leading dimension,
@@ -543,11 +551,11 @@ class CartesianMeshFilters(_BaseFrameFilters):
 	"""
 
 	@_update_user_dict
-	def interpolate_mesh(self, mesh):
+	def interpolate_mesh(self, mesh):		# noqa: D102
 		return mesh.sample(self)
 
 	@_update_user_dict
-	def radially_scale(self, *args, exp: Number | None = None):
+	def radially_scale(self, *args, exp: Number | None = None):		# noqa: D102
 		mesh = self.copy()
 		radius = np.linalg.norm(mesh.points, axis=1).reshape(mesh.dimensions, order="F")
 		r = np.interp(radius, *args) * radius if args else radius
@@ -555,7 +563,7 @@ class CartesianMeshFilters(_BaseFrameFilters):
 		return mesh
 
 	@_update_user_dict
-	def radially_unscale(self, *args, exp: Number | None = None):
+	def radially_unscale(self, *args, exp: Number | None = None): 		# noqa: D102
 		mesh = self.copy()
 		radius = np.linalg.norm(mesh.points, axis=1).reshape(mesh.dimensions, order="F")
 		r = np.interp(radius, *args) * radius if args else radius
@@ -563,7 +571,7 @@ class CartesianMeshFilters(_BaseFrameFilters):
 		return mesh
 
 	@_update_user_dict
-	def logspace(self, base: Number | None = None, offset: float = 1):
+	def logspace(self, base: Number | None = None, offset: float = 1):		# noqa: D102
 		mesh = self.copy()
 		r = np.linalg.norm(mesh.points, axis=1, keepdims=True)
 		r_new = np.log(r) + offset if base is None else np.log(r) / np.log(base) + offset
@@ -571,7 +579,7 @@ class CartesianMeshFilters(_BaseFrameFilters):
 		return mesh
 
 	@_update_user_dict
-	def expspace(self, base: Number | None = None, offset: float = 1):
+	def expspace(self, base: Number | None = None, offset: float = 1):		# noqa: D102
 		mesh = self.copy()
 		r = np.linalg.norm(mesh.points, axis=1, keepdims=True)
 		r_new = np.exp(r - offset) if base is None else base ** (r - offset)
@@ -579,7 +587,7 @@ class CartesianMeshFilters(_BaseFrameFilters):
 		return mesh
 
 	@_update_user_dict
-	def deconstruct(self, axis: int = 0, method: str = "splines"):
+	def deconstruct(self, axis: int = 0, method: str = "splines"):		# noqa: D102
 		x, y, z = self.scales
 		match method:
 			case "points":
@@ -621,11 +629,11 @@ class SphericalMeshFilters(_BaseFrameFilters):
 	"""
 
 	@_update_user_dict
-	def interpolate_mesh(self, mesh):
+	def interpolate_mesh(self, mesh): # noqa: D102
 		return mesh.sample(self)
 
 	@_update_user_dict
-	def radially_scale(self, *args, exp: Number | None = None):
+	def radially_scale(self, *args, exp: Number | None = None): # noqa: D102
 		mesh = self.copy()
 		r = np.interp(mesh.r, *args) * mesh.r if args else mesh.r
 		r = np.expand_dims(r, (1, 2))
@@ -633,7 +641,7 @@ class SphericalMeshFilters(_BaseFrameFilters):
 		return mesh
 
 	@_update_user_dict
-	def radially_unscale(self, *args, exp: Number | None = None):
+	def radially_unscale(self, *args, exp: Number | None = None): # noqa: D102
 		mesh = self.copy()
 		r = np.interp(mesh.r, *args) * mesh.r if args else mesh.r
 		r = np.expand_dims(r, (1, 2))
@@ -641,7 +649,7 @@ class SphericalMeshFilters(_BaseFrameFilters):
 		return mesh
 
 	@_update_user_dict
-	def logspace(self, base: Number | None = None, offset: float = 1):
+	def logspace(self, base: Number | None = None, offset: float = 1): # noqa: D102
 		mesh = self.copy()
 		if base is None:
 			mesh.r = np.log(mesh.r) + offset
@@ -650,7 +658,7 @@ class SphericalMeshFilters(_BaseFrameFilters):
 		return mesh
 
 	@_update_user_dict
-	def expspace(self, base: Number | None = None, offset: float = 1):
+	def expspace(self, base: Number | None = None, offset: float = 1): # noqa: D102
 		mesh = self.copy()
 		if base is None:
 			mesh.r = np.exp(mesh.r - offset)
@@ -659,7 +667,7 @@ class SphericalMeshFilters(_BaseFrameFilters):
 		return mesh
 
 	@_update_user_dict
-	def deconstruct(self, axis: int = 0, method: str = "splines"):
+	def deconstruct(self, axis: int = 0, method: str = "splines"): # noqa: D102
 		r, t, p = parse_grid_mesh(*self.scales)
 		match method:
 			case "points":
@@ -944,7 +952,9 @@ class _BaseFrameMesh(ABC):
 		"""Handle PyVista dataset input by forwarding to :meth:`_dispatch_pyvista`."""
 		deep = kwargs.pop("deep", False)
 		if (args or kwargs) and not os.environ.get("SPHINX_GALLERY_BUILD"):
-			warnings.warn("Additional arguments are ignored when input is a PyVista DataSet.")
+			warnings.warn("Additional arguments are ignored when "
+						  "input is a PyVista DataSet.",
+						  stacklevel=2)
 		return self._dispatch_pyvista(uinput, iformat, deep)
 
 	def _parse_input(self, iformat, data, *scales, **kwargs):
@@ -980,7 +990,8 @@ class _BaseFrameMesh(ABC):
 			smap = dict(zip(sformat, scales, strict=True))
 			smap |= {k: np.atleast_1d(kwargs.pop(k)) for k in sorder if k in kwargs}
 		except ValueError as e:
-			msg = f"Format string '{sformat}' does not match the number of scales read from the file: {len(scales)}."
+			msg = (f"Format string '{sformat}' does not match the number of scales "
+				   f"read from the file: {len(scales)}.")
 			raise ValueError(msg) from e
 
 		try:
@@ -1100,8 +1111,9 @@ class CartesianMesh(_BaseFrameMesh, pv.StructuredGrid, CartesianMeshFilters):
 	   The general motivation behind this class (in contrast to the :class:`SphericalMesh`
 	   class) is to facilitate the use of PyVista/VTK's
 	   `filters <https://docs.pyvista.org/api/core/filters>`_ on spherical grids that have
-	   been converted to Cartesian coordinates. This :func:`~pyvisual.utils.geometry.spherical_to_cartesian`
-	   transformation yeilds topological structured meshes that are, nevertheless, not composed
+	   been converted to Cartesian coordinates. This
+	   :func:`~pyvisual.utils.geometry.spherical_to_cartesian` transformation yields topological
+	   structured meshes that are, nevertheless, not composed
 	   of monotonically increasing coordinate arrays. Therefore, the grid's internal structure
 	   has to be stored explicitly *viz.* through a :class:`pyvista.StructuredGrid` rather than a
 	   :class:`pyvista.RectilinearGrid`.
@@ -1280,12 +1292,18 @@ class SphericalMesh(_BaseFrameMesh, pv.RectilinearGrid, SphericalMeshFilters):
 			raise ValueError(msg)
 		return sformat, sorder
 
-	def _set_arrays(self, iformat, data, *scales):
+	def _set_arrays(self,
+					iformat,		# noqa: ARG002
+					data,
+					*scales):
 		r, t, p = scales
 		self._from_arrays(x=r, y=t, z=p)
 		self.data = data
 
-	def _dispatch_pyvista(self, uinput, iformat, deep):
+	def _dispatch_pyvista(self,
+						  uinput,
+						  iformat,		# noqa: ARG002
+						  deep):
 		if isinstance(uinput, (pv.RectilinearGrid, pv.ImageData)):
 			self.deep_copy(uinput) if deep else self.shallow_copy(uinput)
 		else:

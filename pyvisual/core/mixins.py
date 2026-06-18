@@ -35,6 +35,7 @@ caller-supplied overrides.
 
 from __future__ import annotations
 
+import contextlib
 from collections.abc import Iterable
 from functools import wraps
 from typing import Literal
@@ -122,10 +123,8 @@ def render_scene(func):
 	@wraps(func)
 	def wrapper(self, *args, **kwargs):
 		result = func(self, *args, **kwargs)
-		try:
+		with contextlib.suppress(AttributeError):
 			self.render()
-		except AttributeError:
-			pass
 		return result
 
 	return wrapper
@@ -1188,9 +1187,9 @@ class ObserverMixin:
 
 		.. note::
 		   This method is intended to set a fixed camera up vector (with a specified roll)
-		   for **interactive scene exploration only**. Programmatically setting the observer orientation
-		   using ``observer_orientation`` or ``observer_los_view`` will override this method's
-		   behavior and result in undefined behavior.
+		   for **interactive scene exploration only**. Programmatically setting the observer
+		   orientation using ``observer_orientation`` or ``observer_los_view`` will override
+		   this method's behavior and result in undefined behavior.
 
 		See Also
 		--------
@@ -1288,7 +1287,7 @@ class ObserverMixin:
 				return tuple(f"{arg:.2f}" for arg in args)
 			return f"{args:.2f}"
 
-		def _update_text(caller, event):
+		def _update_text(caller, event):		# noqa: ARG001
 			values = [
 				f"{opt}: {_format_tuple(getattr(self, opt))}"
 				if opt.startswith("observer")
@@ -1510,7 +1509,7 @@ class ObserverMixin:
 		    >>> plotter.observer_los_view = -10, 10, -8, 8
 		    >>> plotter.show()
 		"""
-		r, t, p = cartesian_to_spherical(*self.camera.position)
+		_, t, p = cartesian_to_spherical(*self.camera.position)
 		obs_lat = 90.0 - np.rad2deg(t)
 		obs_lon = clip_angle(np.rad2deg(p), max_value=180.0)
 		p_angle = self.observer_orientation.p_angle
@@ -1749,7 +1748,7 @@ class GeometryMixin:
 		    >>> plotter.show()
 		"""
 		sun = pv.Sphere(radius=1.0, center=(0, 0, 0), theta_resolution=180, phi_resolution=360)
-		kw_overrides = dict(color="orange", opacity=1, name="SUN") | kwargs
+		kw_overrides = {"color": "orange", "opacity": 1, "name": "SUN"} | kwargs
 		return self.add_mesh(sun, **kw_overrides)
 
 	def add_shell(
@@ -1762,7 +1761,8 @@ class GeometryMixin:
 		**kwargs,
 	) -> pv.Actor:
 		r"""
-		Add a spherical shell to the plot, defined by inner and outer radii and centered at a given position.
+		Add a spherical shell to the plot, defined by inner and outer radii and centered at a
+		given position.
 
 		Parameters
 		----------
@@ -1812,8 +1812,10 @@ class GeometryMixin:
 		    >>> plotter = Plot3d()
 		    >>> plotter.show_axes()
 		    >>> plotter.add_sun()
-		    >>> plotter.add_shell(2, pi/4, 0, inner_radius=0.05, outer_radius=0.1, color='red', opacity=0.8)
-		    >>> plotter.add_shell(2, 3*pi/4, 0, inner_radius=0.05, outer_radius=0.1, color='blue', opacity=0.8)
+		    >>> plotter.add_shell(2, pi/4, 0, inner_radius=0.05, outer_radius=0.1,
+		    >>>					  color='red', opacity=0.8)
+		    >>> plotter.add_shell(2, 3*pi/4, 0, inner_radius=0.05, outer_radius=0.1,
+		    >>>					  color='blue', opacity=0.8)
 		    >>> plotter.show()
 		"""
 		center = spherical_to_cartesian(r, t, p)

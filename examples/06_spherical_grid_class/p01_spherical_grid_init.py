@@ -1,3 +1,4 @@
+# noqa: INP001
 """
 Constructing a SphericalMesh
 ============================
@@ -46,11 +47,11 @@ br_file = fetch_mas_data(domains="cor", variables="br").cor_br
 
 mesh_from_path = SphericalMesh(br_file)
 
-print(f"dimensions : {mesh_from_path.dimensions}")
-print(f"r range    : [{mesh_from_path.r.min():.2f}, {mesh_from_path.r.max():.2f}] R_sun")
-print(f"t range    : [{mesh_from_path.t.min():.4f}, {mesh_from_path.t.max():.4f}] rad")
-print(f"p range    : [{mesh_from_path.p.min():.4f}, {mesh_from_path.p.max():.4f}] rad")
-print(f"data range : [{mesh_from_path.data.min():.4f}, {mesh_from_path.data.max():.4f}] MAS Units")
+print(f"dimensions : {mesh_from_path.dimensions}")  # noqa: T201
+print(f"r range    : [{mesh_from_path.r.min():.2f}, {mesh_from_path.r.max():.2f}] R_sun")   # noqa: T201
+print(f"t range    : [{mesh_from_path.t.min():.4f}, {mesh_from_path.t.max():.4f}] rad") # noqa: T201
+print(f"p range    : [{mesh_from_path.p.min():.4f}, {mesh_from_path.p.max():.4f}] rad") # noqa: T201
+print(f"data range : [{mesh_from_path.data.min():.4f}, {mesh_from_path.data.max():.4f}] MAS Units") # noqa: T201
 
 # %%
 # From Data Arrays
@@ -68,8 +69,8 @@ data, r, t, p = read_hdf_by_index(br_file)
 mesh_from_arrays = SphericalMesh(r, t, p, data=data, dataid="Br")
 
 # Dimensions and data range are identical to the file-path route.
-print(f"dimensions match : {mesh_from_arrays.dimensions == mesh_from_path.dimensions}")
-print(f"data allclose    : {(mesh_from_arrays.data == mesh_from_path.data).all()}")
+print(f"dimensions match : {mesh_from_arrays.dimensions == mesh_from_path.dimensions}") # noqa: T201
+print(f"data allclose    : {(mesh_from_arrays.data == mesh_from_path.data).all()}") # noqa: T201
 
 # %%
 # From an Existing SphericalMesh
@@ -81,7 +82,7 @@ print(f"data allclose    : {(mesh_from_arrays.data == mesh_from_path.data).all()
 
 mesh_from_mesh = SphericalMesh(mesh_from_path)
 
-print(f"dimensions match : {mesh_from_mesh.dimensions == mesh_from_path.dimensions}")
+print(f"dimensions match : {mesh_from_mesh.dimensions == mesh_from_path.dimensions}")       # noqa: T201
 
 # %%
 # Visualising the Mesh

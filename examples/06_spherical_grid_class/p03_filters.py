@@ -1,3 +1,4 @@
+# noqa: INP001
 """
 SphericalMesh Filter Methods
 ==============================
@@ -37,13 +38,13 @@ br_file = fetch_mas_data(domains="cor", variables="br").cor_br
 # :math:`(r, \theta, \phi)` index space and rendered as a semi-transparent volume
 # using a diverging colormap.
 mesh = SphericalMesh(br_file)
-mesh
+mesh		# noqa: B018
 
 # %%
 #
 
 sub_mesh = mesh[120:150, 55:85, 135:165]
-sub_mesh
+sub_mesh		# noqa: B018
 
 plotter = Plot3d()
 plotter.show_axes()

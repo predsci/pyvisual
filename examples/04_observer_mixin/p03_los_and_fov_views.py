@@ -1,3 +1,4 @@
+# noqa: INP001
 r"""
 Line-of-Sight and Field-of-View Control
 =========================================

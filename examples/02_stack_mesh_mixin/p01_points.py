@@ -1,3 +1,4 @@
+# noqa: INP001
 """
 Plotting Points and Splines
 ============================

@@ -22,10 +22,14 @@ Named tuples
 
 from __future__ import annotations
 
-from collections import namedtuple
 from os import PathLike
 from pathlib import Path
-from typing import Literal, TypeAlias, Union
+from typing import (
+	Literal,
+	NamedTuple,
+	TypeAlias,
+	Union,
+)
 
 from pyvista import VectorLike
 
@@ -85,67 +89,91 @@ PlotterFramesType = Literal["cartesian"]
 meshes in other frames are converted before being passed to PyVista.
 """
 
-SolarCoordinate = namedtuple("SolarCoordinate", ["radius", "b_angle", "longitude"])
-r"""Named tuple representing a heliographic Carrington coordinate.
 
-Fields
-------
-radius : float
-    Heliocentric distance in solar radii :math:`R_\odot`.
-b_angle : float
-    Heliographic latitude (B\ :sub:`0` angle) in degrees.
-longitude : float
-    Carrington longitude in degrees.
-"""
+class SolarCoordinate(NamedTuple):
+	r"""Named tuple representing a heliographic Carrington coordinate.
 
-SphericalCoordinate = namedtuple("SphericalCoordinate", ["r", "t", "p"])
-r"""Named tuple representing a PSI spherical coordinate :math:`(r, \theta, \phi)`.
+	Fields
+	------
+	radius : float
+	    Heliocentric distance in solar radii :math:`R_\odot`.
+	b_angle : float
+	    Heliographic latitude (B\ :sub:`0` angle) in degrees.
+	longitude : float
+	    Carrington longitude in degrees.
+	"""
 
-Fields
-------
-r : float
-    Radial distance in solar radii :math:`R_\odot`.
-t : float
-    Colatitude :math:`\theta` in radians, measured from the north pole.
-p : float
-    Longitude :math:`\phi` in radians.
-"""
+	radius: float
+	b_angle: float
+	longitude: float
 
-CartesianCoordinate = namedtuple("CartesianCoordinates", ["x", "y", "z"])
-r"""Named tuple representing a Cartesian coordinate :math:`(x, y, z)`.
 
-Fields
-------
-x : float
-    Cartesian x-coordinate in solar radii :math:`R_\odot`.
-y : float
-    Cartesian y-coordinate in solar radii :math:`R_\odot`.
-z : float
-    Cartesian z-coordinate in solar radii :math:`R_\odot`.
-"""
+class SphericalCoordinate(NamedTuple):
+	r"""Named tuple representing a PSI spherical coordinate :math:`(r, \theta, \phi)`.
 
-ObserverView = namedtuple("ObserverView", ["x0", "x1", "y0", "y1"])
-"""Named tuple representing line-of-sight field-of-view extents in degrees.
+	Fields
+	------
+	r : float
+	    Radial distance in solar radii :math:`R_\odot`.
+	t : float
+	    Colatitude :math:`\theta` in radians, measured from the north pole.
+	p : float
+	    Longitude :math:`\phi` in radians.
+	"""
 
-Fields
-------
-x0 : float
-    Left edge of the horizontal (elongation) FOV extent in degrees.
-x1 : float
-    Right edge of the horizontal (elongation) FOV extent in degrees.
-y0 : float
-    Bottom edge of the vertical (altitude) FOV extent in degrees.
-y1 : float
-    Top edge of the vertical (altitude) FOV extent in degrees.
-"""
+	r: float
+	t: float
+	p: float
 
-ObserverOrientation = namedtuple("ObserverOrientation", ["p_angle"])
-"""Named tuple representing the observer's position angle.
 
-Fields
-------
-p_angle : float
-    Roll of the camera about the line-of-sight axis, measured from solar north,
-    in degrees.  A value of ``0`` means solar north points straight up in the image
-    plane.
-"""
+class CartesianCoordinate(NamedTuple):
+	r"""Named tuple representing a Cartesian coordinate :math:`(x, y, z)`.
+
+	Fields
+	------
+	x : float
+	    Cartesian x-coordinate in solar radii :math:`R_\odot`.
+	y : float
+	    Cartesian y-coordinate in solar radii :math:`R_\odot`.
+	z : float
+	    Cartesian z-coordinate in solar radii :math:`R_\odot`.
+	"""
+
+	x: float
+	y: float
+	z: float
+
+
+class ObserverView(NamedTuple):
+	"""Named tuple representing line-of-sight field-of-view extents in degrees.
+
+	Fields
+	------
+	x0 : float
+	    Left edge of the horizontal (elongation) FOV extent in degrees.
+	x1 : float
+	    Right edge of the horizontal (elongation) FOV extent in degrees.
+	y0 : float
+	    Bottom edge of the vertical (altitude) FOV extent in degrees.
+	y1 : float
+	    Top edge of the vertical (altitude) FOV extent in degrees.
+	"""
+
+	x0: float
+	x1: float
+	y0: float
+	y1: float
+
+
+class ObserverOrientation(NamedTuple):
+	"""Named tuple representing the observer's position angle.
+
+	Fields
+	------
+	p_angle : float
+	    Roll of the camera about the line-of-sight axis, measured from solar north,
+	    in degrees.  A value of ``0`` means solar north points straight up in the image
+	    plane.
+	"""
+
+	p_angle: float

@@ -1,6 +1,7 @@
+# noqa: INP001
 r"""
 Interactive Fieldline Tracer
-=============================
+============================
 
 This example builds a two-panel interactive scene for exploring coronal magnetic
 connectivity.  The top panel displays a longitude–latitude map of :math:`B_r`
